@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="C:\Users\huixue.gong\.gradle\caches\transforms-1\files-1.1\design-25.3.1.aar\4b7c67e814f00c9d206d1349ff44b691\jars\classes.jar"
+        jumboMode="false"
+        min-sdk-version="22"
+        optimize="true"
+        revision="26.0.2"
+        sha1="38789e20ace9ab7dbd00554bd2673ab424478d3b">
+        <dex dex="C:\Users\huixue.gong\AndroidStudioProjects\MultMedia\app\build\intermediates\transforms\preDex\release\1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\huixue.gong\.gradle\caches\transforms-1\files-1.1\transition-25.3.1.aar\7643afcce29c7a1d5757cae831fac109\jars\classes.jar"
+        jumboMode="false"
+        min-sdk-version="22"
+        optimize="true"
+        revision="26.0.2"
+        sha1="d4cf6227dd6a2ceff0f7dcf0c324380b7abf2c28">
+        <dex dex="C:\Users\huixue.gong\AndroidStudioProjects\MultMedia\app\build\intermediates\transforms\preDex\release\7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\huixue.gong\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-25.3.1.aar\35bdeabee03733986b3f9d87293707a2\jars\classes.jar"
+        jumboMode="false"
+        min-sdk-version="22"
+        optimize="true"
+        revision="26.0.2"
+        sha1="95519720620b553f63afc789beba9ad582807f7c">
+        <dex dex="C:\Users\huixue.gong\AndroidStudioProjects\MultMedia\app\build\intermediates\transforms\preDex\release\6.jar" />
+    </item>
+
+</items>
