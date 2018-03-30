@@ -1,4 +1,4 @@
-package com.example.android.multmedia.player.fragment;
+package com.example.android.multmedia.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;

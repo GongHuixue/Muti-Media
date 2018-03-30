@@ -1,4 +1,6 @@
-package com.example.android.multmedia.player.fragment;
+package com.example.android.multmedia.tabmenu;
+
+import com.example.android.multmedia.fragment.BaseFragment;
 
 /**
  * Created by huixue.gong on 2018/3/29.

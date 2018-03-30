@@ -27,19 +27,16 @@
 
         <activity
             android:name=".player.videoplayer.VideoPlayerActivity"
-            android:theme="@style/Theme.Playback"
             android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
             android:excludeFromRecents="true">
         </activity>
         <activity
             android:name=".player.imageplayer.PicturePlayerActivity"
-            android:theme="@style/Theme.Playback"
             android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
             android:excludeFromRecents="true">
         </activity>
         <activity
             android:name=".player.audioplayer.AudioPlayerActivity"
-            android:theme="@style/Theme.Playback"
             android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
             android:excludeFromRecents="true">
         </activity>

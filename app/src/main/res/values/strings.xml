@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MultMedia</string>
+
+    <!--Define the bottom tab menu-->
+    <string name="media">Media</string>
+    <string name="video">Video</string>
+    <string name="audio">Audio</string>
+    <string name="picture">Picture</string>
+
 </resources>
