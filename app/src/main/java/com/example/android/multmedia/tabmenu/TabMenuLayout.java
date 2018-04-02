@@ -29,6 +29,7 @@ public class TabMenuLayout extends LinearLayout implements View.OnClickListener{
     public TabMenuLayout(Context context, AttributeSet atts, int defStyle) {
         super(context, atts, defStyle);
         mContext = context;
+        setOrientation(HORIZONTAL);
     }
 
     public void setCurrentTab(int i) {
@@ -54,11 +55,14 @@ public class TabMenuLayout extends LinearLayout implements View.OnClickListener{
 
         if(tabs != null && (tabs.size() > 0)) {
             tabCount = tabs.size();
-            TabView mTabView = null;
+            TabView mTabView;
 
             for(int i = 0; i < tabs.size(); i++ ) {
-//                mTabView = new TabView(getContext());
-//                mTabView.setTag()
+                mTabView = new TabView(getContext());
+                mTabView.setTag(tabs.get(i));
+                mTabView.initTabItemData(tabs.get(i));
+                mTabView.setOnClickListener(this);
+                addView(mTabView, params);
             }
             setCurrentTab(0); //set the first highlight as default;
         }else {
@@ -75,7 +79,7 @@ public class TabMenuLayout extends LinearLayout implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-//        tabClickLister.onTabClick((TableItem) view.getTag());
+        tabClickLister.onTabClick((TableItem) view.getTag());
     }
 
     public interface OnTabClickListener {

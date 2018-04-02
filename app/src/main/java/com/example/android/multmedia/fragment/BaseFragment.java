@@ -1,18 +1,18 @@
 package com.example.android.multmedia.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 
 /**
  * Created by huixue.gong on 2018/3/29.
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends android.support.v4.app.Fragment {
     protected boolean isViewInit;
     protected boolean isVisiable;
     protected boolean isDataInit;
 
     public abstract void fetchData();
+    public abstract BaseFragment getFragment();
 
     @Override
     public void onCreate(Bundle savedInsanceState) {

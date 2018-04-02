@@ -2,6 +2,7 @@ package com.example.android.multmedia.tabmenu;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,7 +19,6 @@ public class TabView extends RelativeLayout implements View.OnClickListener{
     private static final String TAG = TabView.class.getSimpleName();
     private ImageView mTabImage;
     private TextView mTabText;
-    private View mView;
 
     public TabView(Context context) {
         super(context);
@@ -36,6 +36,7 @@ public class TabView extends RelativeLayout implements View.OnClickListener{
     }
 
     private void initView(Context context) {
+        setGravity(Gravity.CENTER);
         LayoutInflater.from(context).inflate(R.layout.tab_view, this, true);
         mTabImage = findViewById(R.id.tab_image);
         mTabText = findViewById(R.id.tab_lable);

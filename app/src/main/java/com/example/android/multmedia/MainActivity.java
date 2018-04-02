@@ -21,14 +21,14 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
     private ViewPager mViewPager;
     private ArrayList<TableItem> tabs;
     private BaseFragment fragment;
+    FragmentAdapter fgAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Log.d(TAG, "onCreate Enter");
         initView();
-
     }
 
     private void initView() {
@@ -44,6 +44,25 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
         mTabLayout.initData(tabs, this);
         mTabLayout.setCurrentTab(0);
 
+        fgAdapter = new FragmentAdapter(getSupportFragmentManager(), tabs);
+        mViewPager.setAdapter(fgAdapter);
+        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mTabLayout.setCurrentTab(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 
@@ -55,21 +74,4 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
         mViewPager.setCurrentItem(item);
     }
 
-    public class FragmentAdapter extends FragmentPagerAdapter {
-        public FragmentAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int index) {
-            try {
-                return tabs.get(index).tagFragmentClass.getClass();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            return fragment;
-        }
-    }
 }
