@@ -43,7 +43,7 @@ public class MediaFragment extends BaseFragment {
     }
 
     private void initFragmentData() {
-        MediaSourceItem favourites = new MediaSourceItem("Favoite", R.drawable.favourty);
+        MediaSourceItem favourites = new MediaSourceItem("Favorite", R.drawable.favourty);
         MediaSourceItem popular = new MediaSourceItem("Most Popular", R.drawable.popular);
         MediaSourceItem lastPlayed = new MediaSourceItem("Last Played", R.drawable.play);
         MediaSourceItem settings = new MediaSourceItem("Settings", R.drawable.setting);
