@@ -1,12 +1,16 @@
 package com.example.android.multmedia.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
+import com.example.android.multmedia.MainActivity;
 import com.example.android.multmedia.MediaSourceItem;
 import com.example.android.multmedia.MediaSourceItemAdapter;
 import com.example.android.multmedia.R;
@@ -18,6 +22,7 @@ import java.util.ArrayList;
  */
 
 public class MediaFragment extends BaseFragment {
+    private static final String TAG = MediaFragment.class.getSimpleName();
     private ArrayList<MediaSourceItem> mediaList;
     private MediaSourceItemAdapter adapter;
     @Override
@@ -39,6 +44,14 @@ public class MediaFragment extends BaseFragment {
         initFragmentData();
         ListView listView = view.findViewById(R.id.media_item_list_view);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                MediaSourceItem mediaItem = mediaList.get(position);
+                Log.d(TAG, "Current Selected Item is = " + mediaItem);
+                //Toast.makeText(MainActivity.this, mediaItem.getItemName(), Toast.LENGTH_SHORT).show();
+            }
+        });
         return view;
     }
 
