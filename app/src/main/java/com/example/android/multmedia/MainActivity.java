@@ -20,12 +20,19 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
     private BaseFragment fragment;
     FragmentAdapter fgAdapter;
 
+    private static final int MEDIA_FRAGMENT = 0;
+    private static final int VIDEO_FRAGMENT = 1;
+    private static final int AUDIO_FRAGMENT = 2;
+    private static final int PICTURE_FRAGMENT =3;
+    private volatile int currentFragment = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate Enter");
         initView();
+        fragment = new MediaFragment();
     }
 
     private void initView() {
@@ -53,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
             @Override
             public void onPageSelected(int position) {
                 mTabLayout.setCurrentTab(position);
+                currentFragment = position;
             }
 
             @Override
@@ -67,6 +75,6 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
         int item = tabs.indexOf(tabItem);
         Log.i(TAG, "onTabClick: item=" + item);
         mViewPager.setCurrentItem(item);
+        currentFragment = item;
     }
-
 }
