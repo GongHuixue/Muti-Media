@@ -7,12 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 
-import com.example.android.multmedia.MainActivity;
-import com.example.android.multmedia.MediaSourceItem;
-import com.example.android.multmedia.MediaSourceItemAdapter;
 import com.example.android.multmedia.R;
 
 import java.util.ArrayList;
@@ -23,8 +19,6 @@ import java.util.ArrayList;
 
 public class MediaFragment extends BaseFragment {
     private static final String TAG = MediaFragment.class.getSimpleName();
-    private ArrayList<MediaSourceItem> mediaList;
-    private MediaSourceItemAdapter adapter;
     @Override
     public void fetchData() {
 
@@ -38,16 +32,16 @@ public class MediaFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.media_fragment, container, false);
-        mediaList = new ArrayList<>();
-        adapter = new MediaSourceItemAdapter(this.getContext(),
-                R.layout.media_item, mediaList);
+        fragList = new ArrayList<>();
+        fragListItemAdapter = new FragListItemAdapter(this.getContext(),
+                R.layout.media_item, fragList);
         initFragmentData();
         ListView listView = view.findViewById(R.id.media_item_list_view);
-        listView.setAdapter(adapter);
+        listView.setAdapter(fragListItemAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MediaSourceItem mediaItem = mediaList.get(position);
+                FragListItem mediaItem = fragList.get(position);
                 Log.d(TAG, "Current Selected Item is = " + mediaItem);
                 //Toast.makeText(MainActivity.this, mediaItem.getItemName(), Toast.LENGTH_SHORT).show();
             }
@@ -56,14 +50,14 @@ public class MediaFragment extends BaseFragment {
     }
 
     private void initFragmentData() {
-        MediaSourceItem favourites = new MediaSourceItem("Favorite", R.drawable.favourty);
-        MediaSourceItem popular = new MediaSourceItem("Most Popular", R.drawable.popular);
-        MediaSourceItem lastPlayed = new MediaSourceItem("Last Played", R.drawable.play);
-        MediaSourceItem settings = new MediaSourceItem("Settings", R.drawable.setting);
+        FragListItem favourites = new FragListItem("Favorite", R.drawable.favourty);
+        FragListItem popular = new FragListItem("Most Popular", R.drawable.popular);
+        FragListItem lastPlayed = new FragListItem("Last Played", R.drawable.play);
+        FragListItem settings = new FragListItem("Settings", R.drawable.setting);
 
-        mediaList.add(favourites);
-        mediaList.add(popular);
-        mediaList.add(lastPlayed);
-        mediaList.add(settings);
+        fragList.add(favourites);
+        fragList.add(popular);
+        fragList.add(lastPlayed);
+        fragList.add(settings);
     }
 }

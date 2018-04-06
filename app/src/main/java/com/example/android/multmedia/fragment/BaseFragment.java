@@ -2,6 +2,8 @@ package com.example.android.multmedia.fragment;
 
 import android.os.Bundle;
 
+import java.util.ArrayList;
+
 /**
  * Created by huixue.gong on 2018/3/29.
  */
@@ -10,6 +12,10 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
     protected boolean isViewInit;
     protected boolean isVisiable;
     protected boolean isDataInit;
+
+    protected ArrayList<FragListItem> fragList;
+    protected FragListItem fragListItem;
+    protected FragListItemAdapter fragListItemAdapter;
 
     public abstract void fetchData();
     public abstract BaseFragment getFragment();
@@ -44,5 +50,23 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
             return true;
         }
         return false;
+    }
+
+    public class FragListItem {
+        private int imageId;
+        private String itemName;
+
+        public FragListItem(String name, int image) {
+            this.itemName = name;
+            this.imageId = image;
+        }
+
+        public int getImageId() {
+            return imageId;
+        }
+
+        public String getItemName() {
+            return itemName;
+        }
     }
 }
