@@ -19,11 +19,10 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
     private ArrayList<TableItem> tabs;
     private BaseFragment fragment;
     FragmentAdapter fgAdapter;
+    private PanelViewManager mPanelViewManager;
+    private Utility mUtility;
 
-    private static final int MEDIA_FRAGMENT = 0;
-    private static final int VIDEO_FRAGMENT = 1;
-    private static final int AUDIO_FRAGMENT = 2;
-    private static final int PICTURE_FRAGMENT =3;
+
     private volatile int currentFragment = 0;
 
     @Override
@@ -32,6 +31,10 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate Enter");
         initView();
+
+        mPanelViewManager = new PanelViewManager(this);
+        mUtility = new Utility(this, mPanelViewManager);
+
         fragment = new MediaFragment();
     }
 
