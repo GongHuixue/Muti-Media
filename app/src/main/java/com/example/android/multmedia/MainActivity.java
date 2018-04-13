@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
             public void onPageSelected(int position) {
                 mTabLayout.setCurrentTab(position);
                 currentFragment = position;
+                mPanelViewManager.setActiveFragment(currentFragment, (BaseFragment) fgAdapter.getItem(currentFragment));
             }
 
             @Override
@@ -79,5 +80,10 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
         Log.i(TAG, "onTabClick: item=" + item);
         mViewPager.setCurrentItem(item);
         currentFragment = item;
+        mPanelViewManager.setActiveFragment(currentFragment, (BaseFragment) fgAdapter.getItem(currentFragment));
+    }
+
+    public Utility getUtility() {
+        return mUtility;
     }
 }

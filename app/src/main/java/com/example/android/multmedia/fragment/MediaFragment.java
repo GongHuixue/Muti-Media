@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 
+import com.example.android.multmedia.Constant;
 import com.example.android.multmedia.R;
 
 import java.util.ArrayList;
@@ -31,29 +32,30 @@ public class MediaFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.media_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_item, container, false);
         fragList = new ArrayList<>();
         fragListItemAdapter = new FragListItemAdapter(this.getContext(),
                 R.layout.media_item, fragList);
         initFragmentData();
         ListView listView = view.findViewById(R.id.media_item_list_view);
         listView.setAdapter(fragListItemAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(onItemClickListener);
+        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FragListItem mediaItem = fragList.get(position);
                 Log.d(TAG, "Current Selected Item is = " + mediaItem);
                 //Toast.makeText(MainActivity.this, mediaItem.getItemName(), Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
         return view;
     }
 
     private void initFragmentData() {
-        FragListItem favourites = new FragListItem("Favorite", R.drawable.favourty);
-        FragListItem popular = new FragListItem("Most Popular", R.drawable.popular);
-        FragListItem lastPlayed = new FragListItem("Last Played", R.drawable.play);
-        FragListItem settings = new FragListItem("Settings", R.drawable.setting);
+        FragListItem favourites = new FragListItem(Constant.FAVORITE_FILES, R.drawable.favourty);
+        FragListItem popular = new FragListItem(Constant.POPULAR_FILES, R.drawable.popular);
+        FragListItem lastPlayed = new FragListItem(Constant.LASTED_FILES, R.drawable.play);
+        FragListItem settings = new FragListItem(Constant.SETTINGS, R.drawable.setting);
 
         fragList.add(favourites);
         fragList.add(popular);

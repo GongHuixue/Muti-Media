@@ -1,6 +1,11 @@
 package com.example.android.multmedia.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.widget.AdapterView;
+
+import com.example.android.multmedia.MainActivity;
+import com.example.android.multmedia.PanelViewManager;
 
 import java.util.ArrayList;
 
@@ -13,12 +18,21 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
     protected boolean isVisiable;
     protected boolean isDataInit;
 
+    protected AdapterView.OnItemClickListener onItemClickListener;
     protected ArrayList<FragListItem> fragList;
     protected FragListItem fragListItem;
     protected FragListItemAdapter fragListItemAdapter;
+    //protected MainActivity mActivity;
 
     public abstract void fetchData();
     public abstract BaseFragment getFragment();
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        //mActivity = (MainActivity) getActivity();
+        onItemClickListener = new PanelViewManager(context);
+    }
 
     @Override
     public void onCreate(Bundle savedInsanceState) {
@@ -37,11 +51,6 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
         this.isVisiable = isVisibleToUser;
         prepareFetchData(false);
     }
-
-
-    /*public boolean prepareFetchData() {
-        return prepareFetchData(false);
-    }*/
 
     public boolean prepareFetchData(boolean forceUpdate) {
         if (isVisiable && isViewInit && (!isDataInit || forceUpdate)) {

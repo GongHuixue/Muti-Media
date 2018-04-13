@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.example.android.multmedia.Constant;
 import com.example.android.multmedia.R;
 
 import java.util.ArrayList;
@@ -27,18 +28,19 @@ public class PictureFragment extends BaseFragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.picture_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_item, container, false);
         fragList = new ArrayList<>();
         fragListItemAdapter = new FragListItemAdapter(this.getContext(),
                 R.layout.media_item, fragList);
         initFragmentData();
         ListView listView = view.findViewById(R.id.media_item_list_view);
         listView.setAdapter(fragListItemAdapter);
+        listView.setOnItemClickListener(onItemClickListener);
         return view;
     }
 
     private void initFragmentData() {
-        fragListItem = new FragListItem("All Picture Files", R.drawable.ic_tab_picture);
+        fragListItem = new FragListItem(Constant.PICTURE_FILES, R.drawable.ic_tab_picture);
         fragList.add(fragListItem);
     }
 }

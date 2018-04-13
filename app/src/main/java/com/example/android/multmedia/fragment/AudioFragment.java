@@ -27,12 +27,13 @@ public class AudioFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.audio_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_item, container, false);
         fragList = new ArrayList<>();
         fragListItemAdapter = new FragListItemAdapter(this.getContext(), R.layout.media_item, fragList);
         initFragmentData();
         ListView listView = view.findViewById(R.id.media_item_list_view);
         listView.setAdapter(fragListItemAdapter);
+        listView.setOnItemClickListener(onItemClickListener);
         return view;
     }
 
