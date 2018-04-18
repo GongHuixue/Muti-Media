@@ -1,9 +1,10 @@
-package com.example.android.multmedia.fragment;
+package com.example.android.multmedia.adpter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.android.multmedia.fragment.BaseFragment;
 import com.example.android.multmedia.tabmenu.TableItem;
 
 import java.util.ArrayList;

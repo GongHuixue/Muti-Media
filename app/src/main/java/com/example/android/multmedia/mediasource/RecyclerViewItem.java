@@ -4,10 +4,10 @@ package com.example.android.multmedia.mediasource;
  * Created by huixue.gong on 2018/4/9.
  */
 
-public class MediaSource {
+public class RecyclerViewItem {
     private int imageId;
 
-    public MediaSource(int imageId) {
+    public RecyclerViewItem(int imageId) {
         this.imageId = imageId;
     }
 

@@ -1,4 +1,4 @@
-package com.example.android.multmedia.fragment;
+package com.example.android.multmedia.adpter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.multmedia.R;
+import com.example.android.multmedia.fragment.BaseFragment;
 
 import java.util.List;
 

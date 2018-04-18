@@ -8,7 +8,6 @@ import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.android.multmedia.fragment.FragItemClickListener;
 import com.example.android.multmedia.videobrowser.VideoBrowser;
 
 /**

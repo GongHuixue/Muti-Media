@@ -4,8 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.widget.AdapterView;
 
-import com.example.android.multmedia.MainActivity;
 import com.example.android.multmedia.PanelViewManager;
+import com.example.android.multmedia.adpter.FragListItemAdapter;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,6 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
     protected ArrayList<FragListItem> fragList;
     protected FragListItem fragListItem;
     protected FragListItemAdapter fragListItemAdapter;
-    //protected MainActivity mActivity;
 
     public abstract void fetchData();
     public abstract BaseFragment getFragment();
@@ -30,7 +29,6 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        //mActivity = (MainActivity) getActivity();
         onItemClickListener = new PanelViewManager(context);
     }
 

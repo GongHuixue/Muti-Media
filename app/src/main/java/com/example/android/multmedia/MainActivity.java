@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.android.multmedia.adpter.FragmentAdapter;
 import com.example.android.multmedia.fragment.*;
 import com.example.android.multmedia.tabmenu.TabMenuLayout;
 import com.example.android.multmedia.tabmenu.TableItem;

@@ -8,6 +8,7 @@ import android.widget.ListView;
 
 import com.example.android.multmedia.Constant;
 import com.example.android.multmedia.R;
+import com.example.android.multmedia.adpter.FragListItemAdapter;
 
 import java.util.ArrayList;
 

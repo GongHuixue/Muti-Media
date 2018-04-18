@@ -1,4 +1,4 @@
-package com.example.android.multmedia.mediasource;
+package com.example.android.multmedia.adpter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.android.multmedia.R;
+import com.example.android.multmedia.mediasource.RecyclerViewItem;
 
 import java.util.List;
 
@@ -14,11 +15,11 @@ import java.util.List;
  * Created by huixue.gong on 2018/4/8.
  */
 
-public class MediaItemAdapter extends RecyclerView.Adapter<MediaItemAdapter.ViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private List<MediaSource> mMediaList;
+    private List<RecyclerViewItem> mMediaList;
 
-    public MediaItemAdapter(List<MediaSource> mediaList) {
+    public RecyclerViewAdapter(List<RecyclerViewItem> mediaList) {
         mMediaList = mediaList;
     }
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -41,8 +42,8 @@ public class MediaItemAdapter extends RecyclerView.Adapter<MediaItemAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        MediaSource mediaSource = mMediaList.get(position);
-        holder.mImageView.setImageResource(mediaSource.getImageId());
+        RecyclerViewItem recyclerViewItem = mMediaList.get(position);
+        holder.mImageView.setImageResource(recyclerViewItem.getImageId());
     }
 
     @Override

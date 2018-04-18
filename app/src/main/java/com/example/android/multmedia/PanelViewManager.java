@@ -4,13 +4,9 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.android.multmedia.fragment.BaseFragment;
-import com.example.android.multmedia.fragment.FragItemClickListener;
-import com.example.android.multmedia.fragment.MediaFragment;
-import com.example.android.multmedia.fragment.VideoFragment;
 
 /**
  * Created by huixue.gong on 2018/4/4.
