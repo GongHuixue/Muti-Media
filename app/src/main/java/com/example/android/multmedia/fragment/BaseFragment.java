@@ -2,6 +2,7 @@ package com.example.android.multmedia.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.AdapterView;
 
 import com.example.android.multmedia.PanelViewManager;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
  */
 
 public abstract class BaseFragment extends android.support.v4.app.Fragment {
+    private final static String TAG = BaseFragment.class.getSimpleName();
     protected boolean isViewInit;
     protected boolean isVisiable;
     protected boolean isDataInit;
@@ -29,7 +31,7 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        onItemClickListener = new PanelViewManager(context);
+        onItemClickListener = PanelViewManager.getPanelViewManager(context);
     }
 
     @Override

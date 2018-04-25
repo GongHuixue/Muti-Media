@@ -17,6 +17,7 @@ public class Constant {
     public static final String FAVORITE_FILES = "Favorite";
     public static final String POPULAR_FILES = "Most Popular";
     public static final String LASTED_FILES = "Last Played";
+    public static final String ONLINE_MEDIA = "Online Media";
     public static final String SETTINGS = "Settings";
 
     public static final String PREF = "com.example.android.multmedia";

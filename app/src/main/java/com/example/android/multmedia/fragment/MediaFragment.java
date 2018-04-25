@@ -39,14 +39,6 @@ public class MediaFragment extends BaseFragment {
         ListView listView = view.findViewById(R.id.media_item_list_view);
         listView.setAdapter(fragListItemAdapter);
         listView.setOnItemClickListener(onItemClickListener);
-        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FragListItem mediaItem = fragList.get(position);
-                Log.d(TAG, "Current Selected Item is = " + mediaItem);
-                //Toast.makeText(MainActivity.this, mediaItem.getItemName(), Toast.LENGTH_SHORT).show();
-            }
-        });*/
         return view;
     }
 
@@ -54,11 +46,13 @@ public class MediaFragment extends BaseFragment {
         FragListItem favourites = new FragListItem(Constant.FAVORITE_FILES, R.drawable.favourty);
         FragListItem popular = new FragListItem(Constant.POPULAR_FILES, R.drawable.popular);
         FragListItem lastPlayed = new FragListItem(Constant.LASTED_FILES, R.drawable.play);
+        FragListItem onlineMedia = new FragListItem(Constant.ONLINE_MEDIA, R.drawable.online);
         FragListItem settings = new FragListItem(Constant.SETTINGS, R.drawable.setting);
 
         fragList.add(favourites);
         fragList.add(popular);
         fragList.add(lastPlayed);
+        fragList.add(onlineMedia);
         fragList.add(settings);
     }
 }

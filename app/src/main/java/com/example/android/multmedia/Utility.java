@@ -42,8 +42,8 @@ public class Utility {
     public View getProgressBarView(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View layout = inflater.inflate(R.layout.recycler_view_item, null);
-        ProgressBar progressBar = layout.findViewById(R.id.loader);
-        progressBar.setVisibility(View.VISIBLE);
+//        ProgressBar progressBar = layout.findViewById(R.id.loader);
+//        progressBar.setVisibility(View.VISIBLE);
         Toast.makeText(mContext, "File is Loading, please wait", Toast.LENGTH_SHORT).show();
         return layout;
     }

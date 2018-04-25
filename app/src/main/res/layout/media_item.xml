@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:orientation="horizontal">
@@ -23,4 +23,4 @@
             android:layout_gravity="center_horizontal|center_vertical">
         </TextView>
 
-</merge>
+</LinearLayout>

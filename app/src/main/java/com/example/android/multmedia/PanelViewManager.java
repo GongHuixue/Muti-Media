@@ -14,13 +14,20 @@ import com.example.android.multmedia.fragment.BaseFragment;
 
 public class PanelViewManager implements AdapterView.OnItemClickListener{
     private static final String TAG = PanelViewManager.class.getSimpleName();
-
+    private static PanelViewManager mInstance;
     private MainActivity mActivity;
     private int currentActiveFragId;
     private BaseFragment currentActiveFrag;
 
-    public PanelViewManager(Context context) {
+    private PanelViewManager(Context context) {
         this.mActivity = (MainActivity)context;
+    }
+
+    public static synchronized PanelViewManager getPanelViewManager(Context context) {
+        if(mInstance == null) {
+            mInstance = new PanelViewManager(context);
+        }
+        return mInstance;
     }
 
     @Override

@@ -33,11 +33,28 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
         Log.d(TAG, "onCreate Enter");
         initView();
 
-        mPanelViewManager = new PanelViewManager(this);
+        mPanelViewManager = PanelViewManager.getPanelViewManager(this);
         mUtility = new Utility(this, mPanelViewManager);
-
-        fragment = new MediaFragment();
     }
+
+    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            Log.d(TAG, "Page Selected " + position);
+            mTabLayout.setCurrentTab(position);
+            handlePageChanged(position);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 
     private void initView() {
         mTabLayout = (TabMenuLayout) findViewById(R.id.tab_layout);
@@ -50,29 +67,12 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
         tabs.add(new TableItem(R.drawable.selector_tab_picture, R.string.picture, PictureFragment.class));
 
         mTabLayout.initData(tabs, this);
-        mTabLayout.setCurrentTab(0);
+        mTabLayout.setCurrentTab(0); //set media fragment as default.
 
         fgAdapter = new FragmentAdapter(getSupportFragmentManager(), tabs);
         mViewPager.setAdapter(fgAdapter);
         mViewPager.setOffscreenPageLimit(2);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                mTabLayout.setCurrentTab(position);
-                currentFragment = position;
-                mPanelViewManager.setActiveFragment(currentFragment, (BaseFragment) fgAdapter.getItem(currentFragment));
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+        mViewPager.addOnPageChangeListener(pageChangeListener);
     }
 
     @Override
@@ -80,11 +80,17 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
         int item = tabs.indexOf(tabItem);
         Log.i(TAG, "onTabClick: item=" + item);
         mViewPager.setCurrentItem(item);
-        currentFragment = item;
-        mPanelViewManager.setActiveFragment(currentFragment, (BaseFragment) fgAdapter.getItem(currentFragment));
     }
 
     public Utility getUtility() {
         return mUtility;
+    }
+
+    private void handlePageChanged(int pageIndex) {
+        Log.d(TAG, "handlePageChanged Index = " + pageIndex + ", currentFragment = " + currentFragment);
+        currentFragment = pageIndex;
+        fragment = (BaseFragment) fgAdapter.getItem(pageIndex);
+        Log.d(TAG, "Current fragment is " + fragment);
+        mPanelViewManager.setActiveFragment(currentFragment, (BaseFragment) fgAdapter.getItem(currentFragment));
     }
 }

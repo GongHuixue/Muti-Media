@@ -15,7 +15,7 @@ import com.example.android.multmedia.R;
  * Created by huixue.gong on 2018/3/30.
  */
 
-public class TabView extends RelativeLayout implements View.OnClickListener{
+public class TabView extends RelativeLayout{
     private static final String TAG = TabView.class.getSimpleName();
     private ImageView mTabImage;
     private TextView mTabText;
@@ -45,10 +45,5 @@ public class TabView extends RelativeLayout implements View.OnClickListener{
     public void initTabItemData(TableItem tabItem) {
         mTabImage.setImageResource(tabItem.imageResId);
         mTabText.setText(tabItem.lableResId);
-    }
-
-    @Override
-    public void onClick(View view) {
-
     }
 }
