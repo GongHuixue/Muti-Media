@@ -1,5 +1,6 @@
 package com.example.android.multmedia;
 
+import android.app.ProgressDialog;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
     private TabMenuLayout mTabLayout;
     private ViewPager mViewPager;
     private ArrayList<TableItem> tabs;
+    private ProgressDialog progressDialog;
     private BaseFragment fragment;
     FragmentAdapter fgAdapter;
     private PanelViewManager mPanelViewManager;
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
     private void initView() {
         mTabLayout = (TabMenuLayout) findViewById(R.id.tab_layout);
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        progressDialog = new ProgressDialog(MainActivity.this);
 
         tabs = new ArrayList<>();
         tabs.add(new TableItem(R.drawable.selector_tab_media, R.string.media, MediaFragment.class));
@@ -92,5 +95,18 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
         fragment = (BaseFragment) fgAdapter.getItem(pageIndex);
         Log.d(TAG, "Current fragment is " + fragment);
         mPanelViewManager.setActiveFragment(currentFragment, (BaseFragment) fgAdapter.getItem(currentFragment));
+    }
+
+    public void showProgessLoading() {
+        progressDialog.setTitle("");
+        progressDialog.setMessage("File is loading, please wait ......");
+        progressDialog.setCancelable(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(false);
+        progressDialog.show();
+    }
+
+    public void hideProgressLoading() {
+        progressDialog.hide();
     }
 }

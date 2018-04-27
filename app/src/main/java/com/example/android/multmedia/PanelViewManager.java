@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.android.multmedia.fragment.BaseFragment;
@@ -35,6 +37,12 @@ public class PanelViewManager implements AdapterView.OnItemClickListener{
         Log.d(TAG, "onItemClick view = " + view + ", parent = " + parent + ", position = " + position);
         ListView listView = (ListView) parent;
         BaseFragment.FragListItem fragListItem;
+
+        FrameLayout frameLayout = new FrameLayout(mActivity);
+        FrameLayout.LayoutParams frameParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+
+//        LinearLayout linearLayout = (LinearLayout) getUtility().getRecyclerViewLayout(mActivity);
         View panelView = null;
 
         try {
@@ -62,8 +70,12 @@ public class PanelViewManager implements AdapterView.OnItemClickListener{
             Log.d(TAG, "Launch Popular Recycler View");
         }
 
+        Log.d(TAG, "Panel View = " + panelView);
         if(panelView != null) {
             //LinearLayout linearLayout = (LinearLayout)findViewById(R.id.media_recycler_layout);
+            frameLayout.addView(panelView, frameParams);
+            panelView.bringToFront();
+
         }
     }
 
@@ -83,10 +95,11 @@ public class PanelViewManager implements AdapterView.OnItemClickListener{
     public View getVideoBrowserView(int position) {
         View recyclerView = null;
         boolean isVideoScaned = getUtility().isMediaScanned(mActivity);
-        if(!isVideoScaned) {
-            /*if the media had not scanned, show the loading progress bar*/
-            return getUtility().getProgressBarView(mActivity);
-        }
+//        if(!isVideoScaned) {
+//            /*if the media had not scanned, show the loading progress bar*/
+//            mActivity.showProgessLoading();
+//            return recyclerView;
+//        }
         recyclerView = getUtility().getVideoRecyclerView();
         return recyclerView;
     }

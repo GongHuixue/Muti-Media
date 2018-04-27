@@ -39,11 +39,9 @@ public class Utility {
         return preferences.getBoolean("", false);
     }
 
-    public View getProgressBarView(Context context) {
+    public View getRecyclerViewLayout(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View layout = inflater.inflate(R.layout.recycler_view_item, null);
-//        ProgressBar progressBar = layout.findViewById(R.id.loader);
-//        progressBar.setVisibility(View.VISIBLE);
         Toast.makeText(mContext, "File is Loading, please wait", Toast.LENGTH_SHORT).show();
         return layout;
     }

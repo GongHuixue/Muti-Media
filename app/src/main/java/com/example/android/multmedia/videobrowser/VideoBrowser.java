@@ -8,12 +8,18 @@ import android.app.LoaderManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.example.android.multmedia.MainActivity;
 import com.example.android.multmedia.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -27,6 +33,7 @@ public class VideoBrowser implements LoaderManager.LoaderCallbacks<Cursor> {
     private MainActivity mActivity;
     private View mRetView;
     private RecyclerView mView;
+    private VideoBrowserAdapter mAdapter;
     private Cursor mCursor;
     private int mNumColumns;
     private static VideoBrowser mVbInstance = null;
@@ -73,6 +80,7 @@ public class VideoBrowser implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /*get recycler view layout*/
     public View getRecyclerViewLayout() {
+        /*
         if(mCursor != null && mCursor.getCount() == 0) {
             return null;
         }
@@ -82,7 +90,15 @@ public class VideoBrowser implements LoaderManager.LoaderCallbacks<Cursor> {
 
             mRetView = mActivity.getLayoutInflater().inflate(R.layout.activity_video_browser, null);
             mView = mRetView.findViewById(R.id.vid_recycler_view);
-        }
+        }*/
+        mAdapter = new VideoBrowserAdapter(getData());
+
+        mRetView = mActivity.getLayoutInflater().inflate(R.layout.activity_video_browser, null);
+        mView = mRetView.findViewById(R.id.vid_recycler_view);
+        mView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        mView.setItemAnimator(new DefaultItemAnimator());
+        mView.setAdapter(mAdapter);
+
         return mRetView;
     }
 
@@ -90,4 +106,15 @@ public class VideoBrowser implements LoaderManager.LoaderCallbacks<Cursor> {
     public RecyclerView getRecyclerViewInstance() {
         return mView;
     }
+
+    private ArrayList<String> getData() {
+        ArrayList<String> data = new ArrayList<>();
+        String temp = " TextView ";
+
+        for(int i = 0; i < 50; i++) {
+            data.add(temp + i);
+        }
+        return data;
+    }
+
 }
