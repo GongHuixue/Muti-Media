@@ -1,6 +1,7 @@
 package com.example.android.multmedia;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.android.multmedia.fragment.BaseFragment;
+import com.example.android.multmedia.player.videoplayer.VideoPlayerActivity;
 
 /**
  * Created by huixue.gong on 2018/4/4.
@@ -20,6 +22,7 @@ public class PanelViewManager implements AdapterView.OnItemClickListener{
     private MainActivity mActivity;
     private int currentActiveFragId;
     private BaseFragment currentActiveFrag;
+    private Intent intent;
 
     private PanelViewManager(Context context) {
         this.mActivity = (MainActivity)context;
@@ -38,13 +41,6 @@ public class PanelViewManager implements AdapterView.OnItemClickListener{
         ListView listView = (ListView) parent;
         BaseFragment.FragListItem fragListItem;
 
-        FrameLayout frameLayout = new FrameLayout(mActivity);
-        FrameLayout.LayoutParams frameParams = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-
-//        LinearLayout linearLayout = (LinearLayout) getUtility().getRecyclerViewLayout(mActivity);
-        View panelView = null;
-
         try {
             fragListItem = (BaseFragment.FragListItem) listView.getItemAtPosition(position);
         }catch (Exception ex) {
@@ -56,27 +52,7 @@ public class PanelViewManager implements AdapterView.OnItemClickListener{
 
         Log.d(TAG, "Current Selected List Item is " + listItemName);
 
-        if(listItemName.equalsIgnoreCase(Constant.AUDIO_FILES)) {
-            Log.d(TAG, "Launch Audio Recycler View");
-            //panelView = getVideoBrowserView();
-        }else if (listItemName.equalsIgnoreCase(Constant.VIDEO_FILES)) {
-            Log.d(TAG, "Launch Video Recycler View");
-            panelView = getVideoBrowserView(position);
-        }else if(listItemName.equalsIgnoreCase(Constant.PICTURE_FILES)) {
-            Log.d(TAG, "Launch Picture Recycler View");
-        }else if(listItemName.equalsIgnoreCase(Constant.FAVORITE_FILES)) {
-            Log.d(TAG, "Launch Favorite Recycler View");
-        }else if(listItemName.equalsIgnoreCase(Constant.POPULAR_FILES)) {
-            Log.d(TAG, "Launch Popular Recycler View");
-        }
-
-        Log.d(TAG, "Panel View = " + panelView);
-        if(panelView != null) {
-            //LinearLayout linearLayout = (LinearLayout)findViewById(R.id.media_recycler_layout);
-            frameLayout.addView(panelView, frameParams);
-            panelView.bringToFront();
-
-        }
+        mActivity.startActivity(listItemName);
     }
 
     public void setActiveFragment(int fragmentId, BaseFragment fragment) {

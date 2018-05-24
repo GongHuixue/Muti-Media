@@ -1,5 +1,7 @@
 package com.example.android.multmedia.adpter;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +20,10 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     private List<RecyclerViewItem> mMediaList;
-
     public RecyclerViewAdapter(List<RecyclerViewItem> mediaList) {
         mMediaList = mediaList;
     }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         View mediaView;
         ImageView mImageView;
@@ -29,7 +31,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ViewHolder(View view) {
             super(view);
             mediaView = view;
-            mImageView = view.findViewById(R.id.media_item_image);
+            mImageView = (ImageView) view.findViewById(R.id.media_item_image);
         }
     }
 

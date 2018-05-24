@@ -1,5 +1,7 @@
 package com.example.android.multmedia.videobrowser;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +18,16 @@ import java.util.ArrayList;
 
 public class VideoBrowserAdapter extends RecyclerView.Adapter<VideoBrowserAdapter.VideoViewHolder>{
     private ArrayList<String> mData;
-    
+    private Context mContext;
+    private Cursor mCursor;
+
     public VideoBrowserAdapter(ArrayList<String> data) {
         this.mData = data;
+    }
+
+    public VideoBrowserAdapter(Context context, Cursor cursor) {
+        this.mContext = context;
+        this.mCursor = cursor;
     }
 
     @Override

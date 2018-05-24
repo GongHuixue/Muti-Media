@@ -38,8 +38,8 @@ public class TabView extends RelativeLayout{
     private void initView(Context context) {
         setGravity(Gravity.CENTER);
         LayoutInflater.from(context).inflate(R.layout.tab_view, this, true);
-        mTabImage = findViewById(R.id.tab_image);
-        mTabText = findViewById(R.id.tab_lable);
+        mTabImage = (ImageView) findViewById(R.id.tab_image);
+        mTabText = (TextView) findViewById(R.id.tab_lable);
     }
 
     public void initTabItemData(TableItem tabItem) {

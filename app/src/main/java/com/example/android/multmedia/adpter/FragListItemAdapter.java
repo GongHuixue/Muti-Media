@@ -36,8 +36,8 @@ public class FragListItemAdapter extends ArrayAdapter<BaseFragment.FragListItem>
             view = convertView;
         }
 
-        ImageView MediaItemImage = view.findViewById(R.id.media_item_image);
-        TextView MediaItemName = view.findViewById(R.id.media_item_name);
+        ImageView MediaItemImage = (ImageView)view.findViewById(R.id.media_item_image);
+        TextView MediaItemName = (TextView) view.findViewById(R.id.media_item_name);
         MediaItemImage.setImageResource(mediaItem.getImageId());
         MediaItemName.setText(mediaItem.getItemName());
 

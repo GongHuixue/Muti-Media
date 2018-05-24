@@ -45,4 +45,5 @@ public class Utility {
         Toast.makeText(mContext, "File is Loading, please wait", Toast.LENGTH_SHORT).show();
         return layout;
     }
+
 }

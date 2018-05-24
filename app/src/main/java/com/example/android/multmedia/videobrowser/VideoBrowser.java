@@ -17,8 +17,11 @@ import android.view.ViewGroup;
 
 import com.example.android.multmedia.MainActivity;
 import com.example.android.multmedia.R;
+import com.example.android.multmedia.player.videoplayer.VideoPlayerActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -41,7 +44,7 @@ public class VideoBrowser implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private VideoBrowser(Context context) {
         mContext = context;
-        mActivity = (MainActivity) context;
+        mActivity = (MainActivity)context;
     }
 
     public static VideoBrowser getVbInstance(Context context) {
@@ -49,6 +52,10 @@ public class VideoBrowser implements LoaderManager.LoaderCallbacks<Cursor> {
             mVbInstance = new VideoBrowser(context);
         }
         return mVbInstance;
+    }
+
+    public void startLoader() {
+        mActivity.getLoaderManager().restartLoader(VbConstants.VB_LOADER_ID, null, this);
     }
 
     @Override
@@ -60,22 +67,31 @@ public class VideoBrowser implements LoaderManager.LoaderCallbacks<Cursor> {
                 MediaStore.Video.Media._ID, MediaStore.Video.Media.TITLE,
                 MediaStore.Video.Media.DATE_TAKEN, MediaStore.Video.Media.SIZE,
                 MediaStore.Video.Media.DURATION };
-        String mntPath = null;
-        String selection = MediaStore.Video.Media.DATA + " LIKE '" + mntPath+"/%'"
-                +" AND "+ MediaStore.Video.Media.DATA + " NOT LIKE '" + mntPath + "/%.divx'";
+//        String mntPath = null;
+//        String selection = MediaStore.Video.Media.DATA + " LIKE '" + mntPath+"/%'"
+//                +" AND "+ MediaStore.Video.Media.DATA + " NOT LIKE '" + mntPath + "/%.divx'";
 
-        return new CursorLoader(mContext, uri, projection, selection, null,
+        return new CursorLoader(mContext, uri, projection, null, null,
                 VbConstants.ORDER_BY[mSortOrder]);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         Log.d(TAG, "onLoadFinished...");
+        mCursor = cursor;
+        chooseAdapter();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         Log.d(TAG, "onLoaderReset");
+    }
+
+    private void chooseAdapter() {
+        Log.d(TAG, "Choose Video Adapter + Total Video files = " + mCursor.getCount());
+        if((mCursor != null) && (mCursor.getCount() > 0)) {
+            mAdapter = new VideoBrowserAdapter(mContext, mCursor);
+        }
     }
 
     /*get recycler view layout*/
@@ -91,13 +107,13 @@ public class VideoBrowser implements LoaderManager.LoaderCallbacks<Cursor> {
             mRetView = mActivity.getLayoutInflater().inflate(R.layout.activity_video_browser, null);
             mView = mRetView.findViewById(R.id.vid_recycler_view);
         }*/
-        mAdapter = new VideoBrowserAdapter(getData());
-
-        mRetView = mActivity.getLayoutInflater().inflate(R.layout.activity_video_browser, null);
-        mView = mRetView.findViewById(R.id.vid_recycler_view);
-        mView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        mView.setItemAnimator(new DefaultItemAnimator());
-        mView.setAdapter(mAdapter);
+//        mAdapter = new VideoBrowserAdapter(getData());
+//
+//        mRetView = mActivity.getLayoutInflater().inflate(R.layout.activity_video_browser, null);
+//        mView = (RecyclerView) mRetView.findViewById(R.id.vid_recycler_view);
+//        mView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+//        mView.setItemAnimator(new DefaultItemAnimator());
+//        mView.setAdapter(mAdapter);
 
         return mRetView;
     }

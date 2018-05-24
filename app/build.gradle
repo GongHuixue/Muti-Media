@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 25
     defaultConfig {
         applicationId "com.example.android.multmedia"
         minSdkVersion 22
-        targetSdkVersion 26
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -24,6 +24,9 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:25.3.1'
     testImplementation 'junit:junit:4.12'
+
+    //add dependencies medialoader
+    compile project(':mediaload')
     //androidTestImplementation 'com.android.support.test:runner:0.5'
     //androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
 }

@@ -36,7 +36,7 @@ public class MediaFragment extends BaseFragment {
         fragListItemAdapter = new FragListItemAdapter(this.getContext(),
                 R.layout.media_item, fragList);
         initFragmentData();
-        ListView listView = view.findViewById(R.id.media_item_list_view);
+        ListView listView = (ListView) view.findViewById(R.id.media_item_list_view);
         listView.setAdapter(fragListItemAdapter);
         listView.setOnItemClickListener(onItemClickListener);
         return view;
