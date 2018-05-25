@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.example.android.multmedia.adpter.FragmentAdapter;
 import com.example.android.multmedia.fragment.*;
-import com.example.android.multmedia.player.videoplayer.VideoPlayerActivity;
+import com.example.android.multmedia.player.VideoPlayerPlayerActivity;
 import com.example.android.multmedia.tabmenu.TabMenuLayout;
 import com.example.android.multmedia.tabmenu.TableItem;
 
@@ -113,14 +113,14 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
         progressDialog.hide();
     }
 
-    public void startActivity(String activityName) {
+    public void launchActivity(String activityName) {
         if(activityName.equalsIgnoreCase(Constant.AUDIO_FILES)) {
             Log.d(TAG, "Launch Audio Recycler View");
             //panelView = getVideoBrowserView();
         }else if (activityName.equalsIgnoreCase(Constant.VIDEO_FILES)) {
             Log.d(TAG, "Launch Video Recycler View");
 //            panelView = getVideoBrowserView(position);
-            intent = new Intent(MainActivity.this, VideoPlayerActivity.class);
+            intent = new Intent(MainActivity.this, VideoPlayerPlayerActivity.class);
             startActivity(intent);
 
         }else if(activityName.equalsIgnoreCase(Constant.PICTURE_FILES)) {

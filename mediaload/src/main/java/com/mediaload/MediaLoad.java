@@ -33,7 +33,6 @@ public class MediaLoad {
     private final int MSG_LOAD_START = 101;
     private final int MSG_LOAD_STOP = 102;
     private final int MSG_LOAD_FINISH = 103;
-    private final int MSG_LOAD_ERROR = 104;
 
     private final int MEDIA_LOAD_ID = 1000;
 

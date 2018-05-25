@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.multmedia">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -25,22 +25,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".player.videoplayer.VideoPlayerActivity"
+            android:name=".player.VideoPlayerPlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
-            android:excludeFromRecents="true">
-        </activity>
+            android:excludeFromRecents="true"></activity>
         <activity
-            android:name=".player.imageplayer.PicturePlayerActivity"
+            android:name=".player.PicturePlayerPlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
-            android:excludeFromRecents="true">
-        </activity>
+            android:excludeFromRecents="true"></activity>
         <activity
-            android:name=".player.audioplayer.AudioPlayerActivity"
+            android:name=".player.AudioPlayerPlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
-            android:excludeFromRecents="true">
-        </activity>
+            android:excludeFromRecents="true"></activity>
+        <activity android:name=".player.BasePlayerActivity"></activity>
     </application>
 
 </manifest>

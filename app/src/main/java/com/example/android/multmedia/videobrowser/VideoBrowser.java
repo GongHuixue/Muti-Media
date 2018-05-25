@@ -8,21 +8,13 @@ import android.app.LoaderManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.android.multmedia.MainActivity;
-import com.example.android.multmedia.R;
-import com.example.android.multmedia.player.videoplayer.VideoPlayerActivity;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 
 /**

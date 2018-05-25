@@ -5,12 +5,9 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.android.multmedia.fragment.BaseFragment;
-import com.example.android.multmedia.player.videoplayer.VideoPlayerActivity;
 
 /**
  * Created by huixue.gong on 2018/4/4.
@@ -52,7 +49,7 @@ public class PanelViewManager implements AdapterView.OnItemClickListener{
 
         Log.d(TAG, "Current Selected List Item is " + listItemName);
 
-        mActivity.startActivity(listItemName);
+        mActivity.launchActivity(listItemName);
     }
 
     public void setActiveFragment(int fragmentId, BaseFragment fragment) {

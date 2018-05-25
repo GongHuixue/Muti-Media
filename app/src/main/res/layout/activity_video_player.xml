@@ -4,7 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.multmedia.player.videoplayer.VideoPlayerActivity">
+    android:orientation="vertical"
+    tools:context="com.example.android.multmedia.player.VideoPlayerPlayerActivity">
+
+    <TextView
+        android:id="@+id/video_num"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textSize="15dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/video_recycler_view"
