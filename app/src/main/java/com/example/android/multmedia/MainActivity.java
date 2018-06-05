@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
     public void launchActivity(String activityName) {
         if(activityName.equalsIgnoreCase(Constant.AUDIO_FILES)) {
             Log.d(TAG, "Launch Audio Recycler View");
+            
             //panelView = getVideoBrowserView();
         }else if (activityName.equalsIgnoreCase(Constant.VIDEO_FILES)) {
             Log.d(TAG, "Launch Video Recycler View");

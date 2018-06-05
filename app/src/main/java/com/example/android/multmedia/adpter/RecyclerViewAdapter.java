@@ -17,11 +17,14 @@ import java.util.List;
  * Created by huixue.gong on 2018/4/8.
  */
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private List<RecyclerViewItem> mMediaList;
-    public RecyclerViewAdapter(List<RecyclerViewItem> mediaList) {
-        mMediaList = mediaList;
+    protected List<T> mMediaList;
+    protected int mLayoutId;
+
+    public RecyclerViewAdapter(List<T> mediaList,  int layoutId) {
+        this.mMediaList = mediaList;
+        this.mLayoutId = layoutId;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -44,8 +47,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        RecyclerViewItem recyclerViewItem = mMediaList.get(position);
-        holder.mImageView.setImageResource(recyclerViewItem.getImageId());
+//        RecyclerViewItem recyclerViewItem = mMediaList.get(position);
+//        holder.mImageView.setImageResource(recyclerViewItem.getImageId());
     }
 
     @Override
