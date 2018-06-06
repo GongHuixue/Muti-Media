@@ -2,13 +2,15 @@ package com.example.android.multmedia;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.example.android.multmedia.adpter.FragmentAdapter;
 import com.example.android.multmedia.fragment.*;
+import com.example.android.multmedia.player.AudioPlayerPlayerActivity;
+import com.example.android.multmedia.player.PicturePlayerPlayerActivity;
 import com.example.android.multmedia.player.VideoPlayerPlayerActivity;
 import com.example.android.multmedia.tabmenu.TabMenuLayout;
 import com.example.android.multmedia.tabmenu.TableItem;
@@ -16,7 +18,7 @@ import com.example.android.multmedia.tabmenu.TableItem;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnTabClickListener {
+public class MainActivity extends FragmentActivity implements TabMenuLayout.OnTabClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private TabMenuLayout mTabLayout;
     private ViewPager mViewPager;
@@ -27,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
     private PanelViewManager mPanelViewManager;
     private Utility mUtility;
     private Intent intent;
-
 
     private volatile int currentFragment = 0;
 
@@ -116,16 +117,18 @@ public class MainActivity extends AppCompatActivity implements TabMenuLayout.OnT
     public void launchActivity(String activityName) {
         if(activityName.equalsIgnoreCase(Constant.AUDIO_FILES)) {
             Log.d(TAG, "Launch Audio Recycler View");
-            
+            intent = new Intent(MainActivity.this, AudioPlayerPlayerActivity.class);
+            startActivity(intent);
             //panelView = getVideoBrowserView();
         }else if (activityName.equalsIgnoreCase(Constant.VIDEO_FILES)) {
             Log.d(TAG, "Launch Video Recycler View");
 //            panelView = getVideoBrowserView(position);
             intent = new Intent(MainActivity.this, VideoPlayerPlayerActivity.class);
             startActivity(intent);
-
         }else if(activityName.equalsIgnoreCase(Constant.PICTURE_FILES)) {
             Log.d(TAG, "Launch Picture Recycler View");
+            intent = new Intent(MainActivity.this, PicturePlayerPlayerActivity.class);
+            startActivity(intent);
         }else if(activityName.equalsIgnoreCase(Constant.FAVORITE_FILES)) {
             Log.d(TAG, "Launch Favorite Recycler View");
         }else if(activityName.equalsIgnoreCase(Constant.POPULAR_FILES)) {
