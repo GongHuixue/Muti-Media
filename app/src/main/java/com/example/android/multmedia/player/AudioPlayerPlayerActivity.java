@@ -1,7 +1,10 @@
 package com.example.android.multmedia.player;
 
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.widget.TextView;
 
 import com.example.android.multmedia.R;
@@ -14,6 +17,8 @@ import java.util.List;
 
 public class AudioPlayerPlayerActivity extends BasePlayerActivity {
     private List<String> audioList = new ArrayList<>();
+    private DividerItemDecoration verticalDivider;
+    private DividerItemDecoration horizontalDivider;
 
     @Override
     public int getLayoutResID() {
@@ -32,7 +37,13 @@ public class AudioPlayerPlayerActivity extends BasePlayerActivity {
         });
         /*init recycler view*/
         RecyclerView audioRecyclerView = (RecyclerView) findViewById(R.id.audio_recycler_view);
-        audioRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        audioRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+        /*add horizontal and vertical divider line*/
+        verticalDivider = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
+        horizontalDivider = new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL);
+        audioRecyclerView.addItemDecoration(verticalDivider);
+        audioRecyclerView.addItemDecoration(horizontalDivider);
+
         audioRecyclerView.setAdapter(new AudioRvAdapter(this, getAudioList()));
     }
 
