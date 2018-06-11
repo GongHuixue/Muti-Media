@@ -1,33 +1,26 @@
 package com.example.android.multmedia.player;
 
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.widget.TextView;
 
 import com.example.android.multmedia.R;
+import com.example.android.multmedia.adpter.RecyclerViewAdapter;
 import com.example.android.multmedia.videobrowser.VideoBrowser;
+import com.mediaload.bean.PhotoItem;
+import com.mediaload.bean.VideoItem;
 import com.mediaload.bean.VideoResult;
 import com.mediaload.callback.OnVideoLoadCallBack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class VideoPlayerPlayerActivity extends BasePlayerActivity {
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private VideoBrowser videoBrowser;
-
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_video_player);
-////        mRecyclerView = (RecyclerView) findViewById(R.id.video_recycler_view);
-////        mLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-////        mRecyclerView.setLayoutManager(mLayoutManager);
-////        mAdapter = new VideoBrowserAdapter(getData());
-////        mRecyclerView.setAdapter(mAdapter);
-//    }
+    private RecyclerViewAdapter<VideoItem> mVideoRvAdapter;
+    private List<VideoItem> mVideoItems = new ArrayList<>();
 
     @Override
     public int getLayoutResID(){
@@ -37,21 +30,32 @@ public class VideoPlayerPlayerActivity extends BasePlayerActivity {
     @Override
     public void initView() {
         final TextView videoNum = (TextView) findViewById(R.id.video_num);
+        mRecyclerView = (RecyclerView) findViewById(R.id.video_recycler_view);
         mediaLoad.loadVideos(VideoPlayerPlayerActivity.this, new OnVideoLoadCallBack() {
             @Override
             public void onResult(VideoResult result) {
                 videoNum.setText("Video Files: " + result.getItems().size());
+                mVideoItems = result.getItems();
             }
         });
+
+        mVideoRvAdapter = new RecyclerViewAdapter<VideoItem>(mVideoItems, VideoPlayerPlayerActivity.this) {
+            @Override
+            public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
+                holder.mImageView.setImageResource(R.drawable.ic_tab_video);
+                holder.mTextView.setText("Video");
+            }
+        };
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+
+        /*add horizontal and vertical divider line*/
+        verticalDivider = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
+        horizontalDivider = new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.addItemDecoration(verticalDivider);
+        mRecyclerView.addItemDecoration(horizontalDivider);
+
+        mRecyclerView.setAdapter(mVideoRvAdapter);
+
     }
 
-    private ArrayList<String> getData() {
-        ArrayList<String> data = new ArrayList<>();
-        String temp = " Item ";
-
-        for (int i = 0; i < 50; i++ ) {
-            data.add(temp + i);
-        }
-        return data;
-    }
 }

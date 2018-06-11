@@ -3,10 +3,12 @@ package com.example.android.multmedia.adpter;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.mediasource.RecyclerViewItem;
@@ -17,42 +19,53 @@ import java.util.List;
  * Created by huixue.gong on 2018/4/8.
  */
 
-public class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+    private final static String TAG = RecyclerViewAdapter.class.getSimpleName();
 
     protected List<T> mMediaList;
+    protected Context mContext;
     protected int mLayoutId;
 
-    public RecyclerViewAdapter(List<T> mediaList,  int layoutId) {
+    public RecyclerViewAdapter(List<T> mediaList, Context context) {
+        Log.d(TAG, "RecyclerViewAdapter");
         this.mMediaList = mediaList;
-        this.mLayoutId = layoutId;
+        this.mContext = context;
+        //this.mLayoutId = layoutId;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         View mediaView;
-        ImageView mImageView;
+        public ImageView mImageView;
+        public TextView mTextView;
 
         public ViewHolder(View view) {
             super(view);
             mediaView = view;
-            mImageView = (ImageView) view.findViewById(R.id.media_item_image);
+            mImageView = (ImageView) view.findViewById(R.id.image_item);
+            mTextView = (TextView) view.findViewById(R.id.text_item);
         }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.media_item, parent, false);
+        Log.d(TAG, "onCreateViewHolder");
+        //View view = LayoutInflater.from(mContext).inflate(R.layout.recycler_view_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item, parent, false);
+
         final ViewHolder holder = new ViewHolder(view);
         return holder;
     }
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+//    @Override
+//    public void onBindViewHolder(ViewHolder holder, int position) {
 //        RecyclerViewItem recyclerViewItem = mMediaList.get(position);
 //        holder.mImageView.setImageResource(recyclerViewItem.getImageId());
-    }
+//    }
 
     @Override
     public int getItemCount() {
-        return  mMediaList.size();
+        Log.d(TAG, "Get Item Count = " + mMediaList.size());
+        return 50;
+        //return  mMediaList.size();
     }
 }
