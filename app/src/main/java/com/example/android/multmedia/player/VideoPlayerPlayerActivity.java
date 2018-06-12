@@ -35,7 +35,11 @@ public class VideoPlayerPlayerActivity extends BasePlayerActivity {
             @Override
             public void onResult(VideoResult result) {
                 videoNum.setText("Video Files: " + result.getItems().size());
-                mVideoItems = result.getItems();
+                if(result.getItems().size() > 0) {
+                    mVideoItems.clear();
+                    mVideoItems.addAll(result.getItems());
+                    mVideoRvAdapter.notifyDataSetChanged();
+                }
             }
         });
 

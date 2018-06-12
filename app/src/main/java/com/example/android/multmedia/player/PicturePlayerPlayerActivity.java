@@ -9,6 +9,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.adpter.RecyclerViewAdapter;
 import com.mediaload.bean.PhotoItem;
@@ -22,11 +23,10 @@ public class PicturePlayerPlayerActivity extends BasePlayerActivity {
     private final static String TAG = PicturePlayerPlayerActivity.class.getSimpleName();
     private RecyclerViewAdapter<PhotoItem> mPictureRvAdapter;
     private List<PhotoItem> mPictureItems = new ArrayList<>();
-    private List<String> mPictureList = new ArrayList<>();
 
 
     @Override
-    public int getLayoutResID(){
+    public int getLayoutResID() {
         return R.layout.activity_picture_player;
     }
 
@@ -39,13 +39,20 @@ public class PicturePlayerPlayerActivity extends BasePlayerActivity {
             @Override
             public void onResult(PhotoResult result) {
                 pictureNum.setText("Picture Files: " + result.getItems().size());
-                mPictureItems = result.getItems();
+                if(result.getItems().size()> 0 ) {
+                    mPictureItems.clear();
+                    mPictureItems.addAll(result.getItems());
+                    mPictureRvAdapter.notifyDataSetChanged();
+                }
             }
         });
 
         mPictureRvAdapter = new RecyclerViewAdapter<PhotoItem>(mPictureItems, PicturePlayerPlayerActivity.this) {
             @Override
             public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
+//                Glide.with(PicturePlayerPlayerActivity.this).
+//                        load("file://" + mPictureItems.get(position)).into(holder.mImageView);
+
                 //PhotoItem mPhoto = mPictureItems.get(position);
                 holder.mImageView.setImageResource(R.drawable.ic_tab_picture);
                 holder.mTextView.setText("Photo");
@@ -60,12 +67,5 @@ public class PicturePlayerPlayerActivity extends BasePlayerActivity {
         mRecyclerView.addItemDecoration(horizontalDivider);
 
         mRecyclerView.setAdapter(mPictureRvAdapter);
-    }
-
-    private List<String> getAudioList() {
-        for (int i = 0; i < 50; i++) {
-            mPictureList.add("picture " + i);
-        }
-        return mPictureList;
     }
 }

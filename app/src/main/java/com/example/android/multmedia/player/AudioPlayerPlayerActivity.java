@@ -18,9 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AudioPlayerPlayerActivity extends BasePlayerActivity {
-    private DividerItemDecoration verticalDivider;
-    private DividerItemDecoration horizontalDivider;
-
     private RecyclerViewAdapter<AudioItem> mAudioRvAdapter;
     private List<AudioItem> mAudioItems = new ArrayList<>();
 
@@ -39,7 +36,11 @@ public class AudioPlayerPlayerActivity extends BasePlayerActivity {
             @Override
             public void onResult(AudioResult result) {
                 audioNum.setText("Audio Files: " + result.getItems().size());
-                mAudioItems = result.getItems();
+                if(result.getItems().size() > 0) {
+                    mAudioItems.clear();
+                    mAudioItems.addAll(result.getItems());
+                    mAudioRvAdapter.notifyDataSetChanged();
+                }
             }
         });
 
@@ -60,5 +61,4 @@ public class AudioPlayerPlayerActivity extends BasePlayerActivity {
 
         mRecyclerView.setAdapter(mAudioRvAdapter);
     }
-
 }

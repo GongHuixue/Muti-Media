@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.content.Loader;
+import android.util.Log;
 
 import com.mediaload.bean.PhotoFolder;
 import com.mediaload.bean.PhotoItem;
@@ -21,7 +22,7 @@ import static android.provider.MediaStore.MediaColumns.DISPLAY_NAME;
 import static android.provider.MediaStore.MediaColumns.SIZE;
 
 public abstract class OnPhotoLoadCallBack extends BaseLoaderCallBack<PhotoResult>{
-
+    private final static String TAG = OnPhotoLoadCallBack.class.getSimpleName();
     public void onLoadFinish(Loader<Cursor> loader, Cursor data) {
         List<PhotoFolder> folders = new ArrayList<>();
         List<PhotoItem> allPhotos = new ArrayList<>();
@@ -40,6 +41,9 @@ public abstract class OnPhotoLoadCallBack extends BaseLoaderCallBack<PhotoResult
             long size = data.getLong(data.getColumnIndexOrThrow(SIZE));
             String path = data.getString(data.getColumnIndexOrThrow(DATA));
             long modified = data.getLong(data.getColumnIndexOrThrow(DATE_MODIFIED));
+
+            Log.d(TAG, "folderName = " + folderName + ",imageId = " + imageId + ",name = " + name + ",path = " + path);
+
             folder = new PhotoFolder();
             folder.setId(folderId);
             folder.setName(folderName);

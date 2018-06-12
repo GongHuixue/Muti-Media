@@ -27,10 +27,8 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     protected int mLayoutId;
 
     public RecyclerViewAdapter(List<T> mediaList, Context context) {
-        Log.d(TAG, "RecyclerViewAdapter");
         this.mMediaList = mediaList;
         this.mContext = context;
-        //this.mLayoutId = layoutId;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -64,8 +62,6 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
 
     @Override
     public int getItemCount() {
-        Log.d(TAG, "Get Item Count = " + mMediaList.size());
-        return 50;
-        //return  mMediaList.size();
+        return  mMediaList.size();
     }
 }
