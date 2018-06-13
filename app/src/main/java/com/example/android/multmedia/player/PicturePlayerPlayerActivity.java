@@ -1,7 +1,5 @@
 package com.example.android.multmedia.player;
 
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -53,6 +51,7 @@ public class PicturePlayerPlayerActivity extends BasePlayerActivity {
                 PhotoItem mPhoto = mPictureItems.get(position);
                 Glide.with(PicturePlayerPlayerActivity.this)
                         .load("file://" + mPhoto.getPath())
+                        .centerCrop()
                         .thumbnail(0.1f)
                         .into(holder.mImageView);
 

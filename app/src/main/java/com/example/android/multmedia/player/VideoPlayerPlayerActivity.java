@@ -46,6 +46,7 @@ public class VideoPlayerPlayerActivity extends BasePlayerActivity {
                 VideoItem mVideo = mVideoItems.get(position);
                 Glide.with(VideoPlayerPlayerActivity.this)
                         .load("file://" + mVideo.getPath())
+                        .centerCrop()
                         .thumbnail(0.1f)
                         .into(holder.mImageView);
 //                holder.mImageView.setImageResource(R.drawable.ic_tab_video);
