@@ -64,4 +64,8 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     public int getItemCount() {
         return  mMediaList.size();
     }
+    /*short click for play*/
+    //public abstract void onItemClickListener();
+    /*long click for add/del*/
+    //public abstract void onItemLongClickListener();
 }

@@ -50,12 +50,13 @@ public class PicturePlayerPlayerActivity extends BasePlayerActivity {
         mPictureRvAdapter = new RecyclerViewAdapter<PhotoItem>(mPictureItems, PicturePlayerPlayerActivity.this) {
             @Override
             public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
-//                Glide.with(PicturePlayerPlayerActivity.this).
-//                        load("file://" + mPictureItems.get(position)).into(holder.mImageView);
+                PhotoItem mPhoto = mPictureItems.get(position);
+                Glide.with(PicturePlayerPlayerActivity.this)
+                        .load("file://" + mPhoto.getPath())
+                        .thumbnail(0.1f)
+                        .into(holder.mImageView);
 
-                //PhotoItem mPhoto = mPictureItems.get(position);
-                holder.mImageView.setImageResource(R.drawable.ic_tab_picture);
-                holder.mTextView.setText("Photo");
+                //holder.mTextView.setText(mPhoto.getDisplayName());
             }
         };
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));

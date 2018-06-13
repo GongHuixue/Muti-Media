@@ -24,7 +24,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:25.3.1'
 
-    //add glide library
+    //add glide library dependency
     compile 'com.github.bumptech.glide:glide:3.7.0'
     //add mediaload library
     compile project(':mediaload')

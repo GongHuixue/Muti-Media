@@ -1,16 +1,13 @@
 package com.example.android.multmedia.player;
 
-import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.widget.TextView;
-
+import com.bumptech.glide.Glide;
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.adpter.RecyclerViewAdapter;
-import com.example.android.multmedia.videobrowser.VideoBrowser;
-import com.mediaload.bean.PhotoItem;
 import com.mediaload.bean.VideoItem;
 import com.mediaload.bean.VideoResult;
 import com.mediaload.callback.OnVideoLoadCallBack;
@@ -46,8 +43,13 @@ public class VideoPlayerPlayerActivity extends BasePlayerActivity {
         mVideoRvAdapter = new RecyclerViewAdapter<VideoItem>(mVideoItems, VideoPlayerPlayerActivity.this) {
             @Override
             public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
-                holder.mImageView.setImageResource(R.drawable.ic_tab_video);
-                holder.mTextView.setText("Video");
+                VideoItem mVideo = mVideoItems.get(position);
+                Glide.with(VideoPlayerPlayerActivity.this)
+                        .load("file://" + mVideo.getPath())
+                        .thumbnail(0.1f)
+                        .into(holder.mImageView);
+//                holder.mImageView.setImageResource(R.drawable.ic_tab_video);
+//                holder.mTextView.setText("Video");
             }
         };
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
@@ -59,7 +61,6 @@ public class VideoPlayerPlayerActivity extends BasePlayerActivity {
         mRecyclerView.addItemDecoration(horizontalDivider);
 
         mRecyclerView.setAdapter(mVideoRvAdapter);
-
     }
 
 }
