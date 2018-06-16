@@ -26,18 +26,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".player.VideoPlayerPlayerActivity"
+            android:name=".browser.VideoBrowserActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
             android:excludeFromRecents="true"></activity>
         <activity
-            android:name=".player.PicturePlayerPlayerActivity"
+            android:name=".browser.AudioBrowserActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
             android:excludeFromRecents="true"></activity>
         <activity
-            android:name=".player.AudioPlayerPlayerActivity"
+            android:name=".browser.PictureBrowserActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
             android:excludeFromRecents="true"></activity>
-        <activity android:name=".player.BasePlayerActivity"></activity>
+        <activity android:name=".browser.BaseBrowserActivity"></activity>
     </application>
 
 </manifest>

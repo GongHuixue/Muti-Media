@@ -8,10 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.android.multmedia.adpter.FragmentAdapter;
+import com.example.android.multmedia.browser.PictureBrowserActivity;
 import com.example.android.multmedia.fragment.*;
-import com.example.android.multmedia.player.AudioPlayerPlayerActivity;
-import com.example.android.multmedia.player.PicturePlayerPlayerActivity;
-import com.example.android.multmedia.player.VideoPlayerPlayerActivity;
+import com.example.android.multmedia.browser.AudioBrowserActivity;
+import com.example.android.multmedia.browser.VideoBrowserActivity;
 import com.example.android.multmedia.tabmenu.TabMenuLayout;
 import com.example.android.multmedia.tabmenu.TableItem;
 
@@ -117,17 +117,17 @@ public class MainActivity extends FragmentActivity implements TabMenuLayout.OnTa
     public void launchActivity(String activityName) {
         if(activityName.equalsIgnoreCase(Constant.AUDIO_FILES)) {
             Log.d(TAG, "Launch Audio Recycler View");
-            intent = new Intent(MainActivity.this, AudioPlayerPlayerActivity.class);
+            intent = new Intent(MainActivity.this, AudioBrowserActivity.class);
             startActivity(intent);
             //panelView = getVideoBrowserView();
         }else if (activityName.equalsIgnoreCase(Constant.VIDEO_FILES)) {
             Log.d(TAG, "Launch Video Recycler View");
 //            panelView = getVideoBrowserView(position);
-            intent = new Intent(MainActivity.this, VideoPlayerPlayerActivity.class);
+            intent = new Intent(MainActivity.this, VideoBrowserActivity.class);
             startActivity(intent);
         }else if(activityName.equalsIgnoreCase(Constant.PICTURE_FILES)) {
             Log.d(TAG, "Launch Picture Recycler View");
-            intent = new Intent(MainActivity.this, PicturePlayerPlayerActivity.class);
+            intent = new Intent(MainActivity.this, PictureBrowserActivity.class);
             startActivity(intent);
         }else if(activityName.equalsIgnoreCase(Constant.FAVORITE_FILES)) {
             Log.d(TAG, "Launch Favorite Recycler View");

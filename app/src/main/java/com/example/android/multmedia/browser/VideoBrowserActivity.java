@@ -1,4 +1,4 @@
-package com.example.android.multmedia.player;
+package com.example.android.multmedia.browser;
 
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,20 +15,20 @@ import com.mediaload.callback.OnVideoLoadCallBack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoPlayerPlayerActivity extends BasePlayerActivity {
+public class VideoBrowserActivity extends BaseBrowserActivity {
     private RecyclerViewAdapter<VideoItem> mVideoRvAdapter;
     private List<VideoItem> mVideoItems = new ArrayList<>();
 
     @Override
     public int getLayoutResID(){
-        return R.layout.activity_video_player;
+        return R.layout.activity_video_browser;
     }
 
     @Override
     public void initView() {
         final TextView videoNum = (TextView) findViewById(R.id.video_num);
         mRecyclerView = (RecyclerView) findViewById(R.id.video_recycler_view);
-        mediaLoad.loadVideos(VideoPlayerPlayerActivity.this, new OnVideoLoadCallBack() {
+        mediaLoad.loadVideos(VideoBrowserActivity.this, new OnVideoLoadCallBack() {
             @Override
             public void onResult(VideoResult result) {
                 videoNum.setText("Video Files: " + result.getItems().size());
@@ -40,11 +40,11 @@ public class VideoPlayerPlayerActivity extends BasePlayerActivity {
             }
         });
 
-        mVideoRvAdapter = new RecyclerViewAdapter<VideoItem>(mVideoItems, VideoPlayerPlayerActivity.this) {
+        mVideoRvAdapter = new RecyclerViewAdapter<VideoItem>(mVideoItems, VideoBrowserActivity.this) {
             @Override
             public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
                 VideoItem mVideo = mVideoItems.get(position);
-                Glide.with(VideoPlayerPlayerActivity.this)
+                Glide.with(VideoBrowserActivity.this)
                         .load("file://" + mVideo.getPath())
                         .centerCrop()
                         .thumbnail(0.1f)

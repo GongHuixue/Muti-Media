@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.android.multmedia.player.VideoPlayerPlayerActivity">
+    tools:context="com.example.android.multmedia.browser.PictureBrowserActivity">
 
     <TextView
-        android:id="@+id/video_num"
+        android:id="@+id/picture_num"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_margin="5dp"
@@ -17,7 +17,7 @@
         android:textSize="20dp" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/video_recycler_view"
+        android:id="@+id/picture_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"

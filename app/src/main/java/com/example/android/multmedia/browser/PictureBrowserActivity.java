@@ -1,4 +1,4 @@
-package com.example.android.multmedia.player;
+package com.example.android.multmedia.browser;
 
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,23 +17,23 @@ import com.mediaload.callback.OnPhotoLoadCallBack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PicturePlayerPlayerActivity extends BasePlayerActivity {
-    private final static String TAG = PicturePlayerPlayerActivity.class.getSimpleName();
+public class PictureBrowserActivity extends BaseBrowserActivity {
+    private final static String TAG = PictureBrowserActivity.class.getSimpleName();
     private RecyclerViewAdapter<PhotoItem> mPictureRvAdapter;
     private List<PhotoItem> mPictureItems = new ArrayList<>();
 
 
     @Override
     public int getLayoutResID() {
-        return R.layout.activity_picture_player;
+        return R.layout.activity_picture_browser;
     }
 
     @Override
     public void initView() {
-        Log.d(TAG, "PicturePlayerPlayerActivity Enter");
+        Log.d(TAG, "PictureBrowserActivity Enter");
         final TextView pictureNum = (TextView) findViewById(R.id.picture_num);
         mRecyclerView = (RecyclerView) findViewById(R.id.picture_recycler_view);
-        mediaLoad.loadPhotos(PicturePlayerPlayerActivity.this, new OnPhotoLoadCallBack() {
+        mediaLoad.loadPhotos(PictureBrowserActivity.this, new OnPhotoLoadCallBack() {
             @Override
             public void onResult(PhotoResult result) {
                 pictureNum.setText("Picture Files: " + result.getItems().size());
@@ -45,11 +45,11 @@ public class PicturePlayerPlayerActivity extends BasePlayerActivity {
             }
         });
 
-        mPictureRvAdapter = new RecyclerViewAdapter<PhotoItem>(mPictureItems, PicturePlayerPlayerActivity.this) {
+        mPictureRvAdapter = new RecyclerViewAdapter<PhotoItem>(mPictureItems, PictureBrowserActivity.this) {
             @Override
             public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
                 PhotoItem mPhoto = mPictureItems.get(position);
-                Glide.with(PicturePlayerPlayerActivity.this)
+                Glide.with(PictureBrowserActivity.this)
                         .load("file://" + mPhoto.getPath())
                         .centerCrop()
                         .thumbnail(0.1f)

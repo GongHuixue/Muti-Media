@@ -1,4 +1,4 @@
-package com.example.android.multmedia.player.audio;
+package com.example.android.multmedia.browser.audio;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
