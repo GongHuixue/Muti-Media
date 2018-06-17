@@ -4,25 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/screen"
     android:orientation="vertical"
     tools:context="com.example.android.multmedia.browser.AudioBrowserActivity">
 
-    <TextView
-        android:id="@+id/audio_num"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="5dp"
-        android:layout_gravity="center"
-        android:gravity="center_vertical"
-        android:textSize="20dp"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/audio_recycler_view"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="5dp"
         android:orientation="vertical"
-        android:scrollbars="vertical">
-    </android.support.v7.widget.RecyclerView>
+        android:background="#66000000">
+
+        <TextView
+            android:id="@+id/audio_num"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:gravity="center_vertical"
+            android:textSize="20dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/audio_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 
 </LinearLayout>
