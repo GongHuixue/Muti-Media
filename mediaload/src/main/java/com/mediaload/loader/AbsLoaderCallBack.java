@@ -30,7 +30,7 @@ public abstract class AbsLoaderCallBack implements LoaderManager.LoaderCallbacks
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        onLoaderCallBack.onLoadFinish(loader, data);
+        onLoaderCallBack.onLoadFinish(loader, data, context.get());
         destroyLoader();
     }
 

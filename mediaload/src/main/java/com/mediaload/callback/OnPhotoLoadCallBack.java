@@ -1,5 +1,6 @@
 package com.mediaload.callback;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -23,7 +24,7 @@ import static android.provider.MediaStore.MediaColumns.SIZE;
 
 public abstract class OnPhotoLoadCallBack extends BaseLoaderCallBack<PhotoResult>{
     private final static String TAG = OnPhotoLoadCallBack.class.getSimpleName();
-    public void onLoadFinish(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinish(Loader<Cursor> loader, Cursor data, Context context) {
         List<PhotoFolder> folders = new ArrayList<>();
         List<PhotoItem> allPhotos = new ArrayList<>();
         if(data == null){

@@ -1,5 +1,6 @@
 package com.mediaload.callback;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -23,7 +24,7 @@ import static android.provider.MediaStore.Video.VideoColumns.DURATION;
 
 public abstract class OnVideoLoadCallBack extends BaseLoaderCallBack<VideoResult> {
     @Override
-    public void onLoadFinish(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinish(Loader<Cursor> loader, Cursor data, Context context) {
         List<VideoFolder> folders = new ArrayList<>();
         List<VideoItem> items = new ArrayList<>();
         VideoFolder videoFolder;
