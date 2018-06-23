@@ -3,8 +3,10 @@
     package="com.example.android.multmedia">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".GlobalApplication"
         android:allowBackup="true"
         android:banner="@drawable/banner_media_browser"
         android:hardwareAccelerated="true"

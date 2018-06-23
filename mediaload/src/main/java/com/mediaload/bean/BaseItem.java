@@ -1,7 +1,7 @@
 package com.mediaload.bean;
 
 public class BaseItem {
-    private int id;
+    private long id;
     private String displayName;
     private String path;
     private long size;
@@ -26,11 +26,11 @@ public class BaseItem {
         this.modified = modified;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

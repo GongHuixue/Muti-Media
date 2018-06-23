@@ -1,6 +1,7 @@
 package com.example.android.multmedia.browser.audio;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.multmedia.R;
+import com.mediaload.bean.AudioItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +21,16 @@ import java.util.List;
 public class AudioRvAdapter extends RecyclerView.Adapter<AudioRvAdapter.AudioViewHolder> {
     private final static String TAG = AudioRvAdapter.class.getSimpleName();
     private Context context;
-    //private List<String> audioItem = new ArrayList<>();
+    private List<AudioItem> audioItem = new ArrayList<>();
 
-    public AudioRvAdapter(Context context/*, List<String> audioList*/) {
+    public AudioRvAdapter(Context context, List<AudioItem> audioList) {
         Log.d(TAG, "AudioRvAdapter");
         this.context = context;
-        //this.audioItem.addAll(audioList);
+        this.audioItem.addAll(audioList);
+    }
+
+    public void setAudioList(List<AudioItem> audioList) {
+        this.audioItem.addAll(audioList);
     }
 
     @Override
@@ -36,16 +43,28 @@ public class AudioRvAdapter extends RecyclerView.Adapter<AudioRvAdapter.AudioVie
     @Override
     public void onBindViewHolder(AudioViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder");
-        //String textItem = audioItem.get(position);
-        holder.mAudioName.setText("Yesterday once more");
-        holder.mAudioSinger.setText("Fany");
-        holder.mAudioLength.setText("5:00");
-        holder.mAudioIcon.setImageResource(R.drawable.ic_tab_audio);
+        AudioItem audio = audioItem.get(position);
+        Glide.with(context)
+                .loadFromMediaStore(audio.getAlbumIconUri(audio.getAlbumId()))
+                .asBitmap()
+                .placeholder(R.drawable.record)
+                .into(holder.mAudioIcon);
+
+        holder.mAudioName.setText(audio.getDisplayName());
+        holder.mAudioSinger.setText(audio.getSinger());
+        holder.mAudioLength.setText(audio.getDurationString());
+
+        /*bitmap = audio.getBitmap(context, audio.getId(), audio.getAlbumId());
+        holder.mAudioName.setText(audio.getDisplayName());
+        holder.mAudioSinger.setText(audio.getSinger());
+        holder.mAudioLength.setText(audio.getDurationString());
+        holder.mAudioIcon.setImageBitmap(bitmap);*/
     }
 
     @Override
     public int getItemCount() {
-        return 30; /*audioItem.size();*/
+        Log.d(TAG, "SIZE = " + audioItem.size());
+        return audioItem.size();
     }
 
     public class AudioViewHolder extends RecyclerView.ViewHolder{

@@ -4,6 +4,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.android.multmedia.R;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AudioBrowserActivity extends BaseBrowserActivity {
+    private final static String TAG = AudioBrowserActivity.class.getSimpleName();
     private RecyclerViewAdapter<AudioItem> mAudioRvAdapter;
     private AudioRvAdapter mAudioAdapter;
     private List<AudioItem> mAudioItems = new ArrayList<>();
@@ -36,10 +38,12 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
             @Override
             public void onResult(AudioResult result) {
                 audioNum.setText("Audio Files: " + result.getItems().size());
+                Log.d(TAG, "Total file size = " + result.getItems().size());
                 if(result.getItems().size() > 0) {
                     mAudioItems.clear();
                     mAudioItems.addAll(result.getItems());
                     mAudioAdapter.notifyDataSetChanged();
+                    mAudioAdapter.setAudioList(mAudioItems);
                 }
             }
         });
@@ -53,13 +57,10 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
         };
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));*/
 
-        mAudioAdapter = new AudioRvAdapter(AudioBrowserActivity.this);
+        mAudioAdapter = new AudioRvAdapter(AudioBrowserActivity.this, mAudioItems);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(AudioBrowserActivity.this));
 
-        /*add horizontal and vertical divider line*/
-//        verticalDivider = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
         horizontalDivider = new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL);
-//        mRecyclerView.addItemDecoration(verticalDivider);
         mRecyclerView.addItemDecoration(horizontalDivider);
 
         mRecyclerView.setAdapter(mAudioAdapter);
