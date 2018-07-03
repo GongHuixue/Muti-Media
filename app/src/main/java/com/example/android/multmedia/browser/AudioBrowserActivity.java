@@ -3,13 +3,11 @@ package com.example.android.multmedia.browser;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.example.android.multmedia.R;
-import com.example.android.multmedia.adpter.RecyclerViewAdapter;
-import com.example.android.multmedia.browser.audio.AudioRvAdapter;
+import com.example.android.multmedia.adpter.BrowserRvAdapter;
 import com.mediaload.bean.AudioItem;
 import com.mediaload.bean.AudioResult;
 import com.mediaload.callback.OnAudioLoadCallBack;
@@ -19,8 +17,7 @@ import java.util.List;
 
 public class AudioBrowserActivity extends BaseBrowserActivity {
     private final static String TAG = AudioBrowserActivity.class.getSimpleName();
-    private RecyclerViewAdapter<AudioItem> mAudioRvAdapter;
-    private AudioRvAdapter mAudioAdapter;
+    private BrowserRvAdapter<AudioItem> mAudioRvAdapter;
     private List<AudioItem> mAudioItems = new ArrayList<>();
 
 
@@ -42,27 +39,18 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
                 if(result.getItems().size() > 0) {
                     mAudioItems.clear();
                     mAudioItems.addAll(result.getItems());
-                    mAudioAdapter.notifyDataSetChanged();
-                    mAudioAdapter.setAudioList(mAudioItems);
+                    mAudioRvAdapter.notifyDataSetChanged();
                 }
             }
         });
 
-        /*mAudioRvAdapter = new RecyclerViewAdapter<AudioItem>(mAudioItems, AudioBrowserActivity.this) {
-            @Override
-            public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
-                holder.mImageView.setImageResource(R.drawable.ic_tab_audio);
-                holder.mTextView.setText("Audio");
-            }
-        };
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));*/
-
-        mAudioAdapter = new AudioRvAdapter(AudioBrowserActivity.this, mAudioItems);
+        mAudioRvAdapter = new BrowserRvAdapter<AudioItem>(mAudioItems, AudioBrowserActivity.this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(AudioBrowserActivity.this));
 
         horizontalDivider = new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL);
         mRecyclerView.addItemDecoration(horizontalDivider);
 
-        mRecyclerView.setAdapter(mAudioAdapter);
+        mRecyclerView.setAdapter(mAudioRvAdapter);
+
     }
 }

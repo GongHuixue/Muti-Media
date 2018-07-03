@@ -34,6 +34,10 @@ public class AudioItem extends BaseItem {
 
     RoundRect roundRect = new RoundRect(300, 300, 150);
 
+    public AudioItem() {
+        VIEW_TYPE = 2;
+    }
+
     public long getDuration() {
         return duration;
     }
@@ -60,6 +64,11 @@ public class AudioItem extends BaseItem {
     public Uri getAlbumIconUri(long albumId) {
         return ContentUris.withAppendedId(sArtworkUri, albumId);
     }
+
+    public Uri getAlbumIconUri() {
+        return ContentUris.withAppendedId(sArtworkUri, albumId);
+    }
+
     public boolean isChecked() {
         return checked;
     }

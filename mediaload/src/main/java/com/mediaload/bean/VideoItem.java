@@ -5,6 +5,7 @@ public class VideoItem extends BaseItem {
     private boolean checked;
 
     public VideoItem() {
+        VIEW_TYPE = 0;
     }
 
     public VideoItem(int id, String displayName, String path, long size, long modified, long duration) {

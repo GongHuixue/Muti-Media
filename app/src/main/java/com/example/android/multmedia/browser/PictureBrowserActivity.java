@@ -7,9 +7,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.android.multmedia.R;
-import com.example.android.multmedia.adpter.RecyclerViewAdapter;
+import com.example.android.multmedia.adpter.BrowserRvAdapter;
 import com.mediaload.bean.PhotoItem;
 import com.mediaload.bean.PhotoResult;
 import com.mediaload.callback.OnPhotoLoadCallBack;
@@ -19,7 +18,7 @@ import java.util.List;
 
 public class PictureBrowserActivity extends BaseBrowserActivity {
     private final static String TAG = PictureBrowserActivity.class.getSimpleName();
-    private RecyclerViewAdapter<PhotoItem> mPictureRvAdapter;
+    private BrowserRvAdapter<PhotoItem> mPictureRvAdapter;
     private List<PhotoItem> mPictureItems = new ArrayList<>();
 
 
@@ -45,19 +44,8 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
             }
         });
 
-        mPictureRvAdapter = new RecyclerViewAdapter<PhotoItem>(mPictureItems, PictureBrowserActivity.this) {
-            @Override
-            public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
-                PhotoItem mPhoto = mPictureItems.get(position);
-                Glide.with(PictureBrowserActivity.this)
-                        .load("file://" + mPhoto.getPath())
-                        .centerCrop()
-                        .thumbnail(0.1f)
-                        .into(holder.mImageView);
+        mPictureRvAdapter = new BrowserRvAdapter<PhotoItem>(mPictureItems, PictureBrowserActivity.this) ;
 
-                //holder.mTextView.setText(mPhoto.getDisplayName());
-            }
-        };
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
 
         /*add horizontal and vertical divider line*/

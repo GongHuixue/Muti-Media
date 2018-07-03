@@ -7,7 +7,13 @@ public class BaseItem {
     private long size;
     private long modified;
 
+    public int VIEW_TYPE = 0;
+
     public BaseItem() {
+    }
+
+    public int getViewType() {
+        return VIEW_TYPE;
     }
 
     public BaseItem(int id, String displayName, String path) {

@@ -45,7 +45,6 @@ public abstract class OnAudioLoadCallBack extends BaseLoaderCallBack<AudioResult
     public void onLoadFinish(Loader<Cursor> loader, Cursor data, Context context) {
         List<AudioItem> result = new ArrayList<>();
         AudioItem item;
-        Cursor albumCursor = null;
         long sum_size = 0;
         while (data.moveToNext()) {
             item = new AudioItem();

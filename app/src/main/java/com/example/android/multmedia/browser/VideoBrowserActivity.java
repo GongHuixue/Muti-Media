@@ -5,9 +5,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
+
 import com.example.android.multmedia.R;
-import com.example.android.multmedia.adpter.RecyclerViewAdapter;
+import com.example.android.multmedia.adpter.BrowserRvAdapter;
 import com.mediaload.bean.VideoItem;
 import com.mediaload.bean.VideoResult;
 import com.mediaload.callback.OnVideoLoadCallBack;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VideoBrowserActivity extends BaseBrowserActivity {
-    private RecyclerViewAdapter<VideoItem> mVideoRvAdapter;
+    private BrowserRvAdapter<VideoItem> mVideoRvAdapter;
     private List<VideoItem> mVideoItems = new ArrayList<>();
 
     @Override
@@ -40,19 +40,7 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
             }
         });
 
-        mVideoRvAdapter = new RecyclerViewAdapter<VideoItem>(mVideoItems, VideoBrowserActivity.this) {
-            @Override
-            public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
-                VideoItem mVideo = mVideoItems.get(position);
-                Glide.with(VideoBrowserActivity.this)
-                        .load("file://" + mVideo.getPath())
-                        .centerCrop()
-                        .thumbnail(0.1f)
-                        .into(holder.mImageView);
-//                holder.mImageView.setImageResource(R.drawable.ic_tab_video);
-//                holder.mTextView.setText("Video");
-            }
-        };
+        mVideoRvAdapter = new BrowserRvAdapter<VideoItem>(mVideoItems, VideoBrowserActivity.this) ;
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
 
         /*add horizontal and vertical divider line*/
