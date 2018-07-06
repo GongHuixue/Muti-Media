@@ -7,6 +7,10 @@
     android:orientation="vertical"
     tools:context="com.example.android.multmedia.browser.VideoBrowserActivity">
 
+    <include
+        android:id="@+id/top_action_bar"
+        layout="@layout/top_action_bar"/>
+
     <TextView
         android:id="@+id/video_num"
         android:layout_width="match_parent"

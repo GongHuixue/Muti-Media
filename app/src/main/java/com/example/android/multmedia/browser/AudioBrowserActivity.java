@@ -28,6 +28,7 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
 
     @Override
     public void initView() {
+        //actionBar = getActionBar();
         /*get total audio nums*/
         final TextView audioNum = (TextView) findViewById(R.id.audio_num);
         mRecyclerView = (RecyclerView) findViewById(R.id.audio_recycler_view);

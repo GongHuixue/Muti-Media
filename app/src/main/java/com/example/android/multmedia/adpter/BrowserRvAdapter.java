@@ -30,7 +30,7 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
 
     protected List<T> mMediaList;
     protected Context mContext;
-    private BaseItem mBaseItem;
+
     private static final int VIDEO_BROWSER = 0;
     private static final int PICTURE_BROWSER = 1;
     private static final int AUDIO_BROWSER = 2;

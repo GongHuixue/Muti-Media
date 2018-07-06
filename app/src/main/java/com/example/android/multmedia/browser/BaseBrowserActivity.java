@@ -2,6 +2,7 @@ package com.example.android.multmedia.browser;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 
@@ -12,6 +13,7 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
     public MediaLoad mediaLoad = MediaLoad.getMediaLoad();
 
     public RecyclerView mRecyclerView;
+
     /*recycler view divider*/
     public DividerItemDecoration verticalDivider;
     public DividerItemDecoration horizontalDivider;
@@ -21,6 +23,14 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResID());
         initView();
+    }
+
+    public void showActionBar() {
+
+    }
+
+    public void hideActionBar() {
+
     }
 
     public abstract int getLayoutResID();

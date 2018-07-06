@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.android.multmedia.browser.PictureBrowserActivity">
+    <include
+        android:id="@+id/top_action_bar"
+        layout="@layout/top_action_bar"/>
 
     <TextView
         android:id="@+id/picture_num"
