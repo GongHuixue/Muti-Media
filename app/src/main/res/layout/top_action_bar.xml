@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
+    android:background="#F0F0F0"
     android:orientation="horizontal"
     android:layout_alignParentTop="true">
 
@@ -10,8 +11,7 @@
         android:clickable="true"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
+        android:layout_marginRight="10dp"
         android:layout_weight="1"
         android:contentDescription=""
         android:src="@drawable/icon_back"/>

@@ -4,7 +4,9 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.adpter.BrowserRvAdapter;
@@ -19,6 +21,8 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
     private final static String TAG = AudioBrowserActivity.class.getSimpleName();
     private BrowserRvAdapter<AudioItem> mAudioRvAdapter;
     private List<AudioItem> mAudioItems = new ArrayList<>();
+    private TextView TvTitle;
+    private TextView TvNum;
 
 
     @Override
@@ -28,14 +32,14 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
 
     @Override
     public void initView() {
-        //actionBar = getActionBar();
-        /*get total audio nums*/
-        final TextView audioNum = (TextView) findViewById(R.id.audio_num);
+        TvTitle = (TextView)findViewById(R.id.txt_title);
+        TvTitle.setText(R.string.audio);
+        TvNum = (TextView)findViewById(R.id.txt_number);
         mRecyclerView = (RecyclerView) findViewById(R.id.audio_recycler_view);
         mediaLoad.loadAudios(AudioBrowserActivity.this, new OnAudioLoadCallBack() {
             @Override
             public void onResult(AudioResult result) {
-                audioNum.setText("Audio Files: " + result.getItems().size());
+                TvNum.setText("" + result.getItems().size());
                 Log.d(TAG, "Total file size = " + result.getItems().size());
                 if(result.getItems().size() > 0) {
                     mAudioItems.clear();
@@ -47,6 +51,23 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
 
         mAudioRvAdapter = new BrowserRvAdapter<AudioItem>(mAudioItems, AudioBrowserActivity.this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(AudioBrowserActivity.this));
+
+        /*short click*/
+        mAudioRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(AudioBrowserActivity.this, "short click " + position, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        /*long click*/
+        mAudioRvAdapter.setOnItemLongClickListener(new BrowserRvAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(View view, int position) {
+                Toast.makeText(AudioBrowserActivity.this, "long click " + position, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
 
         horizontalDivider = new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL);
         mRecyclerView.addItemDecoration(horizontalDivider);

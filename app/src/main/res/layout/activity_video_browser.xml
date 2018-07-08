@@ -11,14 +11,14 @@
         android:id="@+id/top_action_bar"
         layout="@layout/top_action_bar"/>
 
-    <TextView
-        android:id="@+id/video_num"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="5dp"
-        android:layout_gravity="center"
-        android:gravity="center_vertical"
-        android:textSize="20dp" />
+    <!--<TextView-->
+        <!--android:id="@+id/video_num"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:textSize="20dp" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/video_recycler_view"

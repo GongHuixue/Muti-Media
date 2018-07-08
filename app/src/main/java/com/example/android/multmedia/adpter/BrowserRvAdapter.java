@@ -25,20 +25,49 @@ import java.util.List;
  * Created by huixue.gong on 2018/4/8.
  */
 
-public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener, View.OnLongClickListener{
     private final static String TAG = BrowserRvAdapter.class.getSimpleName();
 
     protected List<T> mMediaList;
     protected Context mContext;
+    private OnItemClickListener mOnItemClickListener;
+    private OnItemLongClickListener mOnItemLongClickListener;
 
     private static final int VIDEO_BROWSER = 0;
     private static final int PICTURE_BROWSER = 1;
     private static final int AUDIO_BROWSER = 2;
 
+    public interface OnItemClickListener{
+        void onItemClick(View view,int position);
+    }
+
+    public interface OnItemLongClickListener{
+        boolean onItemLongClick(View view,int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener){
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener mOnItemLongClickListener) {
+        this.mOnItemLongClickListener = mOnItemLongClickListener;
+    }
 
     public BrowserRvAdapter(List<T> mediaList, Context context) {
         this.mMediaList = mediaList;
         this.mContext = context;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(mOnItemClickListener != null) {
+            mOnItemClickListener.onItemClick(v, (Integer) v.getTag());
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        return mOnItemLongClickListener != null && mOnItemLongClickListener.onItemLongClick(v, (Integer)v.getTag());
     }
 
     @Override
@@ -68,6 +97,7 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public static class AudioViewHolder extends RecyclerView.ViewHolder {
+        View mediaView;
         public ImageView mAudioIcon;
         public TextView mAudioName;
         public TextView mAudioSinger;
@@ -75,6 +105,7 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public AudioViewHolder(View view) {
             super(view);
+            mediaView = view;
             mAudioIcon = (ImageView) itemView.findViewById(R.id.audio_icon);
             mAudioName = (TextView) itemView.findViewById(R.id.audio_name);
             mAudioSinger = (TextView) itemView.findViewById(R.id.audio_singer);
@@ -98,16 +129,28 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Log.d(TAG, "onCreateViewHolder, viewType = " + viewType);
-
+        View root;
+        RecyclerView.ViewHolder viewHolder;
         if((viewType == VIDEO_BROWSER) && (mContext instanceof VideoBrowserActivity)){
-            return new VideoViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item, parent, false));
+            root = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item, parent, false);
+            viewHolder = new VideoViewHolder(root);
+            root.setOnClickListener(this);
+            root.setOnLongClickListener(this);
         }else if((viewType == PICTURE_BROWSER) && (mContext instanceof PictureBrowserActivity)) {
-            return new PictureViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item, parent, false));
+            root = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item, parent, false);
+            viewHolder = new VideoViewHolder(root);
+            root.setOnClickListener(this);
+            root.setOnLongClickListener(this);
         }else if((viewType == AUDIO_BROWSER) && (mContext instanceof AudioBrowserActivity)){
-            return new AudioViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.audio_list_item, parent, false));
+            root = LayoutInflater.from(parent.getContext()).inflate(R.layout.audio_list_item, parent, false);
+            viewHolder = new VideoViewHolder(root);
+            root.setOnClickListener(this);
+            root.setOnLongClickListener(this);
         }else {
             return null;
         }
+
+        return viewHolder;
     }
 
     @Override
@@ -126,6 +169,7 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                         .centerCrop()
                         .thumbnail(0.1f)
                         .into(((VideoViewHolder) holder).mImageView);
+                ((VideoViewHolder) holder).mediaView.setTag(position);
             } else if (holder instanceof PictureViewHolder) {
                 PhotoItem photoItem = (PhotoItem) mMediaList.get(position);
                 Glide.with(mContext)
@@ -133,6 +177,7 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                         .centerCrop()
                         .thumbnail(0.1f)
                         .into(((PictureViewHolder) holder).mImageView);
+                ((PictureViewHolder) holder).mediaView.setTag(position);
             } else if (holder instanceof AudioViewHolder) {
                 AudioItem audioItem = (AudioItem) mMediaList.get(position);
                 Glide.with(mContext)
@@ -140,7 +185,7 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                         .asBitmap()
                         .placeholder(R.drawable.record)
                         .into(((AudioViewHolder) holder).mAudioIcon);
-
+                ((AudioViewHolder) holder).mediaView.setTag(position);
                 ((AudioViewHolder)holder).mAudioName.setText(audioItem.getDisplayName());
                 ((AudioViewHolder)holder).mAudioSinger.setText(audioItem.getSinger());
                 ((AudioViewHolder)holder).mAudioLength.setText(audioItem.getDurationString());
