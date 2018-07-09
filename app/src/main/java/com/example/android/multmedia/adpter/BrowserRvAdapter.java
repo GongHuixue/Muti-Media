@@ -73,7 +73,7 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public int getItemViewType(int position) {
         Log.d(TAG, "getItemViewType position = " + position);
-        int viewType = 0;
+        int viewType = -1;
         if(mMediaList.size() > 0) {
 
             viewType = ((BaseItem) mMediaList.get(position)).getViewType();
@@ -131,19 +131,19 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
         Log.d(TAG, "onCreateViewHolder, viewType = " + viewType);
         View root;
         RecyclerView.ViewHolder viewHolder;
-        if((viewType == VIDEO_BROWSER) && (mContext instanceof VideoBrowserActivity)){
+        if((viewType == VIDEO_BROWSER) ){
             root = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item, parent, false);
             viewHolder = new VideoViewHolder(root);
             root.setOnClickListener(this);
             root.setOnLongClickListener(this);
-        }else if((viewType == PICTURE_BROWSER) && (mContext instanceof PictureBrowserActivity)) {
+        }else if((viewType == PICTURE_BROWSER) ) {
             root = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item, parent, false);
-            viewHolder = new VideoViewHolder(root);
+            viewHolder = new PictureViewHolder(root);
             root.setOnClickListener(this);
             root.setOnLongClickListener(this);
-        }else if((viewType == AUDIO_BROWSER) && (mContext instanceof AudioBrowserActivity)){
+        }else if((viewType == AUDIO_BROWSER)){
             root = LayoutInflater.from(parent.getContext()).inflate(R.layout.audio_list_item, parent, false);
-            viewHolder = new VideoViewHolder(root);
+            viewHolder = new AudioViewHolder(root);
             root.setOnClickListener(this);
             root.setOnLongClickListener(this);
         }else {
