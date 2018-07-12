@@ -1,5 +1,6 @@
 package com.example.android.multmedia.browser;
 
+import android.content.Intent;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,8 @@ import android.widget.Toast;
 
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.adpter.BrowserRvAdapter;
+import com.example.android.multmedia.base.BaseBrowserActivity;
+import com.example.android.multmedia.player.VideoPlayerActivity;
 import com.mediaload.bean.VideoItem;
 import com.mediaload.bean.VideoResult;
 import com.mediaload.callback.OnVideoLoadCallBack;
@@ -55,6 +58,8 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
         mVideoRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                Intent intent = new Intent(VideoBrowserActivity.this, VideoPlayerActivity.class);
+                startActivity(intent);
                 Toast.makeText(VideoBrowserActivity.this, "short click " + position, Toast.LENGTH_SHORT).show();
             }
         });

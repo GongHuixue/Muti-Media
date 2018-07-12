@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.adpter.BrowserRvAdapter;
+import com.example.android.multmedia.base.BaseBrowserActivity;
 import com.mediaload.bean.AudioItem;
 import com.mediaload.bean.AudioResult;
 import com.mediaload.callback.OnAudioLoadCallBack;

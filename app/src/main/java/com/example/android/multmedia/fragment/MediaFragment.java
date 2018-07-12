@@ -43,7 +43,7 @@ public class MediaFragment extends BaseFragment {
     }
 
     private void initFragmentData() {
-        FragListItem favourites = new FragListItem(Constant.FAVORITE_FILES, R.drawable.favourty);
+        FragListItem favourites = new FragListItem(Constant.FAVORITE_FILES, R.drawable.favorite);
         FragListItem popular = new FragListItem(Constant.POPULAR_FILES, R.drawable.popular);
         FragListItem lastPlayed = new FragListItem(Constant.LASTED_FILES, R.drawable.play);
         FragListItem onlineMedia = new FragListItem(Constant.ONLINE_MEDIA, R.drawable.online);

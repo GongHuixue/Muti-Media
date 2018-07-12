@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.adpter.BrowserRvAdapter;
+import com.example.android.multmedia.base.BaseBrowserActivity;
 import com.mediaload.bean.PhotoItem;
 import com.mediaload.bean.PhotoResult;
 import com.mediaload.callback.OnPhotoLoadCallBack;

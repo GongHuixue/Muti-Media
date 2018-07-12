@@ -1,4 +1,4 @@
-package com.example.android.multmedia.browser;
+package com.example.android.multmedia.base;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;

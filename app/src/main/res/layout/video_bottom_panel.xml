@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_video_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:orientation="vertical"
+    android:background="@color/colorBlack"
+    android:layout_alignParentBottom="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_video_playtime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00:00"
+            android:textColor="@color/colorDivider"
+            android:layout_margin="5dp"/>
+        <SeekBar
+            android:id="@+id/sb_position"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:thumb="@drawable/shape_point_circular"
+            android:thumbOffset="0dp"
+            android:minHeight="4dp"
+            android:maxHeight="4dp"
+            android:progress="0"
+            android:layout_gravity="center_vertical"
+            android:progressDrawable="@drawable/progress_video"/>
+        <TextView
+            android:id="@+id/tv_video_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1:01:30"
+            android:textColor="@color/colorDivider"
+            android:layout_margin="5dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/ib_back"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:layout_weight="1"
+            android:background="@null"
+            android:src="@drawable/btn_return_normal"/>
+
+        <ImageButton
+            android:id="@+id/ib_playmode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:layout_weight="1"
+            android:background="@null"
+            android:src="@drawable/random_play"/>
+
+        <ImageButton
+            android:id="@+id/ib_pre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:layout_weight="1"
+            android:background="@null"
+            android:src="@drawable/video_pre_selector"/>
+
+        <ImageButton
+            android:id="@+id/ib_playpause"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:layout_weight="1"
+            android:background="@null"
+            android:src="@drawable/video_play_selector"/>
+
+        <ImageButton
+            android:id="@+id/ib_next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:layout_weight="1"
+            android:background="@null"
+            android:src="@drawable/video_next_selector"/>
+
+        <ImageButton
+            android:id="@+id/ib_favorite"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:layout_weight="1"
+            android:background="@null"
+            android:src="@drawable/btn_favorite_normal"/>
+
+    </LinearLayout>
+</LinearLayout>
