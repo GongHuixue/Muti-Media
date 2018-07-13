@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="70dp"
     android:orientation="vertical"
-    android:background="@color/colorBlack"
+    android:background="@color/colorPlayerBackground"
     android:layout_alignParentBottom="true">
 
     <LinearLayout
@@ -29,7 +29,8 @@
             android:maxHeight="4dp"
             android:progress="0"
             android:layout_gravity="center_vertical"
-            android:progressDrawable="@drawable/progress_video"/>
+            android:progressDrawable="@drawable/progress_video"
+            android:background="@color/colorBlack"/>
         <TextView
             android:id="@+id/tv_video_duration"
             android:layout_width="wrap_content"

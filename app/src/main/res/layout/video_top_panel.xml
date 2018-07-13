@@ -3,7 +3,7 @@
     android:id="@+id/rl_video_top"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:background="@color/colorBlack">
+    android:background="@color/colorPlayerBackground">
 
     <TextView
         android:id="@+id/tv_video_name"
