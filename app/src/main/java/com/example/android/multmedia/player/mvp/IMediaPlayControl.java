@@ -1,6 +1,6 @@
 package com.example.android.multmedia.player.mvp;
 
-public interface MediaPlayControl {
+public interface IMediaPlayControl {
     void loadMediaData();
     void playPreMedia();
     void playMedia();

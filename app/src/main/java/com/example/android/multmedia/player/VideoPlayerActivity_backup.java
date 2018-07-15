@@ -1,10 +1,13 @@
 package com.example.android.multmedia.player;
 
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -12,14 +15,11 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.example.android.multmedia.R;
-import com.example.android.multmedia.player.mvp.BaseActivity;
-import com.example.android.multmedia.player.mvp.IMediaView;
-import com.example.android.multmedia.player.mvp.MediaControlImpl;
+import com.example.android.multmedia.base.BaseBrowserActivity;
 import com.example.android.multmedia.utils.StringUtils;
 
-public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implements IMediaView {
-    private final static String TAG = VideoPlayerActivity.class.getSimpleName();
-
+public class VideoPlayerActivity_backup extends BaseBrowserActivity {
+    private final static String TAG = VideoPlayerActivity_backup.class.getSimpleName();
     private VideoView videoPlayer;
     private TextView tvSystemTime;
     private TextView tvVideoName;
@@ -36,9 +36,9 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     private int screenWidth;
     private int screenHeight;
-    private int videoPosition;
 
-    private MediaControlImpl mediaControl;
+    private int videoPosition;
+    private GestureDetector onGestureListener;
 
     private final static int MSG_UPDATE_TIME = 1;
     private final static int MSG_UPDATE_PROGRESS = 2;
@@ -62,12 +62,8 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     };
 
     @Override
-    public MediaControlImpl attachMediaView() {
-        if (mediaControl != null) {
-            mediaControl = new MediaControlImpl(this);
-            mediaControl.setVideoPlayer(videoPlayer);
-        }
-        return mediaControl;
+    public int getLayoutResID() {
+        return R.layout.activity_video_player;
     }
 
     @Override
@@ -85,50 +81,76 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         ibNext = (ImageButton) findViewById(R.id.ib_next);
         ibFavorite = (ImageButton) findViewById(R.id.ib_favorite);
 
-        initData();
-    }
+        setVideoPlayerListener();
+        setGestureListener();
+        preAndNext();
 
-    public void initData() {
-        Log.d(TAG, "init Data Enter");
-        initPreAndNext();
-        initSeekBarListener();
-        initScreenHW();
-        mediaControl.setVideoPlayerListener();
-        Log.d(TAG, "init Data Exit");
-    }
+        onGestureListener = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener()) {
+            @Override
+            public boolean onTouchEvent(MotionEvent ev) {
+                return super.onTouchEvent(ev);
+            }
+        };
 
-    private void initPreAndNext() {
-        if(videoPosition == 0 ) {
-            ibPre.setImageResource(R.drawable.btn_pre_normal);
-            ibPre.setEnabled(false);
-        }else {
-            ibPre.setImageResource(R.drawable.btn_pre_pressed);
-            ibPre.setEnabled(true);
-        }
-
-        if(videoPosition == -1) {
-            ibNext.setImageResource(R.drawable.btn_next_normal);
-            ibNext.setEnabled(false);
-        }else {
-            ibNext.setImageResource(R.drawable.btn_next_normal);
-            ibNext.setEnabled(true);
-        }
-    }
-
-    private void initSeekBarListener() {
         /*set video seek bar change listener*/
         VideoSeekBarListener videoSeekBarListener = new VideoSeekBarListener();
         sbPosition.setOnSeekBarChangeListener(videoSeekBarListener);
-    }
 
-    private void initScreenHW() {
         WindowManager windowManager = this.getWindowManager();
         DisplayMetrics outmetrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(outmetrics);
 
         screenWidth = outmetrics.widthPixels;
         screenHeight = outmetrics.heightPixels;
-        Log.d(TAG, "width = " + screenWidth + ", height = " + screenHeight);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateTime();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+    }
+
+    private void setVideoPlayerListener() {
+        videoPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                videoPlayer.start();
+            }
+        });
+
+        videoPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                videoPlayer.stopPlayback();
+            }
+        });
+
+        videoPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+
+                return false;
+            }
+        });
+    }
+
+    private void setGestureListener() {
+//        onGestureListener = new GestureDetector();
     }
 
     private class VideoSeekBarListener implements SeekBar.OnSeekBarChangeListener {
@@ -137,7 +159,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
             switch (seekBar.getId()) {
                 case R.id.sb_position:
                     if(fromUser) {
-                        mediaControl.getVideoPlayer().seekTo(progress);
+                        videoPlayer.seekTo(progress);
                     }
                     break;
             }
@@ -161,8 +183,8 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     }
 
     private void updateProgress() {
-        tvPlayTime.setText(StringUtils.formatMediaTime(mediaControl.getVideoPlayer().getCurrentPosition()));
-        sbPosition.setProgress(mediaControl.getVideoPlayer().getCurrentPosition());
+        tvPlayTime.setText(StringUtils.formatMediaTime(videoPlayer.getCurrentPosition()));
+        sbPosition.setProgress(videoPlayer.getCurrentPosition());
         handler.sendEmptyMessageDelayed(MSG_UPDATE_PROGRESS, 1000);
 
     }
@@ -171,28 +193,28 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     }
 
-    @Override
-    public int getLayoutResID() {
-        return R.layout.activity_audio_player;
+    private void preAndNext() {
+        if(videoPosition == 0 ) {
+            ibPre.setImageResource(R.drawable.btn_pre_normal);
+            ibPre.setEnabled(false);
+        }else {
+            ibPre.setImageResource(R.drawable.btn_pre_pressed);
+            ibPre.setEnabled(true);
+        }
+
+        if(videoPosition == -1) {
+            ibNext.setImageResource(R.drawable.btn_next_normal);
+            ibNext.setEnabled(false);
+        }else {
+            ibNext.setImageResource(R.drawable.btn_next_normal);
+            ibNext.setEnabled(true);
+        }
     }
 
-    @Override
-    public void showTopBottomBar() {
-
-    }
-
-    @Override
-    public void hideTopBottomBar() {
-
-    }
-
-    @Override
-    public void showLoadingProgress() {
-        showLoadingProgressDialog();
-    }
-
-    @Override
-    public void hideLoadingProgress() {
-        hideLoadingProgressDialog();
+    public void onViewClicked(View v) {
+        switch (v.getId()){
+            case R.id.ib_back:
+                break;
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.example.android.multmedia.player.mvp;
 
-public interface MediaView {
+public interface IMediaView {
     void showTopBottomBar();
     void hideTopBottomBar();
     void showLoadingProgress();
