@@ -1,6 +1,9 @@
 package com.mediaload.bean;
 
-public class PhotoItem extends BaseItem {
+import java.io.Serializable;
+
+public class PhotoItem extends BaseItem implements Serializable{
+    private final static long serialVersionUID = 3L;
     private boolean checked;
 
     public PhotoItem(int id, String displayName, String path) {

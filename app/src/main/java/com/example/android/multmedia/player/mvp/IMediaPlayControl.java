@@ -8,4 +8,5 @@ public interface IMediaPlayControl {
     void playNextMedia();
     void playModeChanged();
     void isFavorite();
+    boolean isPlaying();
 }

@@ -13,8 +13,10 @@ public abstract class BaseActivity<P extends BaseControl> extends FragmentActivi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResID());
+        /*The following init flow can't changed*/
         initView();
         mediaView = attachMediaView();
+        initData();
         this.fragmentActivity = this;
     }
 
@@ -31,6 +33,7 @@ public abstract class BaseActivity<P extends BaseControl> extends FragmentActivi
     public abstract P attachMediaView();
     public abstract int getLayoutResID();
     public abstract void initView();
+    public abstract void initData();
 
 
     public void showLoadingProgressDialog() {

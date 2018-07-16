@@ -16,10 +16,12 @@ import com.mediaload.R;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Locale;
 
-public class AudioItem extends BaseItem {
+public class AudioItem extends BaseItem implements Serializable{
     private final static String TAG = AudioItem.class.getSimpleName();
+    private final static long serialVersionUID = 2L;
     private long duration;
     private String durationTime;
     private boolean checked;

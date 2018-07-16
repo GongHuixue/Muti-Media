@@ -3,14 +3,21 @@ package com.example.android.multmedia.player.mvp;
 import android.media.MediaPlayer;
 import android.widget.VideoView;
 
+import com.example.android.multmedia.player.VideoPlayerActivity;
+
 import java.lang.ref.WeakReference;
 
-public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaPlayControl{
+import static com.example.android.multmedia.player.MediaPlayConstants.*;
 
+public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaPlayControl{
+    private final static String TAG = MediaControlImpl.class.getSimpleName();
+    private VideoPlayerActivity videoPlayerActivity;
     private WeakReference<VideoView> videoPlayer;
+    private volatile Boolean isPlaying = false;
 
     public MediaControlImpl(IMediaView view) {
         attachView(view);
+        videoPlayerActivity = (VideoPlayerActivity) getActivityView();
     }
 
     public void setVideoPlayer(VideoView player) {
@@ -37,6 +44,8 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     getVideoPlayer().start();
+                    videoPlayerActivity.setVideoHW(mp.getVideoWidth(), mp.getVideoHeight());
+                    playMedia();
                 }
             });
 
@@ -44,6 +53,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     getVideoPlayer().stopPlayback();
+                    pauseMedia();
                 }
             });
         }
@@ -59,11 +69,13 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     }
     @Override
     public void playMedia(){
-
+        isPlaying = true;
+        videoPlayerActivity.getMainThreadHandler().sendEmptyMessage(MSG_UPDATE_CONTROL_BAR);
     }
     @Override
     public void pauseMedia(){
-
+        isPlaying = false;
+        videoPlayerActivity.getMainThreadHandler().sendEmptyMessage(MSG_UPDATE_CONTROL_BAR);
     }
     @Override
     public void playNextMedia(){
@@ -76,5 +88,9 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     @Override
     public void isFavorite(){
 
+    }
+    @Override
+    public boolean isPlaying(){
+        return isPlaying;
     }
 }

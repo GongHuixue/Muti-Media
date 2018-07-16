@@ -21,6 +21,11 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     }
 
     @Override
+    public void initData() {
+
+    }
+
+    @Override
     public int getLayoutResID() {
         return R.layout.activity_audio_player;
     }
@@ -30,7 +35,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     }
     @Override
-    public void hideTopBottomBar() {
+    public void hideTopBottomBar(int top, int bottom) {
 
     }
     @Override

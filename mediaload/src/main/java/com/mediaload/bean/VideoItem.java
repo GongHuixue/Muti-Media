@@ -1,6 +1,9 @@
 package com.mediaload.bean;
 
-public class VideoItem extends BaseItem {
+import java.io.Serializable;
+
+public class VideoItem extends BaseItem implements Serializable {
+    private final static long serialVersionUID = 1L;
     private long duration;
     private boolean checked;
 

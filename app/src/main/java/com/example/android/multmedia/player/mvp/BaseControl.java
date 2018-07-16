@@ -10,4 +10,8 @@ public class BaseControl<V> {
     public void detachView() {
         this.mvpView = null;
     }
+
+    public V getActivityView() {
+        return mvpView;
+    }
 }
