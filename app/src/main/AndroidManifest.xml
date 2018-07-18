@@ -39,7 +39,10 @@
             android:name=".browser.PictureBrowserActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
             android:excludeFromRecents="true" />
-        <activity android:name=".base.BaseBrowserActivity" />
+        <activity android:name=".player.VideoPlayerActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:screenOrientation="landscape">
+        </activity>
         <activity android:name=".player.AudioPlayerActivity" />
         <activity android:name=".player.PhotoPlayerActivity"></activity>
     </application>

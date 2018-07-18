@@ -63,7 +63,7 @@ public abstract class OnAudioLoadCallBack extends BaseLoaderCallBack<AudioResult
             item.setPath(path);
             item.setAlbum(album);
             item.setDuration(duration);
-            item.setDurationString(item.tanslateDurationToString(duration));
+            item.setDurationString(item.translateDurationToString(duration));
             item.setSize(size);
             item.setModified(modified);
             item.setAlbumId(albumId);

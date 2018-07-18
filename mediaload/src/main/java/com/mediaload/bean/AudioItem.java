@@ -15,11 +15,9 @@ import com.mediaload.R;
 
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.Serializable;
 import java.util.Locale;
 
-public class AudioItem extends BaseItem implements Serializable{
+public class AudioItem extends BaseItem {
     private final static String TAG = AudioItem.class.getSimpleName();
     private final static long serialVersionUID = 2L;
     private long duration;
@@ -56,7 +54,7 @@ public class AudioItem extends BaseItem implements Serializable{
         this.durationTime = time;
     }
 
-    public String tanslateDurationToString(long time) {
+    public String translateDurationToString(long time) {
         double sec = time/1000.0;
         int min = (int) sec/60;
         sec = sec % 60;

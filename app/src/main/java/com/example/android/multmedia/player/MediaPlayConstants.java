@@ -3,7 +3,7 @@ package com.example.android.multmedia.player;
 public class MediaPlayConstants {
     public static final int RANDOM_PLAY = 1;
     public static final int SINGLE_PLAY = 2;
-    public static final int SQUENCE_PLAY = 3;
+    public static final int SEQUENCE_PLAY = 3;
 
     public static final int PLAY_PRE = 4;
     public static final int PLAY = 5;
@@ -14,4 +14,17 @@ public class MediaPlayConstants {
     public static final int MSG_UPDATE_PROGRESS = 9;
     public static final int MSG_SHOW_HIDE_BAR = 10;
     public static final int MSG_UPDATE_CONTROL_BAR = 11;
+
+    public static final int PLAY_STATE_PLAYING = 0;
+    public static final int PLAY_STATE_PAUSE = 1;
+    public static final int PLAY_STATE_END = 2;
+
+    public static final String INTENT_VIDEO_LIST = "video_list";
+    public static final String INTENT_MEDIA_POSITION = "media_position";
+
+    public enum MediaType {
+        VIDEO,
+        AUDIO,
+        PHOTO
+    }
 }

@@ -1,6 +1,8 @@
 package com.mediaload.bean;
 
-public class BaseItem {
+import java.io.Serializable;
+
+public class BaseItem implements Serializable {
     private long id;
     private String displayName;
     private String path;

@@ -1,5 +1,6 @@
 package com.example.android.multmedia.player;
 
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -21,6 +22,9 @@ import com.example.android.multmedia.player.mvp.BaseActivity;
 import com.example.android.multmedia.player.mvp.IMediaView;
 import com.example.android.multmedia.player.mvp.MediaControlImpl;
 import com.example.android.multmedia.utils.StringUtils;
+import com.mediaload.bean.VideoItem;
+
+import java.util.ArrayList;
 
 import static com.example.android.multmedia.player.MediaPlayConstants.*;
 
@@ -33,6 +37,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     private TextView tvPlayTime;
     private TextView tvVideoDuration;
     private SeekBar sbPosition;
+    private View viewAlpha;
 
     private ImageButton ibReturn;
     private ImageButton ibPlayMode;
@@ -44,6 +49,9 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     private RelativeLayout rlTopBar;
     private LinearLayout llBottomBar;
 
+    private float startY;
+    private float startX;
+    private float currentAlpha;
     private int screenWidth;
     private int screenHeight;
     private int videoWidth;
@@ -52,8 +60,14 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     private int bottomHeight;
     private int videoPosition;
 
-    private boolean isFullScreen = false;
+    private boolean isFullScreen = true;
+    private boolean isFavorite = false;
     private boolean isTopBottomBarShow = false;
+    private volatile int playMode = SEQUENCE_PLAY; //default play mode.
+
+    private ArrayList<VideoItem> videoList;
+    private VideoItem video;
+    private VideoItem currentVideo;
 
     private MediaControlImpl mediaControl;
     private GestureDetector gestureDetector;
@@ -63,6 +77,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            Log.d(TAG, "Main Thread Handle Msg = " + msg.what + ", Msg.arg1 = " + msg.arg1);
             switch (msg.what) {
                 case PLAY_PRE:
                     break;
@@ -79,10 +94,27 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                     updateProgress();
                     break;
                 case MSG_SHOW_HIDE_BAR:
-                    showTopBottomBar();
+                    hideTopBottomBar(topHeight, bottomHeight);
                     break;
                 case MSG_UPDATE_CONTROL_BAR:
-                    updateMediaControlBar();
+                    if(msg.arg1 == PLAY_STATE_PLAYING) {
+                        if(msg.obj != null) {
+                            currentVideo = (VideoItem) msg.obj;
+                            tvVideoDuration.setText(StringUtils.formatMediaTime(currentVideo.getDuration()));
+                            //获取时长,实时更新播放进度
+                            sbPosition.setMax((int)currentVideo.getDuration());
+                        }
+                        ibPlay.setImageResource(R.drawable.btn_pause_normal);
+                        updateProgress();
+                    }else if (msg.arg1 == PLAY_STATE_PAUSE) {
+
+                    }else if (msg.arg1 == PLAY_STATE_END) {
+                        handler.removeMessages(MSG_UPDATE_PROGRESS);
+                        //ibPlay.setImageResource(R.drawable.btn_play_normal);
+                        sbPosition.setProgress(sbPosition.getMax());
+                        tvPlayTime.setText(StringUtils.formatMediaTime(videoPlayer.getDuration()));
+                    }
+                    //updateMediaControlBar();
                     break;
             }
         }
@@ -97,22 +129,37 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         videoHeight = height;
     }
 
+    public void updateSeekBar(int progress) {
+        sbPosition.setSecondaryProgress(progress);
+    }
+
+    public void mediaPlayerPrepared() {
+
+    }
+
+    public int getPlayMode() {
+        return playMode;
+    }
+
     @Override
     public MediaControlImpl attachMediaView() {
-        if (mediaControl != null) {
-            mediaControl = new MediaControlImpl(this);
-            mediaControl.setVideoPlayer(videoPlayer);
+        Log.d(TAG, "attachMediaView");
+        if (mediaControl == null) {
+            mediaControl = new MediaControlImpl(this, MediaType.VIDEO);
+            videoPlayer = mediaControl.getVideoPlayer();
         }
         return mediaControl;
     }
 
     @Override
     public void initView() {
-        videoPlayer = (VideoView) findViewById(R.id.vv_video);
+        Log.d(TAG, "initView");
         tvSystemTime = (TextView) findViewById(R.id.tv_system_time);
         tvVideoName = (TextView) findViewById(R.id.tv_video_name);
         tvPlayTime = (TextView) findViewById(R.id.tv_video_playtime);
         tvVideoDuration = (TextView) findViewById(R.id.tv_video_duration);
+        sbPosition = (SeekBar)findViewById(R.id.sb_position);
+        viewAlpha = (View) findViewById(R.id.view_alpha);
 
         ibReturn = (ImageButton) findViewById(R.id.ib_back);
         ibPlayMode = (ImageButton) findViewById(R.id.ib_playmode);
@@ -139,12 +186,32 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     @Override
     public void initData() {
         Log.d(TAG, "init Data Enter");
+        getVideoDataFromIntent();
         initPreAndNext();
         initSeekBarListener();
         initScreenHW();
-        mediaControl.setVideoPlayerListener();
+        mediaControl.setVideoPlayerListener(videoList);
+
+        /*start play the video*/
+        mediaControl.setVideoPath(video.getPath(), videoPosition);
         gestureDetector = new GestureDetector(this, new GestureListener());
+        handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, 3000);
         Log.d(TAG, "init Data Exit");
+    }
+
+    private void getVideoDataFromIntent() {
+        /*get video list and selected video*/
+        videoList = (ArrayList<VideoItem>)getIntent().getSerializableExtra(INTENT_VIDEO_LIST);
+        videoPosition = getIntent().getIntExtra(INTENT_MEDIA_POSITION, 0);
+        video = videoList.get(videoPosition);
+        Log.d(TAG, "Video Position = " + videoPosition);
+
+        if(video != null) {
+            Log.d(TAG, "Video Duration = " + video.getDuration());
+
+            tvVideoName.setText(video.getDisplayName());
+            tvVideoDuration.setText(StringUtils.formatMediaTime(video.getDuration()));
+        }
     }
 
     private void initPreAndNext() {
@@ -200,7 +267,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
             switch (seekBar.getId()) {
                 case R.id.sb_position:
                     if(fromUser) {
-                        mediaControl.getVideoPlayer().seekTo(progress);
+                        videoPlayer.seekTo(progress);
                     }
                     break;
             }
@@ -211,10 +278,9 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
             handler.removeMessages(MSG_SHOW_HIDE_BAR);
         }
 
-
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            handler.sendEmptyMessageAtTime(MSG_SHOW_HIDE_BAR, 3000);
+            handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, 3000);
         }
     }
 
@@ -248,24 +314,10 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     }
 
     private void updateProgress() {
-        tvPlayTime.setText(StringUtils.formatMediaTime(mediaControl.getVideoPlayer().getCurrentPosition()));
-        sbPosition.setProgress(mediaControl.getVideoPlayer().getCurrentPosition());
+        Log.d(TAG, "Current played time = " + videoPlayer.getCurrentPosition());
+        tvPlayTime.setText(StringUtils.formatMediaTime(videoPlayer.getCurrentPosition()));
+        sbPosition.setProgress(videoPlayer.getCurrentPosition());
         handler.sendEmptyMessageDelayed(MSG_UPDATE_PROGRESS, 1000);
-    }
-
-    private void updateMediaControlBar() {
-        if(mediaControl.isPlaying() == true) {
-            ibPlay.setImageResource(R.drawable.btn_pause_normal);
-            tvVideoDuration.setText(""/*StringUtils.formatMediaTime(video.getTime())*/);
-            //获取时长,实时更新播放进度
-            sbPosition.setMax((int) 0 /*video.getTime()*/);
-            updateProgress();
-        }else {
-            handler.removeMessages(MSG_UPDATE_PROGRESS);
-            tvPlayTime.setText(""/*StringUtils.formatMediaTime(vvVideo.getDuration())*/);
-            ibPlay.setImageResource(R.drawable.btn_play_normal);
-            sbPosition.setProgress(sbPosition.getMax());
-        }
     }
 
     /*Media Play Control Bar Listener*/
@@ -273,16 +325,44 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_back:
+                finish();
                 break;
             case R.id.ib_playmode:
+                if(playMode == SEQUENCE_PLAY) {
+                    playMode = SINGLE_PLAY;
+                    ibPlayMode.setImageResource(R.drawable.btn_playmode_singlerepeat_normal);
+                }else {
+                    playMode = SEQUENCE_PLAY;
+                    ibPlayMode.setImageResource(R.drawable.btn_playmode_all_repeat_normal);
+                }
                 break;
             case R.id.ib_pre:
+                playMode = SEQUENCE_PLAY; // as if the next/pre press, set playmode to default;
+                mediaControl.playPreMedia();
                 break;
             case R.id.ib_playpause:
+                if(mediaControl.isPlaying()) {
+                    mediaControl.pauseMedia();
+                    ibPlay.setImageResource(R.drawable.btn_play_normal);
+                    handler.removeMessages(MSG_UPDATE_PROGRESS);
+                }else {
+                    mediaControl.playMedia();
+                    ibPlay.setImageResource(R.drawable.btn_pause_normal);
+                    updateProgress();
+                }
+                //mediaControl.playPauseMedia();
                 break;
             case R.id.ib_next:
+                playMode = SEQUENCE_PLAY; // as if the next/pre press, set playmode to default;
+                mediaControl.playNextMedia();
                 break;
             case R.id.ib_favorite:
+                if(isFavorite == true) {
+                    ibFavorite.setImageResource(R.drawable.btn_favorite_normal);
+                }else {
+                    ibFavorite.setImageResource(R.drawable.btn_favorite_pressed);
+                }
+                isFavorite = !isFavorite;
                 break;
         }
     }
@@ -292,8 +372,20 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         gestureDetector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                startX = event.getX();
+                startY = event.getY();
+                currentAlpha = viewAlpha.getAlpha();
                 break;
             case MotionEvent.ACTION_MOVE:
+                float alpha = (float) (currentAlpha + (startY - event.getY()) / 100 * 0.1);
+                if (alpha > 0.8f) {
+                    currentAlpha = 0.8f;
+                } else if (alpha < 0.0f) {
+                    currentAlpha = 0.0f;
+                } else {
+                    currentAlpha = alpha;
+                }
+                viewAlpha.setAlpha(currentAlpha);
                 break;
         }
         return super.onTouchEvent(event);
@@ -301,13 +393,14 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     @Override
     public int getLayoutResID() {
-        return R.layout.activity_audio_player;
+        return R.layout.activity_video_player;
     }
 
     @Override
     public void showTopBottomBar() {
         rlTopBar.setTranslationY(0);
         llBottomBar.setTranslationY(0);
+        handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, 3000);
         isTopBottomBarShow = true;
     }
 

@@ -10,7 +10,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     public MediaControlImpl attachMediaView() {
         if(mediaControl != null) {
-            mediaControl = new MediaControlImpl(this);
+            mediaControl = new MediaControlImpl(this, MediaPlayConstants.MediaType.AUDIO);
         }
         return mediaControl;
     }

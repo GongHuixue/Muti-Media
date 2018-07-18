@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_video_top"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="30dp"
     android:background="@color/colorPlayerBackground">
 
     <TextView
@@ -17,11 +17,11 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/btn_lock_normal"/>
+    <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:src="@drawable/btn_lock_normal"/>-->
 
     <TextView
         android:id="@+id/tv_system_time"

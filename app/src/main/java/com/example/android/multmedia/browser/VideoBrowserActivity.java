@@ -1,10 +1,12 @@
 package com.example.android.multmedia.browser;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,10 +22,12 @@ import com.mediaload.callback.OnVideoLoadCallBack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.android.multmedia.player.MediaPlayConstants.*;
+
 public class VideoBrowserActivity extends BaseBrowserActivity {
     final static String TAG = VideoBrowserActivity.class.getSimpleName();
     private BrowserRvAdapter<VideoItem> mVideoRvAdapter;
-    private List<VideoItem> mVideoItems = new ArrayList<>();
+    private ArrayList<VideoItem> mVideoItems = new ArrayList<>();
     private TextView TvTitle;
     private TextView TvNum;
 
@@ -58,12 +62,16 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
         mVideoRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ArrayList<VideoItem> videoList = (ArrayList<VideoItem>)mVideoItems;
+                ArrayList<VideoItem> videoList = new ArrayList<>();
+                videoList.addAll(mVideoItems);
                 Intent intent = new Intent(VideoBrowserActivity.this, VideoPlayerActivity.class);
-                intent.putExtra("position", position);
-                intent.putExtra("videolist", videoList);
+                intent.putExtra(INTENT_MEDIA_POSITION, position);
+                intent.putExtra(INTENT_VIDEO_LIST, mVideoItems);
+                Log.d(TAG, "video name = " + mVideoItems.get(position).getDisplayName() + ", path = " + mVideoItems.get(position).getPath());
+                Log.d(TAG, "video name = " + videoList.get(position).getDisplayName() + ", path = " + videoList.get(position).getPath());
+
                 startActivity(intent);
-                Toast.makeText(VideoBrowserActivity.this, "short click " + position, Toast.LENGTH_SHORT).show();
+
             }
         });
 
