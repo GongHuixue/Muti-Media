@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_video_bottom"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="50dp"
     android:orientation="vertical"
     android:background="@color/colorPlayerBackground"
     android:layout_alignParentBottom="true">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="20dp"
         android:orientation="horizontal">
         <TextView
             android:id="@+id/tv_video_playtime"
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="00:00:00"
             android:textColor="@color/colorDivider"
-            android:layout_margin="5dp"/>
+            android:layout_margin="2dp"/>
         <SeekBar
             android:id="@+id/sb_position"
             android:layout_width="0dp"
@@ -37,14 +37,15 @@
             android:layout_height="wrap_content"
             android:text="1:01:30"
             android:textColor="@color/colorDivider"
-            android:layout_margin="5dp"/>
+            android:layout_margin="2dp"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="30dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="horizontal"
+        android:layout_marginBottom="3dp">
 
         <ImageButton
             android:id="@+id/ib_back"
@@ -53,6 +54,7 @@
             android:scaleType="center"
             android:layout_weight="1"
             android:background="@null"
+            android:layout_gravity="center"
             android:src="@drawable/btn_return_normal"/>
 
         <ImageButton
@@ -62,6 +64,7 @@
             android:scaleType="center"
             android:layout_weight="1"
             android:background="@null"
+            android:layout_gravity="center"
             android:src="@drawable/random_play"/>
 
         <ImageButton
@@ -71,6 +74,7 @@
             android:scaleType="center"
             android:layout_weight="1"
             android:background="@null"
+            android:layout_gravity="center"
             android:src="@drawable/video_pre_selector"/>
 
         <ImageButton
@@ -80,6 +84,7 @@
             android:scaleType="center"
             android:layout_weight="1"
             android:background="@null"
+            android:layout_gravity="center"
             android:src="@drawable/video_play_selector"/>
 
         <ImageButton
@@ -89,6 +94,7 @@
             android:scaleType="center"
             android:layout_weight="1"
             android:background="@null"
+            android:layout_gravity="center"
             android:src="@drawable/video_next_selector"/>
 
         <ImageButton
@@ -98,6 +104,7 @@
             android:scaleType="center"
             android:layout_weight="1"
             android:background="@null"
+            android:layout_gravity="center"
             android:src="@drawable/btn_favorite_normal"/>
 
     </LinearLayout>

@@ -110,7 +110,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
                     }else if (msg.arg1 == PLAY_STATE_END) {
                         handler.removeMessages(MSG_UPDATE_PROGRESS);
-                        //ibPlay.setImageResource(R.drawable.btn_play_normal);
+                        ibPlay.setImageResource(R.drawable.btn_play_normal);
                         sbPosition.setProgress(sbPosition.getMax());
                         tvPlayTime.setText(StringUtils.formatMediaTime(videoPlayer.getDuration()));
                     }
@@ -195,7 +195,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         /*start play the video*/
         mediaControl.setVideoPath(video.getPath(), videoPosition);
         gestureDetector = new GestureDetector(this, new GestureListener());
-        handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, 3000);
+        handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, CONTROL_BAR_UPDATE);
         Log.d(TAG, "init Data Exit");
     }
 
@@ -280,7 +280,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, 3000);
+            handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, CONTROL_BAR_UPDATE);
         }
     }
 
@@ -310,14 +310,14 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     private void updateTime() {
         tvSystemTime.setText(StringUtils.getSystemTime());
-        handler.sendEmptyMessageDelayed(MSG_UPDATE_TIME, 1000);
+        handler.sendEmptyMessageDelayed(MSG_UPDATE_TIME, SYSTEM_TIME_UPDATE);
     }
 
     private void updateProgress() {
         Log.d(TAG, "Current played time = " + videoPlayer.getCurrentPosition());
         tvPlayTime.setText(StringUtils.formatMediaTime(videoPlayer.getCurrentPosition()));
         sbPosition.setProgress(videoPlayer.getCurrentPosition());
-        handler.sendEmptyMessageDelayed(MSG_UPDATE_PROGRESS, 1000);
+        handler.sendEmptyMessageDelayed(MSG_UPDATE_PROGRESS, SYSTEM_TIME_UPDATE);
     }
 
     /*Media Play Control Bar Listener*/
@@ -400,7 +400,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     public void showTopBottomBar() {
         rlTopBar.setTranslationY(0);
         llBottomBar.setTranslationY(0);
-        handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, 3000);
+        handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, CONTROL_BAR_UPDATE);
         isTopBottomBarShow = true;
     }
 

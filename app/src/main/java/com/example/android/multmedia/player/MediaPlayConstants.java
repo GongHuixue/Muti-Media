@@ -19,6 +19,9 @@ public class MediaPlayConstants {
     public static final int PLAY_STATE_PAUSE = 1;
     public static final int PLAY_STATE_END = 2;
 
+    public static final int SYSTEM_TIME_UPDATE = 1000;
+    public static final int CONTROL_BAR_UPDATE = 5000;
+
     public static final String INTENT_VIDEO_LIST = "video_list";
     public static final String INTENT_MEDIA_POSITION = "media_position";
 
