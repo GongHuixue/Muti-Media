@@ -11,7 +11,11 @@ import android.widget.VideoView;
 
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.browser.VideoBrowserActivity;
+import com.example.android.multmedia.player.AudioPlayerActivity;
+import com.example.android.multmedia.player.PhotoPlayerActivity;
 import com.example.android.multmedia.player.VideoPlayerActivity;
+import com.mediaload.bean.AudioItem;
+import com.mediaload.bean.PhotoItem;
 import com.mediaload.bean.VideoItem;
 
 import java.lang.ref.WeakReference;
@@ -21,11 +25,15 @@ import static com.example.android.multmedia.player.MediaPlayConstants.*;
 
 public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaPlayControl{
     private final static String TAG = MediaControlImpl.class.getSimpleName();
-    private Context mContext;
     private VideoPlayerActivity videoPlayerActivity;
     private VideoView videoPlayer;
     private ArrayList<VideoItem> videoList = new ArrayList<>();
-    private int videoPosition = 0;
+    private AudioPlayerActivity audioPlayerActivity;
+    private ArrayList<AudioItem> audioList = new ArrayList<>();
+    private PhotoPlayerActivity photoPlayerActivity;
+    private ArrayList<PhotoItem> photoList = new ArrayList<>();
+
+    private int mediaPosition = 0;
     private volatile Boolean isPlaying = false;
     private MediaType mediaType;
 
@@ -39,11 +47,22 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
             mainHandler = videoPlayerActivity.getMainThreadHandler();
             Log.d(TAG, "Video Player init");
             videoPlayer = (VideoView) videoPlayerActivity.findViewById(R.id.vv_video);
+        } else if (getActivityView() instanceof AudioPlayerActivity) {
+            audioPlayerActivity = (AudioPlayerActivity) getActivityView();
+            mediaType = type;
+            Log.d(TAG, "Audio Player Init");
+        } else if (getActivityView() instanceof PhotoPlayerActivity) {
+            photoPlayerActivity = (PhotoPlayerActivity)getActivityView();
+            mediaType = type;
         }
     }
 
     public VideoView getVideoPlayer() {
         return videoPlayer;
+    }
+
+    public MediaPlayer getAudioPlayer() {
+        return new MediaPlayer();
     }
 
     public void setVideoPlayerListener(ArrayList<VideoItem> videoItems) {
@@ -70,7 +89,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
 
                     Message msg = mainHandler.obtainMessage(MSG_UPDATE_CONTROL_BAR);
                     msg.arg1 = PLAY_STATE_PLAYING;
-                    msg.obj = videoList.get(videoPosition);
+                    msg.obj = videoList.get(mediaPosition);
                     mainHandler.sendMessage(msg);
 
                     Log.d(TAG, "start play video");
@@ -87,7 +106,8 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
                     msg.arg1 = PLAY_STATE_END;
                     mainHandler.sendMessage(msg);
 
-                    //playPauseMedia();
+                    /*as play completed, need continue play media*/
+                    playPauseMedia();
                 }
             });
         }
@@ -96,10 +116,11 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         videoList.addAll(videoItems);
     }
 
+    /*must set video path by following api*/
     public void setVideoPath(String videoPath, int position) {
         Log.d(TAG, "setVideoPath Video Path = " + videoPath + ", position = " + position);
         getVideoPlayer().setVideoPath(videoPath);
-        videoPosition = position;
+        mediaPosition = position;
     }
 
     @Override
@@ -108,7 +129,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
             if(videoPlayerActivity.getPlayMode() == SEQUENCE_PLAY) {
                 playNextMedia();
             }else {
-                setVideoPath(videoList.get(videoPosition).getPath(), videoPosition);
+                setVideoPath(videoList.get(mediaPosition).getPath(), mediaPosition);
             }
         }else if (mediaType == MediaType.AUDIO) {
 
@@ -122,12 +143,12 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     }
     @Override
     public void playPreMedia(){
-        if(videoPosition == 0) {
+        if(mediaPosition == 0) {
             Log.d(TAG, "This is the first file");
         }else {
-            videoPosition = videoPosition - 1;
+            mediaPosition = mediaPosition - 1;
             videoPlayer.stopPlayback();
-            setVideoPath(videoList.get(videoPosition).getPath(), videoPosition);
+            setVideoPath(videoList.get(mediaPosition).getPath(), mediaPosition);
         }
     }
     @Override
@@ -142,12 +163,12 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     }
     @Override
     public void playNextMedia(){
-        if(videoPosition == (videoList.size() -1)) {
+        if(mediaPosition == (videoList.size() -1)) {
             Log.d(TAG, "This is the last file");
         }else {
-            videoPosition = videoPosition + 1;
+            mediaPosition = mediaPosition + 1;
             videoPlayer.stopPlayback();
-            setVideoPath(videoList.get(videoPosition).getPath(), videoPosition);
+            setVideoPath(videoList.get(mediaPosition).getPath(), mediaPosition);
         }
     }
     @Override
@@ -161,5 +182,26 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     @Override
     public boolean isPlaying(){
         return isPlaying;
+    }
+
+    @Override
+    public void resetMediaData() {
+        /*reset the common data*/
+        isPlaying = false;
+        mediaType = MediaType.NONE;
+        mediaPosition = 0;
+
+        if(mediaType == MediaType.VIDEO) {
+            videoPlayerActivity = null;
+            videoPlayer = null;
+            videoList.clear();
+            mainHandler = null;
+        }else if(mediaType == MediaType.AUDIO) {
+            audioPlayerActivity = null;
+            audioList.clear();
+        }else if(mediaType == MediaType.PHOTO) {
+            photoPlayerActivity = null;
+            photoList.clear();
+        }
     }
 }

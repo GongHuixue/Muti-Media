@@ -62,13 +62,9 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
         mVideoRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ArrayList<VideoItem> videoList = new ArrayList<>();
-                videoList.addAll(mVideoItems);
                 Intent intent = new Intent(VideoBrowserActivity.this, VideoPlayerActivity.class);
                 intent.putExtra(INTENT_MEDIA_POSITION, position);
                 intent.putExtra(INTENT_VIDEO_LIST, mVideoItems);
-                Log.d(TAG, "video name = " + mVideoItems.get(position).getDisplayName() + ", path = " + mVideoItems.get(position).getPath());
-                Log.d(TAG, "video name = " + videoList.get(position).getDisplayName() + ", path = " + videoList.get(position).getPath());
 
                 startActivity(intent);
 

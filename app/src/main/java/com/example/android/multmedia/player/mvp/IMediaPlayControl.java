@@ -10,4 +10,5 @@ public interface IMediaPlayControl {
     void playModeChanged();
     boolean isFavorite();
     boolean isPlaying();
+    void resetMediaData();
 }

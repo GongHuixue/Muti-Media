@@ -22,12 +22,14 @@ public class MediaPlayConstants {
     public static final int SYSTEM_TIME_UPDATE = 1000;
     public static final int CONTROL_BAR_UPDATE = 5000;
 
+    public static final String INTENT_AUDIO_LIST = "audio_list";
     public static final String INTENT_VIDEO_LIST = "video_list";
     public static final String INTENT_MEDIA_POSITION = "media_position";
 
     public enum MediaType {
         VIDEO,
         AUDIO,
-        PHOTO
+        PHOTO,
+        NONE
     }
 }

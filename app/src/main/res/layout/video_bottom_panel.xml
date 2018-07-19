@@ -11,33 +11,43 @@
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:orientation="horizontal">
+
         <TextView
             android:id="@+id/tv_video_playtime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:text="00:00:00"
-            android:textColor="@color/colorDivider"
-            android:layout_margin="2dp"/>
+            android:textColor="@color/colorDivider" />
+        <!--<SeekBar-->
+        <!--android:id="@+id/sb_position"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:thumb="@drawable/shape_point_circular"-->
+        <!--android:thumbOffset="0dp"-->
+        <!--android:minHeight="4dp"-->
+        <!--android:maxHeight="4dp"-->
+        <!--android:progress="0"-->
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:progressDrawable="@drawable/progress_video"-->
+        <!--android:background="@color/colorBlack"/>-->
         <SeekBar
             android:id="@+id/sb_position"
+            style="@android:style/Widget.DeviceDefault.Light.SeekBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:thumb="@drawable/shape_point_circular"
-            android:thumbOffset="0dp"
-            android:minHeight="4dp"
-            android:maxHeight="4dp"
-            android:progress="0"
-            android:layout_gravity="center_vertical"
-            android:progressDrawable="@drawable/progress_video"
-            android:background="@color/colorBlack"/>
+            android:max="100"
+            android:progress="0" />
+
         <TextView
             android:id="@+id/tv_video_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:text="1:01:30"
-            android:textColor="@color/colorDivider"
-            android:layout_margin="2dp"/>
+            android:textColor="@color/colorDivider" />
     </LinearLayout>
 
     <LinearLayout

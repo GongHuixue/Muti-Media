@@ -337,7 +337,6 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                 }
                 break;
             case R.id.ib_pre:
-                playMode = SEQUENCE_PLAY; // as if the next/pre press, set playmode to default;
                 mediaControl.playPreMedia();
                 break;
             case R.id.ib_playpause:
@@ -350,10 +349,8 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                     ibPlay.setImageResource(R.drawable.btn_pause_normal);
                     updateProgress();
                 }
-                //mediaControl.playPauseMedia();
                 break;
             case R.id.ib_next:
-                playMode = SEQUENCE_PLAY; // as if the next/pre press, set playmode to default;
                 mediaControl.playNextMedia();
                 break;
             case R.id.ib_favorite:
@@ -446,6 +443,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     @Override
     protected void onDestroy() {
+        mediaControl.resetMediaData();
         super.onDestroy();
     }
 
