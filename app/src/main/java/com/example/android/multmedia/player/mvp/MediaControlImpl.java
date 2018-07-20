@@ -18,6 +18,7 @@ import com.mediaload.bean.AudioItem;
 import com.mediaload.bean.PhotoItem;
 import com.mediaload.bean.VideoItem;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
@@ -28,6 +29,9 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     private VideoPlayerActivity videoPlayerActivity;
     private VideoView videoPlayer;
     private ArrayList<VideoItem> videoList = new ArrayList<>();
+
+    /*init audio*/
+    private MediaPlayer audioPlayer;
     private AudioPlayerActivity audioPlayerActivity;
     private ArrayList<AudioItem> audioList = new ArrayList<>();
     private PhotoPlayerActivity photoPlayerActivity;
@@ -50,6 +54,9 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         } else if (getActivityView() instanceof AudioPlayerActivity) {
             audioPlayerActivity = (AudioPlayerActivity) getActivityView();
             mediaType = type;
+            if(audioPlayer == null) {
+                audioPlayer = new MediaPlayer();
+            }
             Log.d(TAG, "Audio Player Init");
         } else if (getActivityView() instanceof PhotoPlayerActivity) {
             photoPlayerActivity = (PhotoPlayerActivity)getActivityView();
@@ -62,7 +69,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     }
 
     public MediaPlayer getAudioPlayer() {
-        return new MediaPlayer();
+        return audioPlayer;
     }
 
     public void setVideoPlayerListener(ArrayList<VideoItem> videoItems) {
@@ -116,10 +123,66 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         videoList.addAll(videoItems);
     }
 
+    public void setAudioPlayerListener(ArrayList<AudioItem> audioItems) {
+        if (audioPlayer != null) {
+            audioPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer mp, int what, int extra) {
+                    return false;
+                }
+            });
+
+            audioPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.start();
+
+                    Message msg = mainHandler.obtainMessage(MSG_UPDATE_CONTROL_BAR);
+                    msg.arg1 = PLAY_STATE_PLAYING;
+                    msg.obj = audioList.get(mediaPosition);
+                    mainHandler.sendMessage(msg);
+
+                    Log.d(TAG, "start play audio");
+                }
+            });
+
+            audioPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.reset();
+                    Log.d(TAG, "audio play completed");
+
+                    Message msg = mainHandler.obtainMessage(MSG_UPDATE_CONTROL_BAR);
+                    msg.arg1 = PLAY_STATE_END;
+                    mainHandler.sendMessage(msg);
+
+                    /*as play completed, need continue play media*/
+                    playPauseMedia();
+                }
+            });
+        }
+
+        audioList.clear();
+        audioList.addAll(audioItems);
+    }
+
+
     /*must set video path by following api*/
     public void setVideoPath(String videoPath, int position) {
         Log.d(TAG, "setVideoPath Video Path = " + videoPath + ", position = " + position);
         getVideoPlayer().setVideoPath(videoPath);
+        mediaPosition = position;
+    }
+
+    /*must set audio path by following api*/
+    public void setAudioPath(String audioPath, int position) {
+        Log.d(TAG, "setVideoPath Video Path = " + audioPath + ", position = " + position);
+        try {
+            audioPlayer.setDataSource(audioList.get(position).getPath());
+            audioPlayer.prepareAsync();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
         mediaPosition = position;
     }
 
@@ -132,7 +195,11 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
                 setVideoPath(videoList.get(mediaPosition).getPath(), mediaPosition);
             }
         }else if (mediaType == MediaType.AUDIO) {
-
+            if(audioPlayerActivity.getPlayMode() == SEQUENCE_PLAY) {
+                playNextMedia();
+            }else {
+                setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
+            }
         }else if (mediaType == MediaType.PHOTO) {
 
         }
@@ -143,32 +210,74 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     }
     @Override
     public void playPreMedia(){
-        if(mediaPosition == 0) {
-            Log.d(TAG, "This is the first file");
-        }else {
-            mediaPosition = mediaPosition - 1;
-            videoPlayer.stopPlayback();
-            setVideoPath(videoList.get(mediaPosition).getPath(), mediaPosition);
+        if(mediaType == MediaType.VIDEO) {
+            if (mediaPosition == 0) {
+                Log.d(TAG, "This is the first file");
+            } else {
+                mediaPosition = mediaPosition - 1;
+                videoPlayer.stopPlayback();
+                setVideoPath(videoList.get(mediaPosition).getPath(), mediaPosition);
+            }
+        }else if(mediaType == MediaType.AUDIO) {
+            if(mediaPosition == 0) {
+                Log.d(TAG, "This is the first file");
+            }else {
+                mediaPosition = mediaPosition - 1;
+                audioPlayer.reset();
+                setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
+            }
+        }else if(mediaType == MediaType.PHOTO) {
+
         }
     }
     @Override
     public void playMedia(){
         isPlaying = true;
-        videoPlayer.start();
+        if(mediaType == MediaType.VIDEO) {
+            videoPlayer.start();
+        }else if(mediaType == MediaType.AUDIO){
+            audioPlayer.start();
+        }else if(mediaType == MediaType.PHOTO) {
+
+        }
     }
     @Override
     public void pauseMedia(){
         isPlaying = false;
-        videoPlayer.pause();
+        if(mediaType == MediaType.VIDEO) {
+            videoPlayer.pause();
+            Message msg = mainHandler.obtainMessage(MSG_UPDATE_CONTROL_BAR);
+            msg.arg1 = PLAY_STATE_PAUSE;
+            mainHandler.sendMessage(msg);
+        }else if(mediaType == MediaType.AUDIO) {
+            audioPlayer.pause();
+            Message msg = mainHandler.obtainMessage(MSG_UPDATE_CONTROL_BAR);
+            msg.arg1 = PLAY_STATE_PAUSE;
+            mainHandler.sendMessage(msg);
+        }else if(mediaType == MediaType.PHOTO) {
+
+        }
     }
     @Override
     public void playNextMedia(){
-        if(mediaPosition == (videoList.size() -1)) {
-            Log.d(TAG, "This is the last file");
-        }else {
-            mediaPosition = mediaPosition + 1;
-            videoPlayer.stopPlayback();
-            setVideoPath(videoList.get(mediaPosition).getPath(), mediaPosition);
+        if (mediaType == MediaType.VIDEO) {
+            if (mediaPosition == (videoList.size() - 1)) {
+                Log.d(TAG, "This is the last file");
+            } else {
+                mediaPosition = mediaPosition + 1;
+                videoPlayer.stopPlayback();
+                setVideoPath(videoList.get(mediaPosition).getPath(), mediaPosition);
+            }
+        }else if (mediaType == MediaType.AUDIO) {
+            if(mediaPosition == (audioList.size() -1)) {
+                Log.d(TAG, "This is the last file");
+            }else {
+                mediaPosition = mediaPosition + 1;
+                audioPlayer.reset();
+                setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
+            }
+        }else if (mediaType == MediaType.PHOTO) {
+
         }
     }
     @Override

@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.adpter.BrowserRvAdapter;
 import com.example.android.multmedia.base.BaseBrowserActivity;
+import com.example.android.multmedia.player.AudioPlayerActivity;
 import com.example.android.multmedia.player.VideoPlayerActivity;
 import com.mediaload.bean.AudioItem;
 import com.mediaload.bean.AudioResult;
@@ -20,8 +21,7 @@ import com.mediaload.callback.OnAudioLoadCallBack;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_MEDIA_POSITION;
-import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_VIDEO_LIST;
+import static com.example.android.multmedia.player.MediaPlayConstants.*;
 
 public class AudioBrowserActivity extends BaseBrowserActivity {
     private final static String TAG = AudioBrowserActivity.class.getSimpleName();
@@ -62,9 +62,9 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
         mAudioRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(AudioBrowserActivity.this, VideoPlayerActivity.class);
+                Intent intent = new Intent(AudioBrowserActivity.this, AudioPlayerActivity.class);
                 intent.putExtra(INTENT_MEDIA_POSITION, position);
-                intent.putExtra(INTENT_VIDEO_LIST, mAudioItems);
+                intent.putExtra(INTENT_AUDIO_LIST, mAudioItems);
 
                 startActivity(intent);
             }

@@ -14,6 +14,7 @@ public class MediaPlayConstants {
     public static final int MSG_UPDATE_PROGRESS = 9;
     public static final int MSG_SHOW_HIDE_BAR = 10;
     public static final int MSG_UPDATE_CONTROL_BAR = 11;
+    public static final int MSG_UPDATE_AUDIO_INFO = 12;
 
     public static final int PLAY_STATE_PLAYING = 0;
     public static final int PLAY_STATE_PAUSE = 1;
@@ -24,6 +25,7 @@ public class MediaPlayConstants {
 
     public static final String INTENT_AUDIO_LIST = "audio_list";
     public static final String INTENT_VIDEO_LIST = "video_list";
+    public static final String INTENT_PHOTO_LIST = "photo_list";
     public static final String INTENT_MEDIA_POSITION = "media_position";
 
     public enum MediaType {

@@ -1,19 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/audio_bg"
     tools:context=".player.AudioPlayerActivity">
 
-    <include layout="@layout/video_top_panel"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#1d3446">
+        <TextView
+            android:id="@+id/tv_audio_name"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Yesterday Once More"
+            android:textAllCaps="false"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/colorPlayTitle"
+            android:textSize="20sp"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <ImageView
+            android:id="@+id/iv_zhen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/music_zhen"/>
+        <TextView
+            android:id="@+id/tv_singer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            android:text="Fany"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="@color/colorPlayTitle"
+            android:layout_marginBottom="5dp"/>
+    </RelativeLayout>
+
+    <com.example.android.multmedia.player.audio.LcrView
+        android:id="@+id/tv_lyric"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3">
+    </com.example.android.multmedia.player.audio.LcrView>
+
     <include layout="@layout/video_bottom_panel"/>
 
-    <View
-        android:id="@+id/view_alpha"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0"
-        android:background="@color/colorBlack"/>
-
-</RelativeLayout>
+</LinearLayout>

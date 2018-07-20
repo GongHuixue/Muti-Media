@@ -1,5 +1,6 @@
 package com.example.android.multmedia.browser;
 
+import android.content.Intent;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.adpter.BrowserRvAdapter;
 import com.example.android.multmedia.base.BaseBrowserActivity;
+import com.example.android.multmedia.player.PhotoPlayerActivity;
+import com.example.android.multmedia.player.VideoPlayerActivity;
 import com.mediaload.bean.PhotoItem;
 import com.mediaload.bean.PhotoResult;
 import com.mediaload.callback.OnPhotoLoadCallBack;
@@ -19,10 +22,14 @@ import com.mediaload.callback.OnPhotoLoadCallBack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_AUDIO_LIST;
+import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_MEDIA_POSITION;
+import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_PHOTO_LIST;
+
 public class PictureBrowserActivity extends BaseBrowserActivity {
     private final static String TAG = PictureBrowserActivity.class.getSimpleName();
     private BrowserRvAdapter<PhotoItem> mPictureRvAdapter;
-    private List<PhotoItem> mPictureItems = new ArrayList<>();
+    private ArrayList<PhotoItem> mPictureItems = new ArrayList<>();
     private TextView TvTitle;
     private TextView TvNum;
 
@@ -57,7 +64,11 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
         mPictureRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(PictureBrowserActivity.this, "short click " + position, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(PictureBrowserActivity.this, PhotoPlayerActivity.class);
+                intent.putExtra(INTENT_MEDIA_POSITION, position);
+                intent.putExtra(INTENT_PHOTO_LIST, mPictureItems);
+
+                startActivity(intent);
             }
         });
 

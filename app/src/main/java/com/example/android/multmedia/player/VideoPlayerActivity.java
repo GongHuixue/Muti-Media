@@ -79,14 +79,6 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
             super.handleMessage(msg);
             Log.d(TAG, "Main Thread Handle Msg = " + msg.what + ", Msg.arg1 = " + msg.arg1);
             switch (msg.what) {
-                case PLAY_PRE:
-                    break;
-                case PLAY:
-                    break;
-                case PAUSE:
-                    break;
-                case NEXT:
-                    break;
                 case MSG_UPDATE_TIME:
                     updateTime();
                     break;
@@ -107,14 +99,13 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                         ibPlay.setImageResource(R.drawable.btn_pause_normal);
                         updateProgress();
                     }else if (msg.arg1 == PLAY_STATE_PAUSE) {
-
+                        ibPlay.setImageResource(R.drawable.btn_play_normal);
                     }else if (msg.arg1 == PLAY_STATE_END) {
                         handler.removeMessages(MSG_UPDATE_PROGRESS);
                         ibPlay.setImageResource(R.drawable.btn_play_normal);
                         sbPosition.setProgress(sbPosition.getMax());
                         tvPlayTime.setText(StringUtils.formatMediaTime(videoPlayer.getDuration()));
                     }
-                    //updateMediaControlBar();
                     break;
             }
         }
@@ -443,8 +434,8 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     @Override
     protected void onDestroy() {
+        handler = null;
         mediaControl.resetMediaData();
         super.onDestroy();
     }
-
 }
