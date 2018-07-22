@@ -10,16 +10,15 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.android.multmedia.R;
-import com.example.android.multmedia.browser.VideoBrowserActivity;
 import com.example.android.multmedia.player.AudioPlayerActivity;
 import com.example.android.multmedia.player.PhotoPlayerActivity;
 import com.example.android.multmedia.player.VideoPlayerActivity;
 import com.mediaload.bean.AudioItem;
 import com.mediaload.bean.PhotoItem;
 import com.mediaload.bean.VideoItem;
+import com.xiuyukeji.pictureplayerview.PicturePlayerView;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import static com.example.android.multmedia.player.MediaPlayConstants.*;
@@ -34,6 +33,9 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     private MediaPlayer audioPlayer;
     private AudioPlayerActivity audioPlayerActivity;
     private ArrayList<AudioItem> audioList = new ArrayList<>();
+
+    /*init photo*/
+    private PicturePlayerView photoPlayer;
     private PhotoPlayerActivity photoPlayerActivity;
     private ArrayList<PhotoItem> photoList = new ArrayList<>();
 
@@ -54,6 +56,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         } else if (getActivityView() instanceof AudioPlayerActivity) {
             audioPlayerActivity = (AudioPlayerActivity) getActivityView();
             mediaType = type;
+            mainHandler = audioPlayerActivity.getMainThreadHandler();
             if(audioPlayer == null) {
                 audioPlayer = new MediaPlayer();
             }
@@ -61,6 +64,12 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         } else if (getActivityView() instanceof PhotoPlayerActivity) {
             photoPlayerActivity = (PhotoPlayerActivity)getActivityView();
             mediaType = type;
+            mainHandler = photoPlayerActivity.getMainThreadHandler();
+            if(photoPlayer == null) {
+                photoPlayer = (PicturePlayerView) photoPlayerActivity.findViewById(R.id.photo_player);
+            }
+
+
         }
     }
 
@@ -70,6 +79,10 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
 
     public MediaPlayer getAudioPlayer() {
         return audioPlayer;
+    }
+
+    public PicturePlayerView getPhotoPlayer() {
+        return photoPlayer;
     }
 
     public void setVideoPlayerListener(ArrayList<VideoItem> videoItems) {
@@ -166,6 +179,11 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         audioList.addAll(audioItems);
     }
 
+    public void setPhotoListListener(ArrayList<PhotoItem> photoItems) {
+        photoList.clear();
+        photoList.addAll(photoList);
+
+    }
 
     /*must set video path by following api*/
     public void setVideoPath(String videoPath, int position) {
@@ -201,7 +219,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
                 setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
             }
         }else if (mediaType == MediaType.PHOTO) {
-
+            playNextMedia();
         }
     }
     @Override
@@ -227,7 +245,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
                 setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
             }
         }else if(mediaType == MediaType.PHOTO) {
-
+            Log.d(TAG, "for photo, not support play pre picture");
         }
     }
     @Override
@@ -238,7 +256,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         }else if(mediaType == MediaType.AUDIO){
             audioPlayer.start();
         }else if(mediaType == MediaType.PHOTO) {
-
+            photoPlayer.start();
         }
     }
     @Override
@@ -255,7 +273,10 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
             msg.arg1 = PLAY_STATE_PAUSE;
             mainHandler.sendMessage(msg);
         }else if(mediaType == MediaType.PHOTO) {
-
+            photoPlayer.pause();
+            Message msg = mainHandler.obtainMessage(MSG_UPDATE_CONTROL_BAR);
+            msg.arg1 = PLAY_STATE_PAUSE;
+            mainHandler.sendMessage(msg);
         }
     }
     @Override
@@ -269,7 +290,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
                 setVideoPath(videoList.get(mediaPosition).getPath(), mediaPosition);
             }
         }else if (mediaType == MediaType.AUDIO) {
-            if(mediaPosition == (audioList.size() -1)) {
+            if(mediaPosition == (audioList.size() - 1)) {
                 Log.d(TAG, "This is the last file");
             }else {
                 mediaPosition = mediaPosition + 1;
@@ -277,7 +298,10 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
                 setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
             }
         }else if (mediaType == MediaType.PHOTO) {
-
+            if(mediaPosition == (photoList.size() - 1)) {
+                mediaPosition = mediaPosition + 1;
+                photoPlayer.release();
+            }
         }
     }
     @Override

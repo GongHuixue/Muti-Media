@@ -96,6 +96,11 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         }
     };
 
+    public Handler getMainThreadHandler() {
+        return handler;
+    }
+
+
     public MediaControlImpl attachMediaView() {
         if(mediaControl != null) {
             mediaControl = new MediaControlImpl(this, MediaType.AUDIO);
