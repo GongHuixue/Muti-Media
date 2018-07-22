@@ -7,37 +7,32 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import com.example.android.multmedia.R;
-import com.example.android.multmedia.base.BaseBrowserActivity;
 import com.example.android.multmedia.player.mvp.BaseActivity;
 import com.example.android.multmedia.player.mvp.IMediaView;
 import com.example.android.multmedia.player.mvp.MediaControlImpl;
-import com.example.android.multmedia.utils.StringUtils;
-import com.mediaload.bean.AudioItem;
 import com.mediaload.bean.PhotoItem;
 import com.xiuyukeji.pictureplayerview.PicturePlayerView;
 
 import java.util.ArrayList;
 
-import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_MEDIA_POSITION;
-import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_PHOTO_LIST;
-import static com.example.android.multmedia.player.MediaPlayConstants.MSG_UPDATE_CONTROL_BAR;
-import static com.example.android.multmedia.player.MediaPlayConstants.MSG_UPDATE_PROGRESS;
-import static com.example.android.multmedia.player.MediaPlayConstants.PLAY_STATE_END;
-import static com.example.android.multmedia.player.MediaPlayConstants.PLAY_STATE_PAUSE;
-import static com.example.android.multmedia.player.MediaPlayConstants.PLAY_STATE_PLAYING;
-import static com.example.android.multmedia.player.MediaPlayConstants.SEQUENCE_PLAY;
+import static com.example.android.multmedia.player.MediaPlayConstants.*;
 
-public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implements IMediaView, View.OnClickListener{
+public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implements IMediaView, View.OnClickListener {
     private final static String TAG = PhotoPlayerActivity.class.getSimpleName();
     private ImageButton ibReturn;
     private ImageButton ibPlay;
     private ImageButton ibFavorite;
 
     private boolean isFavorite = false;
+    private boolean isBottomBarShow = false;
+    private int bottomHeight;
     private int playMode = SEQUENCE_PLAY;
     private PicturePlayerView photoPlayer;
     private MediaControlImpl mediaControl;
@@ -45,6 +40,9 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     private ArrayList<PhotoItem> photoList;
     private PhotoItem currentPhoto;
     private int position;
+
+    private LinearLayout llBottomBar;
+    private GestureDetector gestureDetector;
 
     @Override
     public int getLayoutResID() {
@@ -60,15 +58,21 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         ibReturn.setOnClickListener(this);
         ibPlay.setOnClickListener(this);
         ibFavorite.setOnClickListener(this);
+
+        llBottomBar = (LinearLayout) findViewById(R.id.ll_video_bottom);
+        llBottomBar.measure(0, 0);
+        bottomHeight = llBottomBar.getMeasuredHeight();
     }
 
     @Override
     public void initData() {
         getPhotoDataFromIntent();
+        gestureDetector = new GestureDetector(this, new GestureListener());
+        mediaControl.playMedia();
     }
 
     public void getPhotoDataFromIntent() {
-        photoList = (ArrayList<PhotoItem>)getIntent().getSerializableExtra(INTENT_PHOTO_LIST);
+        photoList = (ArrayList<PhotoItem>) getIntent().getSerializableExtra(INTENT_PHOTO_LIST);
         position = getIntent().getIntExtra(INTENT_MEDIA_POSITION, 0);
         currentPhoto = photoList.get(position);
 
@@ -80,18 +84,9 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
             super.handleMessage(msg);
             Log.d(TAG, "Main Thread Handle Msg = " + msg.what + ", Msg.arg1 = " + msg.arg1);
             switch (msg.what) {
-                case MSG_UPDATE_CONTROL_BAR:
-
-                    if(msg.arg1 == PLAY_STATE_PLAYING) {
-                        if(msg.obj != null) {
-                        }
-                        ibPlay.setImageResource(R.drawable.btn_pause_normal);
-
-                    }else if (msg.arg1 == PLAY_STATE_PAUSE) {
-                        ibPlay.setImageResource(R.drawable.btn_play_normal);
-                    }else if (msg.arg1 == PLAY_STATE_END) {
-                        handler.removeMessages(MSG_UPDATE_PROGRESS);
-                        ibPlay.setImageResource(R.drawable.btn_play_normal);
+                case MSG_SHOW_HIDE_BAR:
+                    if(isBottomBarShow == true) {
+                        hideTopBottomBar(0, bottomHeight);
                     }
                     break;
             }
@@ -104,13 +99,35 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     @Override
     public MediaControlImpl attachMediaView() {
-        if(mediaControl == null) {
+        if (mediaControl == null) {
             mediaControl = new MediaControlImpl(this, MediaPlayConstants.MediaType.PHOTO);
             photoPlayer = mediaControl.getPhotoPlayer();
         }
         return mediaControl;
     }
 
+    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return super.onSingleTapUp(e);
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            return super.onDoubleTap(e);
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            if (isBottomBarShow) {
+                hideTopBottomBar(0, bottomHeight);
+                handler.removeMessages(MSG_SHOW_HIDE_BAR);
+            } else {
+                showTopBottomBar();
+            }
+            return super.onSingleTapConfirmed(e);
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -141,12 +158,17 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     @Override
     public void showTopBottomBar() {
-
+        isBottomBarShow = true;
+        llBottomBar.setTranslationY(0);
+        handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, CONTROL_BAR_UPDATE);
     }
+
     @Override
     public void hideTopBottomBar(int topHeight, int bottomHeight) {
-
+        llBottomBar.setTranslationY(bottomHeight);
+        isBottomBarShow = false;
     }
+
     @Override
     public void showLoadingProgress() {
 

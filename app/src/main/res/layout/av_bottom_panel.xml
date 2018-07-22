@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tv_video_playtime"
+            android:id="@+id/tv_av_playtime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -42,7 +42,7 @@
             android:progress="0" />
 
         <TextView
-            android:id="@+id/tv_video_duration"
+            android:id="@+id/tv_av_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"

@@ -113,8 +113,8 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     public void initView() {
         tvMusicName = (TextView) findViewById(R.id.tv_audio_name);
         tvMusicSinger = (TextView) findViewById(R.id.tv_singer_name);
-        tvMusicPlayTime = (TextView) findViewById(R.id.tv_video_playtime);
-        tvMusicDuration = (TextView) findViewById(R.id.tv_video_duration);
+        tvMusicPlayTime = (TextView) findViewById(R.id.tv_av_playtime);
+        tvMusicDuration = (TextView) findViewById(R.id.tv_av_duration);
 
         ibReturn = (ImageButton) findViewById(R.id.ib_back);
         ibPlayMode = (ImageButton) findViewById(R.id.ib_playmode);

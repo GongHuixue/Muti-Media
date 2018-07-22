@@ -56,6 +56,6 @@
         android:layout_weight="3">
     </com.example.android.multmedia.player.audio.LcrView>
 
-    <include layout="@layout/video_bottom_panel"/>
+    <include layout="@layout/av_bottom_panel"/>
 
 </LinearLayout>

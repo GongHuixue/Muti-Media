@@ -147,8 +147,8 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         Log.d(TAG, "initView");
         tvSystemTime = (TextView) findViewById(R.id.tv_system_time);
         tvVideoName = (TextView) findViewById(R.id.tv_video_name);
-        tvPlayTime = (TextView) findViewById(R.id.tv_video_playtime);
-        tvVideoDuration = (TextView) findViewById(R.id.tv_video_duration);
+        tvPlayTime = (TextView) findViewById(R.id.tv_av_playtime);
+        tvVideoDuration = (TextView) findViewById(R.id.tv_av_duration);
         sbPosition = (SeekBar)findViewById(R.id.sb_position);
         viewAlpha = (View) findViewById(R.id.view_alpha);
 
