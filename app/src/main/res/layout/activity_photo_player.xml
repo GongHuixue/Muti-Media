@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".player.PhotoPlayerActivity">
 
     <com.xiuyukeji.pictureplayerview.PicturePlayerView
@@ -12,6 +13,12 @@
         android:layout_height="0dp"
         app:picture_opaque="false"
         app:picture_source="assets" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/photo_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v4.view.ViewPager>
 
     <include layout="@layout/photo_bottom_panel"/>
 
