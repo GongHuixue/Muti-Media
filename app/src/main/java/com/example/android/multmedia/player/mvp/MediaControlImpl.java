@@ -1,18 +1,16 @@
 package com.example.android.multmedia.player.mvp;
 
-import android.content.Context;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.player.AudioPlayerActivity;
 import com.example.android.multmedia.player.PhotoPlayerActivity;
 import com.example.android.multmedia.player.VideoPlayerActivity;
+import com.example.android.multmedia.player.photo.PhotoViewPager;
 import com.mediaload.bean.AudioItem;
 import com.mediaload.bean.PhotoItem;
 import com.mediaload.bean.VideoItem;
@@ -35,7 +33,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     private ArrayList<AudioItem> audioList = new ArrayList<>();
 
     /*init photo*/
-    private PicturePlayerView photoPlayer;
+    private PhotoViewPager photoPlayer;
     private PhotoPlayerActivity photoPlayerActivity;
     private ArrayList<PhotoItem> photoList = new ArrayList<>();
 
@@ -66,7 +64,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
             mediaType = type;
             mainHandler = photoPlayerActivity.getMainThreadHandler();
             if(photoPlayer == null) {
-                photoPlayer = (PicturePlayerView) photoPlayerActivity.findViewById(R.id.photo_player);
+                photoPlayer = (PhotoViewPager) photoPlayerActivity.findViewById(R.id.photo_view);
             }
 
 
@@ -81,7 +79,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         return audioPlayer;
     }
 
-    public PicturePlayerView getPhotoPlayer() {
+    public PhotoViewPager getPhotoPlayer() {
         return photoPlayer;
     }
 
@@ -204,6 +202,10 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         mediaPosition = position;
     }
 
+    public void setPhotoPath() {
+
+    }
+
     @Override
     public void playPauseMedia(){
         if(mediaType == MediaType.VIDEO) {
@@ -256,7 +258,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         }else if(mediaType == MediaType.AUDIO){
             audioPlayer.start();
         }else if(mediaType == MediaType.PHOTO) {
-            photoPlayer.start();
+            //photoPlayer.start();
         }
     }
     @Override
@@ -273,7 +275,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
             msg.arg1 = PLAY_STATE_PAUSE;
             mainHandler.sendMessage(msg);
         }else if(mediaType == MediaType.PHOTO) {
-            photoPlayer.pause();
+            //photoPlayer.pause();
             Message msg = mainHandler.obtainMessage(MSG_UPDATE_CONTROL_BAR);
             msg.arg1 = PLAY_STATE_PAUSE;
             mainHandler.sendMessage(msg);
@@ -300,7 +302,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         }else if (mediaType == MediaType.PHOTO) {
             if(mediaPosition == (photoList.size() - 1)) {
                 mediaPosition = mediaPosition + 1;
-                photoPlayer.release();
+                //photoPlayer.release();
             }
         }
     }

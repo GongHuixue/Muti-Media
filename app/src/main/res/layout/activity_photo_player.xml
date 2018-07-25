@@ -14,11 +14,11 @@
         app:picture_opaque="false"
         app:picture_source="assets" />
 
-    <android.support.v4.view.ViewPager
+    <com.example.android.multmedia.player.photo.PhotoViewPager
         android:id="@+id/photo_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </android.support.v4.view.ViewPager>
+    </com.example.android.multmedia.player.photo.PhotoViewPager>
 
     <include layout="@layout/photo_bottom_panel"/>
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -17,6 +18,8 @@ import com.example.android.multmedia.R;
 import com.example.android.multmedia.player.mvp.BaseActivity;
 import com.example.android.multmedia.player.mvp.IMediaView;
 import com.example.android.multmedia.player.mvp.MediaControlImpl;
+import com.example.android.multmedia.player.photo.PhotoViewAdapter;
+import com.example.android.multmedia.player.photo.PhotoViewPager;
 import com.mediaload.bean.PhotoItem;
 import com.xiuyukeji.pictureplayerview.PicturePlayerView;
 
@@ -34,11 +37,12 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     private boolean isBottomBarShow = false;
     private int bottomHeight;
     private int playMode = SEQUENCE_PLAY;
-    private PicturePlayerView photoPlayer;
+    private PhotoViewPager photoPlayer;
     private MediaControlImpl mediaControl;
 
     private ArrayList<PhotoItem> photoList;
     private PhotoItem currentPhoto;
+    private PhotoViewAdapter photoViewAdapter;
     private int position;
 
     private LinearLayout llBottomBar;
@@ -69,6 +73,27 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         getPhotoDataFromIntent();
         gestureDetector = new GestureDetector(this, new GestureListener());
         mediaControl.playMedia();
+
+        photoViewAdapter = new PhotoViewAdapter(this, photoList);
+        photoPlayer.setAdapter(photoViewAdapter);
+        photoPlayer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                position = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        photoPlayer.setCurrentItem(position);
     }
 
     public void getPhotoDataFromIntent() {
@@ -101,7 +126,7 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     public MediaControlImpl attachMediaView() {
         if (mediaControl == null) {
             mediaControl = new MediaControlImpl(this, MediaPlayConstants.MediaType.PHOTO);
-            photoPlayer = mediaControl.getPhotoPlayer();
+            //photoPlayer = mediaControl.getPhotoPlayer();
         }
         return mediaControl;
     }
