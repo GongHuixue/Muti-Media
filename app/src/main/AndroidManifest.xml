@@ -44,7 +44,9 @@
             android:screenOrientation="landscape">
         </activity>
         <activity android:name=".player.AudioPlayerActivity" />
-        <activity android:name=".player.PhotoPlayerActivity"></activity>
+        <activity android:name=".player.PhotoPlayerActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+        </activity>
     </application>
 
 </manifest>

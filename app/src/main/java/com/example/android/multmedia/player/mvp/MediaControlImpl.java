@@ -202,8 +202,9 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         mediaPosition = position;
     }
 
-    public void setPhotoPath() {
-
+    public void setPhotoPath(int position) {
+        photoPlayer.setCurrentItem(position);
+        mediaPosition = position;
     }
 
     @Override

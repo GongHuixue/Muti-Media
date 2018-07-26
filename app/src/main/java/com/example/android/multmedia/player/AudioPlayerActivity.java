@@ -179,7 +179,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         sbPosition.setProgress(audioPlayer.getCurrentPosition());
         tvLcr.updateLrcView(audioPlayer.getCurrentPosition(), audioPlayer.getDuration());
 
-        handler.sendEmptyMessageDelayed(MSG_UPDATE_PROGRESS, SYSTEM_TIME_UPDATE);
+        handler.sendEmptyMessageDelayed(MSG_UPDATE_PROGRESS, ONE_SECOND_TIMER);
     }
 
 

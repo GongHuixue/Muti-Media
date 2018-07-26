@@ -43,7 +43,7 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     private ArrayList<PhotoItem> photoList;
     private PhotoItem currentPhoto;
     private PhotoViewAdapter photoViewAdapter;
-    private int position;
+    private int currentPosition;
 
     private LinearLayout llBottomBar;
     private GestureDetector gestureDetector;
@@ -63,7 +63,7 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         ibPlay.setOnClickListener(this);
         ibFavorite.setOnClickListener(this);
 
-        llBottomBar = (LinearLayout) findViewById(R.id.ll_video_bottom);
+        llBottomBar = (LinearLayout) findViewById(R.id.ll_photo_bottom);
         llBottomBar.measure(0, 0);
         bottomHeight = llBottomBar.getMeasuredHeight();
     }
@@ -71,9 +71,23 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     @Override
     public void initData() {
         getPhotoDataFromIntent();
-        gestureDetector = new GestureDetector(this, new GestureListener());
-        mediaControl.playMedia();
+        photoViewInit();
 
+        gestureDetector = new GestureDetector(this, new GestureListener());
+
+        //start play selected photo.
+        mediaControl.setPhotoPath(currentPosition);
+        showTopBottomBar();
+        handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, FIVE_SECOND_TIMER);
+    }
+
+    private void getPhotoDataFromIntent() {
+        photoList = (ArrayList<PhotoItem>) getIntent().getSerializableExtra(INTENT_PHOTO_LIST);
+        currentPosition = getIntent().getIntExtra(INTENT_MEDIA_POSITION, 0);
+        currentPhoto = photoList.get(currentPosition);
+    }
+
+    private void photoViewInit() {
         photoViewAdapter = new PhotoViewAdapter(this, photoList);
         photoPlayer.setAdapter(photoViewAdapter);
         photoPlayer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -84,7 +98,8 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
             @Override
             public void onPageSelected(int position) {
-                position = position;
+                currentPosition = position;
+                Log.d(TAG, "onPageSelected = " + position);
             }
 
             @Override
@@ -92,15 +107,6 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
             }
         });
-
-        photoPlayer.setCurrentItem(position);
-    }
-
-    public void getPhotoDataFromIntent() {
-        photoList = (ArrayList<PhotoItem>) getIntent().getSerializableExtra(INTENT_PHOTO_LIST);
-        position = getIntent().getIntExtra(INTENT_MEDIA_POSITION, 0);
-        currentPhoto = photoList.get(position);
-
     }
 
     private Handler handler = new Handler(Looper.getMainLooper()) {
@@ -126,7 +132,7 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     public MediaControlImpl attachMediaView() {
         if (mediaControl == null) {
             mediaControl = new MediaControlImpl(this, MediaPlayConstants.MediaType.PHOTO);
-            //photoPlayer = mediaControl.getPhotoPlayer();
+            photoPlayer = mediaControl.getPhotoPlayer();
         }
         return mediaControl;
     }
@@ -144,6 +150,7 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
+            Log.d(TAG, " onSingleTapConfirmed isBottomBarShow = " + isBottomBarShow);
             if (isBottomBarShow) {
                 hideTopBottomBar(0, bottomHeight);
                 handler.removeMessages(MSG_SHOW_HIDE_BAR);
@@ -180,12 +187,17 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
 
     @Override
     public void showTopBottomBar() {
         isBottomBarShow = true;
         llBottomBar.setTranslationY(0);
-        handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, CONTROL_BAR_UPDATE);
+        handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, FIVE_SECOND_TIMER);
     }
 
     @Override

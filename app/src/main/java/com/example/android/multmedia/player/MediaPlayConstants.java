@@ -20,8 +20,12 @@ public class MediaPlayConstants {
     public static final int PLAY_STATE_PAUSE = 1;
     public static final int PLAY_STATE_END = 2;
 
-    public static final int SYSTEM_TIME_UPDATE = 1000;
-    public static final int CONTROL_BAR_UPDATE = 5000;
+//    public static final int SYSTEM_TIME_UPDATE = 1000;
+//    public static final int CONTROL_BAR_UPDATE = 5000;
+
+    public static final int ONE_SECOND_TIMER = 1000;
+    public static final int THREE_SECOND_TIMER = 3000;
+    public static final int FIVE_SECOND_TIMER = 5000;
 
     public static final String INTENT_AUDIO_LIST = "audio_list";
     public static final String INTENT_VIDEO_LIST = "video_list";

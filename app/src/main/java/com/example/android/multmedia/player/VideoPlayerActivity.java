@@ -186,7 +186,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         /*start play the video*/
         mediaControl.setVideoPath(video.getPath(), videoPosition);
         gestureDetector = new GestureDetector(this, new GestureListener());
-        handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, CONTROL_BAR_UPDATE);
+        handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, FIVE_SECOND_TIMER);
         Log.d(TAG, "init Data Exit");
     }
 
@@ -271,7 +271,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, CONTROL_BAR_UPDATE);
+            handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, FIVE_SECOND_TIMER);
         }
     }
 
@@ -301,14 +301,14 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     private void updateTime() {
         tvSystemTime.setText(StringUtils.getSystemTime());
-        handler.sendEmptyMessageDelayed(MSG_UPDATE_TIME, SYSTEM_TIME_UPDATE);
+        handler.sendEmptyMessageDelayed(MSG_UPDATE_TIME, ONE_SECOND_TIMER);
     }
 
     private void updateProgress() {
         Log.d(TAG, "Current played time = " + videoPlayer.getCurrentPosition());
         tvPlayTime.setText(StringUtils.formatMediaTime(videoPlayer.getCurrentPosition()));
         sbPosition.setProgress(videoPlayer.getCurrentPosition());
-        handler.sendEmptyMessageDelayed(MSG_UPDATE_PROGRESS, SYSTEM_TIME_UPDATE);
+        handler.sendEmptyMessageDelayed(MSG_UPDATE_PROGRESS, ONE_SECOND_TIMER);
     }
 
     /*Media Play Control Bar Listener*/
@@ -388,7 +388,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     public void showTopBottomBar() {
         rlTopBar.setTranslationY(0);
         llBottomBar.setTranslationY(0);
-        handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, CONTROL_BAR_UPDATE);
+        handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, FIVE_SECOND_TIMER);
         isTopBottomBarShow = true;
     }
 

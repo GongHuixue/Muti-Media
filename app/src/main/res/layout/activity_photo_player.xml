@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".player.PhotoPlayerActivity">
-
-    <com.xiuyukeji.pictureplayerview.PicturePlayerView
-        android:id="@+id/photo_player"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:picture_opaque="false"
-        app:picture_source="assets" />
 
     <com.example.android.multmedia.player.photo.PhotoViewPager
         android:id="@+id/photo_view"
@@ -22,4 +15,4 @@
 
     <include layout="@layout/photo_bottom_panel"/>
 
-</LinearLayout>
+</RelativeLayout>
