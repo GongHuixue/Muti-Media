@@ -75,6 +75,25 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
         gestureDetector = new GestureDetector(this, new GestureListener());
 
+        photoPlayer.setOnTouchListener(new View.OnTouchListener() {
+            int flag = 0;
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        Log.d(TAG, "onTouch Down");
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        Log.d(TAG, "onTouch Move");
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        Log.d(TAG, "onTouch Up");
+                        break;
+                }
+                return false;
+            }
+        });
+
         //start play selected photo.
         mediaControl.setPhotoPath(currentPosition);
         showTopBottomBar();
@@ -93,7 +112,7 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         photoPlayer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                Log.d(TAG, "onPageScrolled " + position);
             }
 
             @Override
@@ -104,7 +123,7 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                Log.d(TAG, "onPageScrollStateChanged " + state);
             }
         });
     }
@@ -189,6 +208,7 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        Log.d(TAG, "onTouchEvent");
         gestureDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
