@@ -148,7 +148,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     }
 
     private void getAudioDataFromIntent() {
-        /*get video list and selected video*/
+        /*get audio list and selected audio*/
         audioList = (ArrayList<AudioItem>)getIntent().getSerializableExtra(INTENT_AUDIO_LIST);
         position = getIntent().getIntExtra(INTENT_MEDIA_POSITION, 0);
         currentAudio = audioList.get(position);

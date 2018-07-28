@@ -32,7 +32,7 @@ public class AudioItem extends BaseItem {
 
     private static final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
 
-    RoundRect roundRect = new RoundRect(300, 300, 150);
+    //RoundRect roundRect = new RoundRect(300, 300, 150);
 
     public AudioItem() {
         VIEW_TYPE = 2;
@@ -85,7 +85,7 @@ public class AudioItem extends BaseItem {
         return album;
     }
 
-    public void setImage(String image, Context context) {
+    /*public void setImage(String image, Context context) {
         this.image = image;
         setBitmap(image, context);
         setRound(bitmap, context);
@@ -107,7 +107,7 @@ public class AudioItem extends BaseItem {
                         (context.getResources(), R.drawable.music);
             }
         }
-    }
+    }*/
 
     public void setSinger(String singer) {
         this.singer = singer;
@@ -123,59 +123,5 @@ public class AudioItem extends BaseItem {
 
     public long getAlbumId() {
         return albumId;
-    }
-
-    public static Bitmap getBitmap(Context context, long audioId, long albumId) {
-        Bitmap bm = null;
-        Uri uri;
-        if((audioId < 0 ) && (albumId < 0)) {
-            throw new IllegalArgumentException("must specify an albumId and songId");
-        }
-
-        try{
-            if(albumId < 0) {
-                uri = Uri.parse("content://media/external/audio/media/" + audioId + "/albumart");
-                ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "r");
-                if (pfd != null) {
-                    FileDescriptor fd = pfd.getFileDescriptor();
-                    bm = BitmapFactory.decodeFileDescriptor(fd);
-                }
-            }else {
-                uri = ContentUris.withAppendedId(sArtworkUri, albumId);
-//                InputStream inputStream;
-//                try {
-//                    inputStream = context.getContentResolver().openInputStream(uri);
-//                }catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                    return null;
-//                }
-//
-//                BitmapFactory.Options options = new BitmapFactory.Options();
-//                options.inPreferredConfig = Bitmap.Config.RGB_565;
-//                return BitmapFactory.decodeStream(inputStream, null, options);
-
-                ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "r");
-
-                if(pfd != null) {
-                    Log.d(TAG, "pfd not null");
-                    FileDescriptor fd = pfd.getFileDescriptor();
-                    bm = BitmapFactory.decodeFileDescriptor(fd);
-                }else {
-                    Log.d(TAG, "pfg get failed");
-                    return null;
-                }
-            }
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        if(bm == null) {
-            Drawable drawable = context.getResources().getDrawable(R.drawable.music, null);
-            BitmapDrawable bitmapDrawable = (BitmapDrawable)drawable;
-            bm = bitmapDrawable.getBitmap();
-        }
-
-        Bitmap.createScaledBitmap(bm, 150, 150, true);
-        return bm;
     }
 }
