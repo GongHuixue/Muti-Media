@@ -192,7 +192,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
 
     /*must set audio path by following api*/
     public void setAudioPath(String audioPath, int position) {
-        Log.d(TAG, "setVideoPath Video Path = " + audioPath + ", position = " + position);
+        Log.d(TAG, "setAudioPath Video Path = " + audioPath + ", position = " + position);
         try {
             audioPlayer.setDataSource(audioList.get(position).getPath());
             audioPlayer.prepareAsync();

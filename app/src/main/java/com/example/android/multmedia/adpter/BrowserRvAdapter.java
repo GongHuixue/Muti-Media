@@ -185,7 +185,7 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                         .asBitmap()
                         .placeholder(R.drawable.record)
                         .into(((AudioViewHolder) holder).mAudioIcon);
-                ((AudioViewHolder) holder).mediaView.setTag(position);
+                ((AudioViewHolder)holder).mediaView.setTag(position);
                 ((AudioViewHolder)holder).mAudioName.setText(audioItem.getDisplayName());
                 ((AudioViewHolder)holder).mAudioSinger.setText(audioItem.getSinger());
                 ((AudioViewHolder)holder).mAudioLength.setText(audioItem.getDurationString());

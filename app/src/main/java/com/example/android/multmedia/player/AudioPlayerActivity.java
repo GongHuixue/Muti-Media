@@ -102,7 +102,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
 
     public MediaControlImpl attachMediaView() {
-        if(mediaControl != null) {
+        if(mediaControl == null) {
             mediaControl = new MediaControlImpl(this, MediaType.AUDIO);
             audioPlayer = mediaControl.getAudioPlayer();
         }
@@ -149,10 +149,10 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     private void getAudioDataFromIntent() {
         /*get video list and selected video*/
-        audioList = (ArrayList<AudioItem>)getIntent().getSerializableExtra(INTENT_VIDEO_LIST);
+        audioList = (ArrayList<AudioItem>)getIntent().getSerializableExtra(INTENT_AUDIO_LIST);
         position = getIntent().getIntExtra(INTENT_MEDIA_POSITION, 0);
         currentAudio = audioList.get(position);
-        Log.d(TAG, "Video Position = " + position);
+        Log.d(TAG, "audio Position = " + position);
 
         updateAudioInfo();
     }
@@ -167,6 +167,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         /*set video seek bar change listener*/
         AudioSeekBarListener audioSeekBarListener = new AudioSeekBarListener();
         sbPosition.setOnSeekBarChangeListener(audioSeekBarListener);
+        tvLcr.loadLrc("没有找到歌词文件。");
     }
 
     public void mediaPlayerPrepared() {

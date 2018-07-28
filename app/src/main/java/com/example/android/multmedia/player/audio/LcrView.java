@@ -72,52 +72,56 @@ public class LcrView extends AppCompatTextView{
 
     private void drawAllLrc(Canvas canvas) {
         Rect bounds = new Rect();
-        for (int i = 0;i<lcrs.size();i++){
-            Lcr lrc = lcrs.get(i);
-            if(currentPosition==i){
+        if(lcrs != null) {
+            for (int i = 0; i < lcrs.size(); i++) {
+                Lcr lrc = lcrs.get(i);
+                if (currentPosition == i) {
 
-                paint.setColor(Color.GREEN);
-                paint.setTextSize(big_text);
-                //绘制文字所占的大小
-                paint.getTextBounds(lrc.getContent(),0,lrc.getContent().length(),bounds);
-                //获取文本的宽高
-                int width = bounds.width();
-                int height = bounds.height();
+                    paint.setColor(Color.GREEN);
+                    paint.setTextSize(big_text);
+                    //绘制文字所占的大小
+                    paint.getTextBounds(lrc.getContent(), 0, lrc.getContent().length(), bounds);
+                    //获取文本的宽高
+                    int width = bounds.width();
+                    int height = bounds.height();
 
 
-                //view宽高-文本的宽高 得到文本在view中会只的起始点坐标也就是文本左下角的坐标
+                    //view宽高-文本的宽高 得到文本在view中会只的起始点坐标也就是文本左下角的坐标
 
-                float x = viewWith/2-width/2;
-                float y = viewHeight/2+height/2;
-                //歌词跟着进度涂色
-                paint.setShader(new LinearGradient(x, y, x + width, y,new int[]{Color.GREEN,Color.WHITE},new float[]{passPercent,passPercent+0.2f}, Shader.TileMode.CLAMP));
-                canvas.drawText(lrc.getContent(),x,y,paint);
-            }else{
-                paint.setColor(Color.WHITE);
-                paint.setTextSize(normal_text);
-                //绘制文字所占的大小
-                paint.getTextBounds(lrc.getContent(),0,lrc.getContent().length(),bounds);
-                //获取文本的宽高
-                int width = bounds.width();
-                int height = bounds.height();
-                //view宽高-文本的宽高 得到文本在view中会只的起始点坐标也就是文本左下角的坐标
-                float x = viewWith/2-width/2;
-                float y = viewHeight/2+height/2+(i-currentPosition)*line_height;
-                //不是当前演唱的歌词不涂色
-                paint.setShader(null);
-                canvas.drawText(lrc.getContent(),x,y,paint);
+                    float x = viewWith / 2 - width / 2;
+                    float y = viewHeight / 2 + height / 2;
+                    //歌词跟着进度涂色
+                    paint.setShader(new LinearGradient(x, y, x + width, y, new int[]{Color.GREEN, Color.WHITE}, new float[]{passPercent, passPercent + 0.2f}, Shader.TileMode.CLAMP));
+                    canvas.drawText(lrc.getContent(), x, y, paint);
+                } else {
+                    paint.setColor(Color.WHITE);
+                    paint.setTextSize(normal_text);
+                    //绘制文字所占的大小
+                    paint.getTextBounds(lrc.getContent(), 0, lrc.getContent().length(), bounds);
+                    //获取文本的宽高
+                    int width = bounds.width();
+                    int height = bounds.height();
+                    //view宽高-文本的宽高 得到文本在view中会只的起始点坐标也就是文本左下角的坐标
+                    float x = viewWith / 2 - width / 2;
+                    float y = viewHeight / 2 + height / 2 + (i - currentPosition) * line_height;
+                    //不是当前演唱的歌词不涂色
+                    paint.setShader(null);
+                    canvas.drawText(lrc.getContent(), x, y, paint);
+                }
             }
         }
     }
     private void changeCurrentPosition(int time){
-        for (int i = 0;i<lcrs.size();i++){
-            if(i==lcrs.size()-1){
-                currentPosition = i;
-                break;
-            }
-            if(time>lcrs.get(i).getTime()&&time<lcrs.get(i+1).getTime()){
-                currentPosition = i;
-                break;
+        if(lcrs != null) {
+            for (int i = 0; i < lcrs.size(); i++) {
+                if (i == lcrs.size() - 1) {
+                    currentPosition = i;
+                    break;
+                }
+                if (time > lcrs.get(i).getTime() && time < lcrs.get(i + 1).getTime()) {
+                    currentPosition = i;
+                    break;
+                }
             }
         }
     }
