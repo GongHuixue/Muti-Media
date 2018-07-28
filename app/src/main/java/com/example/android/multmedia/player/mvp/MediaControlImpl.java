@@ -179,7 +179,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
 
     public void setPhotoListListener(ArrayList<PhotoItem> photoItems) {
         photoList.clear();
-        photoList.addAll(photoList);
+        photoList.addAll(photoItems);
 
     }
 
@@ -196,6 +196,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         try {
             audioPlayer.setDataSource(audioList.get(position).getPath());
             audioPlayer.prepareAsync();
+            isPlaying = true;
         }catch (IOException e) {
             e.printStackTrace();
         }
@@ -222,7 +223,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
                 setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
             }
         }else if (mediaType == MediaType.PHOTO) {
-            playNextMedia();
+            Log.d(TAG, "for photo, not support play pre picture");
         }
     }
     @Override
@@ -254,17 +255,26 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     @Override
     public void playMedia(){
         isPlaying = true;
+        Log.d(TAG, "playMedia");
         if(mediaType == MediaType.VIDEO) {
             videoPlayer.start();
         }else if(mediaType == MediaType.AUDIO){
             audioPlayer.start();
         }else if(mediaType == MediaType.PHOTO) {
-            //photoPlayer.start();
+            int photoIndex = photoPlayer.getCurrentItem();
+            Log.d(TAG, "photoIndex = " + photoIndex + ", list size = " + photoList.size());
+            if(photoIndex == (photoList.size() -1)) {
+                photoPlayer.setCurrentItem(0);
+            }else {
+                photoPlayer.setCurrentItem(photoPlayer.getCurrentItem() + 1);
+            }
+            mainHandler.sendEmptyMessageDelayed(PLAY, THREE_SECOND_TIMER);
         }
     }
     @Override
     public void pauseMedia(){
         isPlaying = false;
+        Log.d(TAG, "pauseMedia");
         if(mediaType == MediaType.VIDEO) {
             videoPlayer.pause();
             Message msg = mainHandler.obtainMessage(MSG_UPDATE_CONTROL_BAR);
@@ -277,9 +287,8 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
             mainHandler.sendMessage(msg);
         }else if(mediaType == MediaType.PHOTO) {
             //photoPlayer.pause();
-            Message msg = mainHandler.obtainMessage(MSG_UPDATE_CONTROL_BAR);
-            msg.arg1 = PLAY_STATE_PAUSE;
-            mainHandler.sendMessage(msg);
+            mainHandler.removeMessages(PLAY);
+            mainHandler.sendEmptyMessage(PAUSE);
         }
     }
     @Override
@@ -301,10 +310,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
                 setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
             }
         }else if (mediaType == MediaType.PHOTO) {
-            if(mediaPosition == (photoList.size() - 1)) {
-                mediaPosition = mediaPosition + 1;
-                //photoPlayer.release();
-            }
+
         }
     }
     @Override
@@ -317,6 +323,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     }
     @Override
     public boolean isPlaying(){
+        Log.d(TAG, "isPlaying = " + isPlaying);
         return isPlaying;
     }
 

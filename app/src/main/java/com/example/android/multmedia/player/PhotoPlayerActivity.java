@@ -1,27 +1,28 @@
 package com.example.android.multmedia.player;
 
-import android.app.Activity;
-import android.media.Image;
-import android.os.Bundle;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.player.mvp.BaseActivity;
 import com.example.android.multmedia.player.mvp.IMediaView;
 import com.example.android.multmedia.player.mvp.MediaControlImpl;
-import com.example.android.multmedia.player.photo.PhotoViewAdapter;
 import com.example.android.multmedia.player.photo.PhotoViewPager;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.mediaload.bean.PhotoItem;
-import com.xiuyukeji.pictureplayerview.PicturePlayerView;
 
 import java.util.ArrayList;
 
@@ -46,7 +47,6 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     private int currentPosition;
 
     private LinearLayout llBottomBar;
-    private GestureDetector gestureDetector;
 
     @Override
     public int getLayoutResID() {
@@ -73,26 +73,7 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         getPhotoDataFromIntent();
         photoViewInit();
 
-        gestureDetector = new GestureDetector(this, new GestureListener());
-
-        photoPlayer.setOnTouchListener(new View.OnTouchListener() {
-            int flag = 0;
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        Log.d(TAG, "onTouch Down");
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        Log.d(TAG, "onTouch Move");
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        Log.d(TAG, "onTouch Up");
-                        break;
-                }
-                return false;
-            }
-        });
+        mediaControl.setPhotoListListener(photoList);
 
         //start play selected photo.
         mediaControl.setPhotoPath(currentPosition);
@@ -139,6 +120,22 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                         hideTopBottomBar(0, bottomHeight);
                     }
                     break;
+                case MSG_UPDATE_CONTROL_BAR:
+                    if (mediaControl.isPlaying()) {
+                        ibPlay.setImageResource(R.drawable.btn_pause_normal);
+                    } else {
+                        ibPlay.setImageResource(R.drawable.btn_play_normal);
+                    }
+                case PLAY:
+                    if(mediaControl.isPlaying()) {
+                        mediaControl.playMedia();
+                    }else {
+                        handler.removeMessages(PLAY);
+                    }
+                    break;
+                case PAUSE:
+                    showTopBottomBar();
+                    break;
             }
         }
     };
@@ -156,27 +153,54 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         return mediaControl;
     }
 
-    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            return super.onSingleTapUp(e);
+    private class PhotoViewAdapter extends PagerAdapter {
+        private Context context;
+        private ArrayList<PhotoItem> photoList = new ArrayList<>();
+
+        public PhotoViewAdapter(Context context, ArrayList<PhotoItem> photos) {
+            this.context = context;
+            this.photoList.clear();
+            this.photoList.addAll(photos);
         }
 
         @Override
-        public boolean onDoubleTap(MotionEvent e) {
-            return super.onDoubleTap(e);
+        public int getCount() {
+            return photoList.size();
         }
 
         @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
-            Log.d(TAG, " onSingleTapConfirmed isBottomBarShow = " + isBottomBarShow);
-            if (isBottomBarShow) {
-                hideTopBottomBar(0, bottomHeight);
-                handler.removeMessages(MSG_SHOW_HIDE_BAR);
-            } else {
-                showTopBottomBar();
-            }
-            return super.onSingleTapConfirmed(e);
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Log.d(TAG, "instantiateItem");
+            PhotoView photoView = new PhotoView(context);
+            Glide.with(context)
+                    .load("file://" + photoList.get(position).getPath())
+                    .into(photoView);
+            container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+
+            photoView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "instantiateItem onClick");
+                    if(isBottomBarShow) {
+                        hideTopBottomBar(0, bottomHeight);
+                    }else {
+                        showTopBottomBar();
+                    }
+                }
+            });
+
+            return photoView;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
         }
     }
 
@@ -188,12 +212,14 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                 break;
             case R.id.ib_playpause:
                 if (mediaControl.isPlaying()) {
+                    handler.removeMessages(PLAY);
                     ibPlay.setImageResource(R.drawable.btn_pause_normal);
                     mediaControl.pauseMedia();
                 } else {
                     ibPlay.setImageResource(R.drawable.btn_play_normal);
                     mediaControl.playMedia();
                 }
+                handler.sendEmptyMessage(MSG_UPDATE_CONTROL_BAR);
                 break;
             case R.id.ib_favorite:
                 if (isFavorite == false) {
@@ -204,13 +230,6 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                 isFavorite = !isFavorite;
                 break;
         }
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        Log.d(TAG, "onTouchEvent");
-        gestureDetector.onTouchEvent(event);
-        return super.onTouchEvent(event);
     }
 
     @Override

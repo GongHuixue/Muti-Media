@@ -20,8 +20,7 @@ public class PhotoViewPager extends ViewPager {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         try {
             Log.d(TAG, "onInterceptTouchEvent");
-            return false;
-//            return super.onInterceptTouchEvent(ev);
+            return super.onInterceptTouchEvent(ev);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return false;
