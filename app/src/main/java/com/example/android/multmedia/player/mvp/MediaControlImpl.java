@@ -14,8 +14,6 @@ import com.example.android.multmedia.player.photo.PhotoViewPager;
 import com.mediaload.bean.AudioItem;
 import com.mediaload.bean.PhotoItem;
 import com.mediaload.bean.VideoItem;
-import com.xiuyukeji.pictureplayerview.PicturePlayerView;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -136,6 +134,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
 
     public void setAudioPlayerListener(ArrayList<AudioItem> audioItems) {
         if (audioPlayer != null) {
+            Log.d(TAG, "setAudioPlayerListener");
             audioPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                 @Override
                 public boolean onError(MediaPlayer mp, int what, int extra) {
@@ -188,6 +187,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         Log.d(TAG, "setVideoPath Video Path = " + videoPath + ", position = " + position);
         getVideoPlayer().setVideoPath(videoPath);
         mediaPosition = position;
+        isPlaying = true;
     }
 
     /*must set audio path by following api*/
@@ -342,6 +342,8 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         }else if(mediaType == MediaType.AUDIO) {
             audioPlayerActivity = null;
             audioList.clear();
+            audioPlayer.release();
+            audioPlayer = null;
         }else if(mediaType == MediaType.PHOTO) {
             photoPlayerActivity = null;
             photoList.clear();
