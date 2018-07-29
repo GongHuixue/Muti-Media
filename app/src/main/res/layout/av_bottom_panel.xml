@@ -34,7 +34,7 @@
         <!--android:background="@color/colorBlack"/>-->
         <SeekBar
             android:id="@+id/sb_position"
-            style="@android:style/Widget.DeviceDefault.Light.SeekBar"
+            style="@android:style/Widget.Material.SeekBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

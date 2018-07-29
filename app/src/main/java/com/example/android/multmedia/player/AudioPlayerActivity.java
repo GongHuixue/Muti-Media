@@ -158,6 +158,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     }
 
     private void updateAudioInfo() {
+        Log.d(TAG, "updateAudioInfo, audio duration = " + currentAudio.getDuration());
         tvMusicDuration.setText(StringUtils.formatMediaTime(currentAudio.getDuration()));
         tvMusicName.setText(currentAudio.getDisplayName());
         tvMusicSinger.setText(currentAudio.getSinger());
@@ -179,6 +180,12 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         tvMusicPlayTime.setText(StringUtils.formatMediaTime(audioPlayer.getCurrentPosition()));
         sbPosition.setProgress(audioPlayer.getCurrentPosition());
         tvLcr.updateLrcView(audioPlayer.getCurrentPosition(), audioPlayer.getDuration());
+
+        if(mediaControl.isPlaying()) {
+            animationDrawable.start();
+        }else {
+            animationDrawable.stop();
+        }
 
         handler.sendEmptyMessageDelayed(MSG_UPDATE_PROGRESS, ONE_SECOND_TIMER);
     }
@@ -234,9 +241,11 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                 if(mediaControl.isPlaying()) {
                     mediaControl.pauseMedia();
                     ibPlay.setImageResource(R.drawable.btn_play_normal);
+                    animationDrawable.stop();
                 }else {
                     mediaControl.playMedia();
                     ibPlay.setImageResource(R.drawable.btn_pause_normal);
+                    animationDrawable.start();
                 }
                 break;
             case R.id.ib_next:
@@ -274,14 +283,6 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     @Override
     public void hideLoadingProgress() {
         hideLoadingProgressDialog();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(audioPlayer != null) {
-            updateProgress();
-        }
     }
 
     @Override
