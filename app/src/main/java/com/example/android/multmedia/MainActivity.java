@@ -27,7 +27,6 @@ public class MainActivity extends FragmentActivity implements TabMenuLayout.OnTa
     private BaseFragment fragment;
     FragmentAdapter fgAdapter;
     private PanelViewManager mPanelViewManager;
-    private Utility mUtility;
     private Intent intent;
 
     private volatile int currentFragment = 0;
@@ -40,7 +39,6 @@ public class MainActivity extends FragmentActivity implements TabMenuLayout.OnTa
         initView();
 
         mPanelViewManager = PanelViewManager.getPanelViewManager(this);
-        mUtility = new Utility(this, mPanelViewManager);
     }
 
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -89,15 +87,9 @@ public class MainActivity extends FragmentActivity implements TabMenuLayout.OnTa
         mViewPager.setCurrentItem(item);
     }
 
-    public Utility getUtility() {
-        return mUtility;
-    }
-
     private void handlePageChanged(int pageIndex) {
-        Log.d(TAG, "handlePageChanged Index = " + pageIndex + ", currentFragment = " + currentFragment);
         currentFragment = pageIndex;
         fragment = (BaseFragment) fgAdapter.getItem(pageIndex);
-        Log.d(TAG, "Current fragment is " + fragment);
         mPanelViewManager.setActiveFragment(currentFragment, (BaseFragment) fgAdapter.getItem(currentFragment));
     }
 
@@ -119,10 +111,8 @@ public class MainActivity extends FragmentActivity implements TabMenuLayout.OnTa
             Log.d(TAG, "Launch Audio Recycler View");
             intent = new Intent(MainActivity.this, AudioBrowserActivity.class);
             startActivity(intent);
-            //panelView = getVideoBrowserView();
         }else if (activityName.equalsIgnoreCase(Constant.VIDEO_FILES)) {
             Log.d(TAG, "Launch Video Recycler View");
-//            panelView = getVideoBrowserView(position);
             intent = new Intent(MainActivity.this, VideoBrowserActivity.class);
             startActivity(intent);
         }else if(activityName.equalsIgnoreCase(Constant.PICTURE_FILES)) {

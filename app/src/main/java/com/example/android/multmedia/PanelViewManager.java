@@ -17,9 +17,8 @@ public class PanelViewManager implements AdapterView.OnItemClickListener{
     private static final String TAG = PanelViewManager.class.getSimpleName();
     private static PanelViewManager mInstance;
     private MainActivity mActivity;
-    private int currentActiveFragId;
     private BaseFragment currentActiveFrag;
-    private Intent intent;
+    private int currentActiveFragId;
 
     private PanelViewManager(Context context) {
         this.mActivity = (MainActivity)context;
@@ -59,21 +58,5 @@ public class PanelViewManager implements AdapterView.OnItemClickListener{
 
     public BaseFragment getActiveFragment() {
         return currentActiveFrag;
-    }
-
-    private Utility getUtility() {
-        return mActivity.getUtility();
-    }
-
-    public View getVideoBrowserView(int position) {
-        View recyclerView = null;
-        boolean isVideoScaned = getUtility().isMediaScanned(mActivity);
-//        if(!isVideoScaned) {
-//            /*if the media had not scanned, show the loading progress bar*/
-//            mActivity.showProgessLoading();
-//            return recyclerView;
-//        }
-        recyclerView = getUtility().getVideoRecyclerView();
-        return recyclerView;
     }
 }
