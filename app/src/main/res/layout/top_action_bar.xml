@@ -6,15 +6,16 @@
     android:orientation="horizontal"
     android:layout_alignParentTop="true">
 
-    <ImageView
-        android:id="@+id/img_back"
+    <ImageButton
+        android:id="@+id/ib_back"
         android:clickable="true"
         android:layout_width="0dp"
         android:layout_height="35dp"
         android:layout_marginRight="5dp"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:contentDescription=""
+        android:contentDescription="null"
+        android:background="@null"
         android:src="@drawable/icon_back"/>
 
     <TextView
@@ -47,6 +48,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:src="@drawable/icon_del"
+        android:visibility="invisible"
         android:layout_weight="1"/>
 
 </LinearLayout>

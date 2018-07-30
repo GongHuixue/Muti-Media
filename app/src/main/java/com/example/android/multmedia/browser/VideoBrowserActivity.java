@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
     private ArrayList<VideoItem> mVideoItems = new ArrayList<>();
     private TextView TvTitle;
     private TextView TvNum;
+    private ImageButton IbReturn;
 
     @Override
     public int getLayoutResID(){
@@ -41,6 +43,13 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
         TvTitle = (TextView)findViewById(R.id.txt_title);
         TvTitle.setText(R.string.video);
         TvNum = (TextView)findViewById(R.id.txt_number);
+        IbReturn = (ImageButton)findViewById(R.id.ib_back);
+        IbReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         mRecyclerView = (RecyclerView) findViewById(R.id.video_recycler_view);
         mediaLoad.loadVideos(VideoBrowserActivity.this, new OnVideoLoadCallBack() {
@@ -89,4 +98,14 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
         mRecyclerView.setAdapter(mVideoRvAdapter);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mVideoItems.clear();
+    }
 }

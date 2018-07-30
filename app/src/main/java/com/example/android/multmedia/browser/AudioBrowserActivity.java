@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
     private ArrayList<AudioItem> mAudioItems = new ArrayList<>();
     private TextView TvTitle;
     private TextView TvNum;
+    private ImageButton IbReturn;
 
 
     @Override
@@ -41,6 +43,13 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
         TvTitle = (TextView)findViewById(R.id.txt_title);
         TvTitle.setText(R.string.audio);
         TvNum = (TextView)findViewById(R.id.txt_number);
+        IbReturn = (ImageButton)findViewById(R.id.ib_back);
+        IbReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mRecyclerView = (RecyclerView) findViewById(R.id.audio_recycler_view);
         mediaLoad.loadAudios(AudioBrowserActivity.this, new OnAudioLoadCallBack() {
             @Override
@@ -83,6 +92,16 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
         mRecyclerView.addItemDecoration(horizontalDivider);
 
         mRecyclerView.setAdapter(mAudioRvAdapter);
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAudioItems.clear();
     }
 }

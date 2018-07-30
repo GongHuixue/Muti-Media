@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
     private ArrayList<PhotoItem> mPictureItems = new ArrayList<>();
     private TextView TvTitle;
     private TextView TvNum;
+    private ImageButton IbReturn;
 
 
     @Override
@@ -45,6 +47,13 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
         TvTitle = (TextView)findViewById(R.id.txt_title);
         TvTitle.setText(R.string.picture);
         TvNum = (TextView)findViewById(R.id.txt_number);
+        IbReturn = (ImageButton)findViewById(R.id.ib_back);
+        IbReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mRecyclerView = (RecyclerView) findViewById(R.id.picture_recycler_view);
         mediaLoad.loadPhotos(PictureBrowserActivity.this, new OnPhotoLoadCallBack() {
             @Override
@@ -87,5 +96,16 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
         mRecyclerView.addItemDecoration(horizontalDivider);
 
         mRecyclerView.setAdapter(mPictureRvAdapter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPictureItems.clear();
     }
 }
