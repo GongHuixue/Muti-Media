@@ -20,7 +20,7 @@ android {
     //init green dao
     greendao{
         schemaVersion 1
-        daoPackage 'com.example.android.multmedia.greendao.playedlist'
+        daoPackage 'com.example.android.multmedia.greendao'
         targetGenDir'src/main/java'
     }
 }
