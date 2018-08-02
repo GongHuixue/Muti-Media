@@ -132,17 +132,19 @@ public class LcrView extends AppCompatTextView{
         invalidate();
     }
     private float getSmoothScroll(){
-        int startTime = lcrs.get(currentPosition).getTime();
-        //唱了多久
-        int passTime = currentTime - startTime;
-        if(currentPosition==lcrs.size()-1){
-            passPercent = passTime/(float)(duration-startTime);
-            return line_height*passPercent;
+        if(currentPosition < lcrs.size()) {
+            int startTime = lcrs.get(currentPosition).getTime();
+            //唱了多久
+            int passTime = currentTime - startTime;
+            if(currentPosition==lcrs.size()-1){
+                passPercent = passTime/(float)(duration-startTime);
+                return line_height*passPercent;
+            }
+            int endTime = lcrs.get(currentPosition + 1).getTime();
+            int totalTime = endTime-startTime;
+            //进度百分比
+            passPercent = passTime /(float) (totalTime);
         }
-        int endTime = lcrs.get(currentPosition + 1).getTime();
-        int totalTime = endTime-startTime;
-        //进度百分比
-        passPercent = passTime /(float) (totalTime);
         return line_height*passPercent;
 
     }
