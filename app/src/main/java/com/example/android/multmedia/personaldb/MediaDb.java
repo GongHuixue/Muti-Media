@@ -17,16 +17,6 @@ public class MediaDb {
     private long playedTime;    //record the media file playing time;
     private int playedCounts;   //record the media file played counts.
 
-    public MediaDb(String mediaPath, String mediaName, long size, long id,
-                   long createTime, int mediaType, boolean isFavor) {
-        this.mediaPath = mediaPath;
-        this.mediaName = mediaName;
-        this.size = size;
-        this.id = id;
-        this.createTime = createTime;
-        this.mediaType = mediaType;
-        this.isFavor = isFavor;
-    }
 
     public MediaDb() {
     }
@@ -87,19 +77,15 @@ public class MediaDb {
     public void setIsFavor(boolean isFavor) {
         this.isFavor = isFavor;
     }
-
     public long getPlayedTime() {
         return this.playedTime;
     }
-
     public void setPlayedTime(long playedTime) {
         this.playedTime = playedTime;
     }
-
     public int getPlayedCounts() {
         return this.playedCounts;
     }
-
     public void setPlayedCounts(int playedCounts) {
         this.playedCounts = playedCounts;
     }

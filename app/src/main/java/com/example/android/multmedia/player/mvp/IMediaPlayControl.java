@@ -8,7 +8,7 @@ public interface IMediaPlayControl {
     void pauseMedia();
     void playNextMedia();
     void playModeChanged();
-    boolean isFavorite();
+    void setMediaFavorite(boolean isFavorite);
     boolean isPlaying();
     void resetMediaData();
 }

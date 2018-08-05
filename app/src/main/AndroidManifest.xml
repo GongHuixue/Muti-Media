@@ -39,14 +39,18 @@
             android:name=".browser.PictureBrowserActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
             android:excludeFromRecents="true" />
-        <activity android:name=".player.VideoPlayerActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
-            android:screenOrientation="landscape">
-        </activity>
+        <activity
+            android:name=".player.VideoPlayerActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"></activity>
         <activity android:name=".player.AudioPlayerActivity" />
-        <activity android:name=".player.PhotoPlayerActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
-        </activity>
+        <activity
+            android:name=".player.PhotoPlayerActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"></activity>
+
+        <service
+            android:name=".services.MediaStoreService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

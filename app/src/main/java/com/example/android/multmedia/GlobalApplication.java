@@ -44,4 +44,8 @@ public class GlobalApplication extends Application {
     public DaoSession getDaoSession() {
         return mDaoSession;
     }
+
+    public SQLiteDatabase getMediaDB() {
+        return mediaDB;
+    }
 }

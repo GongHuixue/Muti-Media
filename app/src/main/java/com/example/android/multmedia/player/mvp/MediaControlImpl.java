@@ -1,26 +1,41 @@
 package com.example.android.multmedia.player.mvp;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 import android.widget.VideoView;
 
+import com.example.android.multmedia.GlobalApplication;
 import com.example.android.multmedia.R;
+import com.example.android.multmedia.greendao.DaoMaster;
+import com.example.android.multmedia.greendao.DaoSession;
+import com.example.android.multmedia.greendao.MediaDbDao;
+import com.example.android.multmedia.personaldb.GreeenDaoManager;
+import com.example.android.multmedia.personaldb.MediaDb;
 import com.example.android.multmedia.player.AudioPlayerActivity;
 import com.example.android.multmedia.player.PhotoPlayerActivity;
 import com.example.android.multmedia.player.VideoPlayerActivity;
 import com.example.android.multmedia.player.photo.PhotoViewPager;
+import com.example.android.multmedia.services.MediaStoreService;
 import com.mediaload.bean.AudioItem;
 import com.mediaload.bean.PhotoItem;
 import com.mediaload.bean.VideoItem;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static android.content.Context.BIND_AUTO_CREATE;
 import static com.example.android.multmedia.player.MediaPlayConstants.*;
 
 public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaPlayControl{
     private final static String TAG = MediaControlImpl.class.getSimpleName();
+    private Context mContext;
     private VideoPlayerActivity videoPlayerActivity;
     private VideoView videoPlayer;
     private ArrayList<VideoItem> videoList = new ArrayList<>();
@@ -38,19 +53,46 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     private int mediaPosition = 0;
     private volatile Boolean isPlaying = false;
     private MediaType mediaType;
-
     private Handler mainHandler;
+
+    private boolean mBound = false;
+    private MediaStoreService mediaService;
+
+    private static GreeenDaoManager daoManager = new GreeenDaoManager();
+
+    private static SQLiteDatabase mediaDb = daoManager.getMediaDb();
+    private static DaoMaster daoMaster = daoManager.getDaoMaster();
+    private static DaoSession daoSession = daoManager.getDaoSession();
+    private static MediaDbDao mediaDbDao = daoManager.getMediaDbDao();
+    private MediaDb mediaFile = new MediaDb();
+
+    private ServiceConnection mediaServiceCon = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MediaStoreService.MediaServiceBinder binder = (MediaStoreService.MediaServiceBinder) service;
+            mediaService = binder.getMediaService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBound = false;
+        }
+    };
+
 
     public MediaControlImpl(IMediaView view, MediaType type) {
         attachView(view);
         if (getActivityView() instanceof VideoPlayerActivity) {
             videoPlayerActivity = (VideoPlayerActivity) getActivityView();
+            mContext = videoPlayerActivity;
             mediaType = type;
             mainHandler = videoPlayerActivity.getMainThreadHandler();
             Log.d(TAG, "Video Player init");
             videoPlayer = (VideoView) videoPlayerActivity.findViewById(R.id.vv_video);
         } else if (getActivityView() instanceof AudioPlayerActivity) {
             audioPlayerActivity = (AudioPlayerActivity) getActivityView();
+            mContext = audioPlayerActivity;
             mediaType = type;
             mainHandler = audioPlayerActivity.getMainThreadHandler();
             if(audioPlayer == null) {
@@ -59,14 +101,15 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
             Log.d(TAG, "Audio Player Init");
         } else if (getActivityView() instanceof PhotoPlayerActivity) {
             photoPlayerActivity = (PhotoPlayerActivity)getActivityView();
+            mContext = photoPlayerActivity;
             mediaType = type;
             mainHandler = photoPlayerActivity.getMainThreadHandler();
             if(photoPlayer == null) {
                 photoPlayer = (PhotoViewPager) photoPlayerActivity.findViewById(R.id.photo_view);
             }
-
-
         }
+
+        bindMediaService();
     }
 
     public VideoView getVideoPlayer() {
@@ -179,7 +222,6 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     public void setPhotoListListener(ArrayList<PhotoItem> photoItems) {
         photoList.clear();
         photoList.addAll(photoItems);
-
     }
 
     /*must set video path by following api*/
@@ -206,6 +248,18 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     public void setPhotoPath(int position) {
         photoPlayer.setCurrentItem(position);
         mediaPosition = position;
+    }
+
+    private void bindMediaService() {
+        final Intent intent = new Intent(mContext, MediaStoreService.class);
+        mContext.bindService(intent, mediaServiceCon, BIND_AUTO_CREATE);
+    }
+
+    private void unbindMediaService() {
+        if(mBound == true) {
+            mContext.unbindService(mediaServiceCon);
+        }
+        mediaService = null;
     }
 
     @Override
@@ -245,6 +299,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
                 Log.d(TAG, "This is the first file");
             }else {
                 mediaPosition = mediaPosition - 1;
+                audioPlayer.stop();
                 audioPlayer.reset();
                 setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
             }
@@ -318,8 +373,14 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
 
     }
     @Override
-    public boolean isFavorite(){
-        return false;
+    public void setMediaFavorite(boolean isFavorite){
+        if(mediaType == MediaType.VIDEO) {
+            mediaService.updateFavoriteMedia();
+        }else if(mediaType == MediaType.AUDIO) {
+
+        }else if(mediaType == MediaType.PHOTO) {
+
+        }
     }
     @Override
     public boolean isPlaying(){
@@ -333,6 +394,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         isPlaying = false;
         mediaType = MediaType.NONE;
         mediaPosition = 0;
+        mContext = null;
 
         if(mediaType == MediaType.VIDEO) {
             videoPlayerActivity = null;
@@ -348,5 +410,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
             photoPlayerActivity = null;
             photoList.clear();
         }
+
+        unbindMediaService();
     }
 }

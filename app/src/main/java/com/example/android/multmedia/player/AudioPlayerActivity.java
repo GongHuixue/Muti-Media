@@ -258,6 +258,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                     ibFavorite.setImageResource(R.drawable.btn_favorite_pressed);
                 }
                 isFavorite = !isFavorite;
+                mediaControl.setMediaFavorite(isFavorite);
                 break;
         }
     }
