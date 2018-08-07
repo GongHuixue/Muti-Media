@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin:'org.greenrobot.greendao'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 25
@@ -18,10 +18,10 @@ android {
         }
     }
     //init green dao
-    greendao{
+    greendao {
         schemaVersion 1
         daoPackage 'com.example.android.multmedia.greendao'
-        targetGenDir'src/main/java'
+        targetGenDir 'src/main/java'
     }
 }
 
@@ -38,7 +38,7 @@ dependencies {
     //add mediaload library
     compile project(':mediaload')
     //add greendao library
-    compile'org.greenrobot:greendao:3.2.0'
-    compile'org.greenrobot:greendao-generator:3.2.0'
+    compile 'org.greenrobot:greendao:3.2.0'
+    compile 'org.greenrobot:greendao-generator:3.2.0'
 
 }

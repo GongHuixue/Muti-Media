@@ -33,7 +33,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="5dp"
-            android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
+            android:scrollbars="vertical">
+        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
 </LinearLayout>

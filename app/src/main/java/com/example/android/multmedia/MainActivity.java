@@ -12,6 +12,9 @@ import com.example.android.multmedia.browser.PictureBrowserActivity;
 import com.example.android.multmedia.fragment.*;
 import com.example.android.multmedia.browser.AudioBrowserActivity;
 import com.example.android.multmedia.browser.VideoBrowserActivity;
+import com.example.android.multmedia.playedlist.FavoriteActivity;
+import com.example.android.multmedia.playedlist.LastPlayedActivity;
+import com.example.android.multmedia.playedlist.PopularActivity;
 import com.example.android.multmedia.tabmenu.TabMenuLayout;
 import com.example.android.multmedia.tabmenu.TableItem;
 
@@ -121,8 +124,16 @@ public class MainActivity extends FragmentActivity implements TabMenuLayout.OnTa
             startActivity(intent);
         }else if(activityName.equalsIgnoreCase(Constant.FAVORITE_FILES)) {
             Log.d(TAG, "Launch Favorite Recycler View");
+            intent = new Intent(MainActivity.this, FavoriteActivity.class);
+            startActivity(intent);
         }else if(activityName.equalsIgnoreCase(Constant.POPULAR_FILES)) {
             Log.d(TAG, "Launch Popular Recycler View");
+            intent = new Intent(MainActivity.this, PopularActivity.class);
+            startActivity(intent);
+        }else if(activityName.equalsIgnoreCase(Constant.LASTED_FILES)) {
+            Log.d(TAG, "Launch Popular Recycler View");
+            intent = new Intent(MainActivity.this, LastPlayedActivity.class);
+            startActivity(intent);
         }
     }
 }

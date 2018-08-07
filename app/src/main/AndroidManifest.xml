@@ -41,16 +41,20 @@
             android:excludeFromRecents="true" />
         <activity
             android:name=".player.VideoPlayerActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"></activity>
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
         <activity android:name=".player.AudioPlayerActivity" />
         <activity
             android:name=".player.PhotoPlayerActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"></activity>
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
 
         <service
             android:name=".services.MediaStoreService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".playedlist.FavoriteActivity" />
+        <activity android:name=".playedlist.PopularActivity" />
+        <activity android:name=".playedlist.LastPlayedActivity"></activity>
     </application>
 
 </manifest>
