@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.android.multmedia.greendao.DaoMaster;
 import com.example.android.multmedia.greendao.DaoSession;
+import com.example.android.multmedia.greendao.MediaDbDao;
+import com.example.android.multmedia.personaldb.MediaDb;
 
 public class GlobalApplication extends Application {
     private static Context mContext;
@@ -15,6 +17,7 @@ public class GlobalApplication extends Application {
     private DaoMaster mDaoMaster;
     private DaoSession mDaoSession;
     private SQLiteDatabase mediaDB;
+    private MediaDbDao mediaDbDao;
 
 
     @Override
@@ -35,17 +38,10 @@ public class GlobalApplication extends Application {
         mediaDB = mHelper.getWritableDatabase();
         mDaoMaster = new DaoMaster(mediaDB);
         mDaoSession = mDaoMaster.newSession();
+        mediaDbDao = mDaoSession.getMediaDbDao();
     }
 
-    public DaoMaster getDaoMaster() {
-        return mDaoMaster;
-    }
-
-    public DaoSession getDaoSession() {
-        return mDaoSession;
-    }
-
-    public SQLiteDatabase getMediaDB() {
-        return mediaDB;
+    public MediaDbDao getMediaDbDao() {
+        return mediaDbDao;
     }
 }

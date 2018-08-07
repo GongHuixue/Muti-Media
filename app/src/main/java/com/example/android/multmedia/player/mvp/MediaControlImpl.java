@@ -12,12 +12,11 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.VideoView;
 
-import com.example.android.multmedia.GlobalApplication;
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.greendao.DaoMaster;
 import com.example.android.multmedia.greendao.DaoSession;
 import com.example.android.multmedia.greendao.MediaDbDao;
-import com.example.android.multmedia.personaldb.GreeenDaoManager;
+import com.example.android.multmedia.personaldb.GreenDaoManager;
 import com.example.android.multmedia.personaldb.MediaDb;
 import com.example.android.multmedia.player.AudioPlayerActivity;
 import com.example.android.multmedia.player.PhotoPlayerActivity;
@@ -25,6 +24,7 @@ import com.example.android.multmedia.player.VideoPlayerActivity;
 import com.example.android.multmedia.player.photo.PhotoViewPager;
 import com.example.android.multmedia.services.MediaStoreService;
 import com.mediaload.bean.AudioItem;
+import com.mediaload.bean.BaseItem;
 import com.mediaload.bean.PhotoItem;
 import com.mediaload.bean.VideoItem;
 import java.io.IOException;
@@ -58,13 +58,10 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     private boolean mBound = false;
     private MediaStoreService mediaService;
 
-    private static GreeenDaoManager daoManager = new GreeenDaoManager();
+    private static GreenDaoManager daoManager = GreenDaoManager.getSingleInstance();
 
-    private static SQLiteDatabase mediaDb = daoManager.getMediaDb();
-    private static DaoMaster daoMaster = daoManager.getDaoMaster();
-    private static DaoSession daoSession = daoManager.getDaoSession();
-    private static MediaDbDao mediaDbDao = daoManager.getMediaDbDao();
-    private MediaDb mediaFile = new MediaDb();
+//    private static MediaDbDao mediaDbDao = daoManager.getMediaDbDao();
+    private BaseItem mediaItem;
 
     private ServiceConnection mediaServiceCon = new ServiceConnection() {
         @Override
@@ -230,6 +227,12 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         getVideoPlayer().setVideoPath(videoPath);
         mediaPosition = position;
         isPlaying = true;
+        mediaItem = videoList.get(position);
+        if(daoManager.queryByPath(videoPath)) {
+            daoManager.updatePlayedTimes(videoPath);
+        }else {
+            daoManager.insertIfNotExist(mediaItem);
+        }
     }
 
     /*must set audio path by following api*/
@@ -243,11 +246,25 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
             e.printStackTrace();
         }
         mediaPosition = position;
+
+        mediaItem = audioList.get(position);
+        if(daoManager.queryByPath(audioPath)) {
+            daoManager.updatePlayedTimes(audioPath);
+        }else {
+            daoManager.insertIfNotExist(mediaItem);
+        }
     }
 
     public void setPhotoPath(int position) {
         photoPlayer.setCurrentItem(position);
         mediaPosition = position;
+
+        mediaItem = photoList.get(position);
+        if(daoManager.queryByPath(photoList.get(position).getPath())) {
+            daoManager.updatePlayedTimes(photoList.get(position).getPath());
+        }else {
+            daoManager.insertIfNotExist(mediaItem);
+        }
     }
 
     private void bindMediaService() {
@@ -341,7 +358,6 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
             msg.arg1 = PLAY_STATE_PAUSE;
             mainHandler.sendMessage(msg);
         }else if(mediaType == MediaType.PHOTO) {
-            //photoPlayer.pause();
             mainHandler.removeMessages(PLAY);
             mainHandler.sendEmptyMessage(PAUSE);
         }
@@ -375,12 +391,13 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     @Override
     public void setMediaFavorite(boolean isFavorite){
         if(mediaType == MediaType.VIDEO) {
-            mediaService.updateFavoriteMedia();
+            mediaItem = videoList.get(mediaPosition);
         }else if(mediaType == MediaType.AUDIO) {
-
+            mediaItem = audioList.get(mediaPosition);
         }else if(mediaType == MediaType.PHOTO) {
-
+            mediaItem = photoList.get(mediaPosition);
         }
+        daoManager.updateFavorite(mediaItem, isFavorite);
     }
     @Override
     public boolean isPlaying(){

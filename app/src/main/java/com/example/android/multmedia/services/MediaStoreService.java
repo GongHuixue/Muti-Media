@@ -50,17 +50,4 @@ public class MediaStoreService extends Service {
 
     }
 
-    public void updateFavoriteMedia() {
-
-    }
-
-    public void updatePopularMedia() {
-
-    }
-
-    public void updatePlayedMedia() {
-
-    }
-
-
 }

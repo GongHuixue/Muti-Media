@@ -3,14 +3,17 @@ package com.example.android.multmedia.personaldb;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.NotNull;
 
 @Entity
 public class MediaDb {
-    @Id
+    @Id(autoincrement = true)
+    private long id;
+    @NotNull
     private String mediaPath;
     private String mediaName;
     private long size;
-    private long id;
+    private long mediaId;
     private long createTime;
     private int mediaType;
     private boolean isFavor;    //record the media file is favorite or not
@@ -20,25 +23,26 @@ public class MediaDb {
 
     public MediaDb() {
     }
-
-    @Generated(hash = 170277237)
-    public MediaDb(String mediaPath, String mediaName, long size, long id,
-            long createTime, int mediaType, boolean isFavor, long playedTime,
-            int playedCounts) {
+    @Generated(hash = 1730653658)
+    public MediaDb(long id, @NotNull String mediaPath, String mediaName, long size,
+            long mediaId, long createTime, int mediaType, boolean isFavor,
+            long playedTime, int playedCounts) {
+        this.id = id;
         this.mediaPath = mediaPath;
         this.mediaName = mediaName;
         this.size = size;
-        this.id = id;
+        this.mediaId = mediaId;
         this.createTime = createTime;
         this.mediaType = mediaType;
         this.isFavor = isFavor;
         this.playedTime = playedTime;
         this.playedCounts = playedCounts;
     }
+    @NotNull
     public String getMediaPath() {
         return this.mediaPath;
     }
-    public void setMediaPath(String mediaPath) {
+    public void setMediaPath(@NotNull String mediaPath) {
         this.mediaPath = mediaPath;
     }
     public String getMediaName() {
@@ -55,9 +59,6 @@ public class MediaDb {
     }
     public long getId() {
         return this.id;
-    }
-    public void setId(long id) {
-        this.id = id;
     }
     public long getCreateTime() {
         return this.createTime;
@@ -88,5 +89,14 @@ public class MediaDb {
     }
     public void setPlayedCounts(int playedCounts) {
         this.playedCounts = playedCounts;
+    }
+    public long getMediaId() {
+        return this.mediaId;
+    }
+    public void setMediaId(long mediaId) {
+        this.mediaId = mediaId;
+    }
+    public void setId(long id) {
+        this.id = id;
     }
 }
