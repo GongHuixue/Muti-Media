@@ -24,7 +24,7 @@ public class MediaDbDao extends AbstractDao<MediaDb, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property MediaPath = new Property(1, String.class, "mediaPath", false, "MEDIA_PATH");
         public final static Property MediaName = new Property(2, String.class, "mediaName", false, "MEDIA_NAME");
         public final static Property Size = new Property(3, long.class, "size", false, "SIZE");
@@ -49,7 +49,7 @@ public class MediaDbDao extends AbstractDao<MediaDb, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"MEDIA_DB\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"MEDIA_PATH\" TEXT NOT NULL ," + // 1: mediaPath
                 "\"MEDIA_NAME\" TEXT," + // 2: mediaName
                 "\"SIZE\" INTEGER NOT NULL ," + // 3: size
@@ -70,7 +70,11 @@ public class MediaDbDao extends AbstractDao<MediaDb, Long> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, MediaDb entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
         stmt.bindString(2, entity.getMediaPath());
  
         String mediaName = entity.getMediaName();
@@ -89,7 +93,11 @@ public class MediaDbDao extends AbstractDao<MediaDb, Long> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, MediaDb entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
         stmt.bindString(2, entity.getMediaPath());
  
         String mediaName = entity.getMediaName();
@@ -107,13 +115,13 @@ public class MediaDbDao extends AbstractDao<MediaDb, Long> {
 
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
     public MediaDb readEntity(Cursor cursor, int offset) {
         MediaDb entity = new MediaDb( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // mediaPath
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // mediaName
             cursor.getLong(offset + 3), // size
@@ -129,7 +137,7 @@ public class MediaDbDao extends AbstractDao<MediaDb, Long> {
      
     @Override
     public void readEntity(Cursor cursor, MediaDb entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setMediaPath(cursor.getString(offset + 1));
         entity.setMediaName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setSize(cursor.getLong(offset + 3));
@@ -158,7 +166,7 @@ public class MediaDbDao extends AbstractDao<MediaDb, Long> {
 
     @Override
     public boolean hasKey(MediaDb entity) {
-        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
+        return entity.getId() != null;
     }
 
     @Override

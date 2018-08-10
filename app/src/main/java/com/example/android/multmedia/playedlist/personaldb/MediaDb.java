@@ -7,8 +7,8 @@ import org.greenrobot.greendao.annotation.NotNull;
 
 @Entity
 public class MediaDb {
-    @Id(autoincrement = true)
-    private long id;
+    @Id
+    private Long id;
     @NotNull
     private String mediaPath;
     private String mediaName;
@@ -20,11 +20,11 @@ public class MediaDb {
     private long playedTime;    //record the media file playing time;
     private int playedCounts;   //record the media file played counts.
 
-
+    @Generated(hash = 676810374)
     public MediaDb() {
     }
-    @Generated(hash = 1730653658)
-    public MediaDb(long id, @NotNull String mediaPath, String mediaName, long size,
+    @Generated(hash = 178230970)
+    public MediaDb(Long id, @NotNull String mediaPath, String mediaName, long size,
             long mediaId, long createTime, int mediaType, boolean isFavor,
             long playedTime, int playedCounts) {
         this.id = id;
@@ -57,7 +57,7 @@ public class MediaDb {
     public void setSize(long size) {
         this.size = size;
     }
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
     public long getCreateTime() {
@@ -96,7 +96,7 @@ public class MediaDb {
     public void setMediaId(long mediaId) {
         this.mediaId = mediaId;
     }
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }
