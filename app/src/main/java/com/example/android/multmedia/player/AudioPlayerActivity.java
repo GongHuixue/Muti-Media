@@ -91,6 +91,12 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                         tvMusicPlayTime.setText(StringUtils.formatMediaTime(audioPlayer.getDuration()));
                         animationDrawable.stop();
                     }
+
+                    if(mediaControl.isFavorite()) {
+                        ibFavorite.setImageResource(R.drawable.btn_favorite_pressed);
+                    }else {
+                        ibFavorite.setImageResource(R.drawable.btn_favorite_normal);
+                    }
                     break;
             }
         }

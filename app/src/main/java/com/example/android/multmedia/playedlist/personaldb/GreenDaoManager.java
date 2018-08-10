@@ -6,6 +6,7 @@ import android.os.Message;
 
 import com.example.android.multmedia.GlobalApplication;
 import com.example.android.multmedia.greendao.MediaDbDao;
+import com.example.android.multmedia.notification.NotificationHandler;
 import com.example.android.multmedia.player.MediaPlayConstants;
 import com.mediaload.bean.AudioItem;
 import com.mediaload.bean.BaseItem;
@@ -35,6 +36,7 @@ public class GreenDaoManager {
     private HandlerThread mHT;
 
     private BrowserMediaFile browserMediaFile = new BrowserMediaFile();
+    private NotificationHandler ntf = NotificationHandler.getInstance();
 
     private GreenDaoManager() {
         createHandlerThread();
@@ -128,21 +130,15 @@ public class GreenDaoManager {
         return fileExist;
     }
 
-    public List<MediaDb> queryByMediaType(int mediaType) {
-        List<MediaDb> mediaList = mediaDbDao.queryBuilder()
-                .where(MediaDbDao.Properties.MediaType.eq(mediaType))
-                .orderDesc(MediaDbDao.Properties.PlayedTime)
-                .list();
-
-        return mediaList;
-    }
-
-    public List<MediaDb> queryFavorite(boolean isFavorite) {
-        List<MediaDb> favoriteList = mediaDbDao.queryBuilder()
-                .where(MediaDbDao.Properties.IsFavor.eq(isFavorite))
-                .orderDesc(MediaDbDao.Properties.PlayedTime)
-                .list();
-        return favoriteList;
+    public Boolean queryFavorite(String mediaPath) {
+        boolean isFavorite = false;
+        query = queryBuilder.where(MediaDbDao.Properties.MediaPath.eq(mediaPath), MediaDbDao.Properties.IsFavor.eq(true)).build();
+        query.setParameter(0, mediaPath);
+        media = query.unique();
+        if(media != null) {
+            isFavorite = true;
+        }
+        return isFavorite;
     }
     public List<MediaDb> queryFavoriteByType(int mediaType) {
         List<MediaDb> favoriteList = queryBuilder
@@ -182,6 +178,7 @@ public class GreenDaoManager {
                 }
             }
         }
+        ntf.notifyAllObservers(AUDIO_LOADED_COMPLETED_ID, "");
         return audioItemArrayList;
     }
 
@@ -201,6 +198,7 @@ public class GreenDaoManager {
                 }
             }
         }
+        ntf.notifyAllObservers(VIDEO_LOADED_COMPLETED_ID, "");
         return audioItemArrayList;
     }
 
@@ -220,6 +218,7 @@ public class GreenDaoManager {
                 }
             }
         }
+        ntf.notifyAllObservers(PHOTO_LOADED_COMPLETED_ID, "");
         return photoItemArrayList;
     }
 
@@ -239,6 +238,7 @@ public class GreenDaoManager {
                 }
             }
         }
+        ntf.notifyAllObservers(AUDIO_LOADED_COMPLETED_ID, "");
         return audioItemArrayList;
     }
 
@@ -258,6 +258,7 @@ public class GreenDaoManager {
                 }
             }
         }
+        ntf.notifyAllObservers(AUDIO_LOADED_COMPLETED_ID, "");
         return audioItemArrayList;
     }
 
@@ -277,6 +278,7 @@ public class GreenDaoManager {
                 }
             }
         }
+        ntf.notifyAllObservers(PHOTO_LOADED_COMPLETED_ID, "");
         return photoItemArrayList;
     }
 
@@ -296,6 +298,7 @@ public class GreenDaoManager {
                 }
             }
         }
+        ntf.notifyAllObservers(AUDIO_LOADED_COMPLETED_ID, "");
         return audioItemArrayList;
     }
 
@@ -315,6 +318,7 @@ public class GreenDaoManager {
                 }
             }
         }
+        ntf.notifyAllObservers(AUDIO_LOADED_COMPLETED_ID, "");
         return audioItemArrayList;
     }
 
@@ -334,13 +338,7 @@ public class GreenDaoManager {
                 }
             }
         }
+        ntf.notifyAllObservers(PHOTO_LOADED_COMPLETED_ID, "");
         return photoItemArrayList;
-    }
-
-
-
-
-    public MediaDbDao getMediaDbDao() {
-        return mediaDbDao;
     }
 }

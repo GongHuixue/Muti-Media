@@ -106,6 +106,12 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                         sbPosition.setProgress(sbPosition.getMax());
                         tvPlayTime.setText(StringUtils.formatMediaTime(videoPlayer.getDuration()));
                     }
+
+                    if(mediaControl.isFavorite()) {
+                        ibFavorite.setImageResource(R.drawable.btn_favorite_pressed);
+                    }else {
+                        ibFavorite.setImageResource(R.drawable.btn_favorite_normal);
+                    }
                     break;
             }
         }

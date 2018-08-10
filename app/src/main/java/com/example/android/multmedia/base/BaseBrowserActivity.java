@@ -1,5 +1,6 @@
 package com.example.android.multmedia.base;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -16,6 +17,8 @@ import com.mediaload.bean.VideoItem;
 import java.util.ArrayList;
 
 public abstract class BaseBrowserActivity extends FragmentActivity {
+
+    private ProgressDialog progressDialog;
     /*mediaload instance, user for load audio/video/picture*/
     public MediaLoad mediaLoad = MediaLoad.getMediaLoad();
     public BrowserMediaFile browserMediaFile = new BrowserMediaFile();
@@ -25,7 +28,6 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
 
     /*These are used for played list activity*/
     public RecyclerView mVideoRv, mAudioRv, mPhotoRv;
-    public TextView mediaTv;
 
     public BrowserRvAdapter<VideoItem> mVideoRvAdapter;
     public ArrayList<VideoItem> mVideoList;
@@ -43,16 +45,31 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResID());
         initView();
+        progressDialog = new ProgressDialog(this);
     }
 
-    public void showActionBar() {
-
+    public void showProgessLoading() {
+        progressDialog.setTitle("");
+        progressDialog.setMessage("File is loading, please wait ......");
+        progressDialog.setCancelable(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(false);
+        progressDialog.show();
     }
 
-    public void hideActionBar() {
-
+    public void hideProgressLoading() {
+        progressDialog.hide();
     }
 
     public abstract int getLayoutResID();
     public abstract void initView();
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mVideoList.clear();
+        mPhotoList.clear();
+        mAudioList.clear();
+
+    }
 }

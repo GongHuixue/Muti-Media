@@ -25,5 +25,7 @@ public class Constant {
     public static final String VIDEO_LIST = "video_list_file";
     public static final String PHOTO_LIST = "photo_list_file";
 
-    public static final String PREF = "com.example.android.multmedia";
+    public static final int VIDEO_LOADED_COMPLETED_ID = 0;
+    public static final int AUDIO_LOADED_COMPLETED_ID = 1;
+    public static final int PHOTO_LOADED_COMPLETED_ID = 2;
 }

@@ -53,6 +53,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
 
     private boolean mBound = false;
     private MediaStoreService mediaService;
+    private boolean isFavorite = false;
 
     private static GreenDaoManager daoManager = GreenDaoManager.getSingleInstance();
 
@@ -226,6 +227,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         mediaItem = videoList.get(position);
         if(daoManager.queryByPath(videoPath)) {
             daoManager.updatePlayedTimes(videoPath);
+            isFavorite = daoManager.queryFavorite(videoPath);
         }else {
             daoManager.insertIfNotExist(mediaItem);
         }
@@ -246,6 +248,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         mediaItem = audioList.get(position);
         if(daoManager.queryByPath(audioPath)) {
             daoManager.updatePlayedTimes(audioPath);
+            isFavorite = daoManager.queryFavorite(audioPath);
         }else {
             daoManager.insertIfNotExist(mediaItem);
         }
@@ -258,6 +261,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         mediaItem = photoList.get(position);
         if(daoManager.queryByPath(photoList.get(position).getPath())) {
             daoManager.updatePlayedTimes(photoList.get(position).getPath());
+            isFavorite = daoManager.queryFavorite(photoList.get(position).getPath());
         }else {
             daoManager.insertIfNotExist(mediaItem);
         }
@@ -399,6 +403,12 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     public boolean isPlaying(){
         Log.d(TAG, "isPlaying = " + isPlaying);
         return isPlaying;
+    }
+
+    @Override
+    public boolean isFavorite(){
+        Log.d(TAG, "isFavorite = " + isFavorite);
+        return isFavorite;
     }
 
     @Override

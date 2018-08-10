@@ -97,19 +97,6 @@ public class MainActivity extends FragmentActivity implements TabMenuLayout.OnTa
         mPanelViewManager.setActiveFragment(currentFragment, (BaseFragment) fgAdapter.getItem(currentFragment));
     }
 
-    public void showProgessLoading() {
-        progressDialog.setTitle("");
-        progressDialog.setMessage("File is loading, please wait ......");
-        progressDialog.setCancelable(false);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setIndeterminate(false);
-        progressDialog.show();
-    }
-
-    public void hideProgressLoading() {
-        progressDialog.hide();
-    }
-
     public void launchActivity(String activityName) {
         if(activityName.equalsIgnoreCase(Constant.AUDIO_FILES)) {
             Log.d(TAG, "Launch Audio Recycler View");
