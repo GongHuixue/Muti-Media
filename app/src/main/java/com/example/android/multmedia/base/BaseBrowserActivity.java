@@ -18,7 +18,8 @@ import java.util.ArrayList;
 public abstract class BaseBrowserActivity extends FragmentActivity {
     /*mediaload instance, user for load audio/video/picture*/
     public MediaLoad mediaLoad = MediaLoad.getMediaLoad();
-    public BrowserMediaFile bowserFile = new BrowserMediaFile();
+    public BrowserMediaFile browserMediaFile = new BrowserMediaFile();
+
 
     public RecyclerView mRecyclerView;
 

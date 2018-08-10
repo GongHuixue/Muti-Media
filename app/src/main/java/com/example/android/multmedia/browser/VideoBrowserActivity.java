@@ -63,7 +63,7 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
                     mVideoItems.addAll(result.getItems());
                     mTempList.addAll(result.getItems());
                     mVideoRvAdapter.notifyDataSetChanged();
-                    bowserFile.saveMediaFile(mTempList, VIDEO_LIST);
+                    browserMediaFile.saveMediaFile(mTempList, VIDEO_LIST);
                 }
             }
         });

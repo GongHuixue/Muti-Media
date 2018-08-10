@@ -38,4 +38,8 @@ public class MediaPlayConstants {
         PHOTO,
         NONE
     }
+
+    public static final int VIDEO_TYPE = 0;
+    public static final int AUDIO_TYPE = 1;
+    public static final int PHOTO_TYPE = 2;
 }

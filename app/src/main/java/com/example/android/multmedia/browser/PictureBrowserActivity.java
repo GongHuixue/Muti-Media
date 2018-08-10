@@ -65,7 +65,7 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
                     mPictureItems.addAll(result.getItems());
                     mTempList.addAll(result.getItems());
                     mPictureRvAdapter.notifyDataSetChanged();
-                    bowserFile.saveMediaFile(mTempList, PHOTO_LIST);
+                    browserMediaFile.saveMediaFile(mTempList, PHOTO_LIST);
                 }
             }
         });

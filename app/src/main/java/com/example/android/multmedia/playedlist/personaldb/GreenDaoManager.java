@@ -6,12 +6,22 @@ import android.os.Message;
 
 import com.example.android.multmedia.GlobalApplication;
 import com.example.android.multmedia.greendao.MediaDbDao;
+import com.example.android.multmedia.player.MediaPlayConstants;
+import com.mediaload.bean.AudioItem;
 import com.mediaload.bean.BaseItem;
+import com.mediaload.bean.PhotoItem;
+import com.mediaload.bean.VideoItem;
 
 import org.greenrobot.greendao.query.Query;
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.android.multmedia.player.MediaPlayConstants.AUDIO_TYPE;
+import static com.example.android.multmedia.player.MediaPlayConstants.PHOTO_TYPE;
+import static com.example.android.multmedia.player.MediaPlayConstants.VIDEO_TYPE;
+import static com.example.android.multmedia.utils.Constant.*;
 
 public class GreenDaoManager {
     private static GreenDaoManager singleInstance;
@@ -23,6 +33,8 @@ public class GreenDaoManager {
 
     private Handler mHandler;
     private HandlerThread mHT;
+
+    private BrowserMediaFile browserMediaFile = new BrowserMediaFile();
 
     private GreenDaoManager() {
         createHandlerThread();
@@ -132,15 +144,200 @@ public class GreenDaoManager {
                 .list();
         return favoriteList;
     }
-
-    public List<MediaDb> queryLastPlayed() {
-        List<MediaDb> lastPlayed = mediaDbDao.queryBuilder()
-                .orderDesc(MediaDbDao.Properties.PlayedTime)
-                .limit(50)
-                .build()
-                .list();
-        return lastPlayed;
+    public List<MediaDb> queryFavoriteByType(int mediaType) {
+        List<MediaDb> favoriteList = queryBuilder
+                .where(MediaDbDao.Properties.IsFavor.eq(true), MediaDbDao.Properties.MediaType.eq(mediaType)).list();
+        return favoriteList;
     }
+
+    public List<MediaDb> queryPopularByType(int mediaType) {
+        List<MediaDb> popularList = queryBuilder
+                .where(MediaDbDao.Properties.MediaType.eq(mediaType), MediaDbDao.Properties.PlayedCounts.ge(1)).list();
+        return popularList;
+    }
+
+    public List<MediaDb> queryLastPlayedByType(int mediaType) {
+        List<MediaDb> lastPlayedList = queryBuilder
+                .where(MediaDbDao.Properties.MediaType.eq(mediaType))
+                .orderDesc(MediaDbDao.Properties.PlayedTime)
+                .list();
+        return lastPlayedList;
+    }
+
+
+
+    public ArrayList<AudioItem> getFavoriteAudio() {
+        ArrayList<AudioItem> audioItemArrayList = new ArrayList<>();
+        ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(AUDIO_LIST);
+        List<MediaDb> mediaDbList = queryFavoriteByType(AUDIO_TYPE);
+        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
+            for(int index = 0; index < mediaDbList.size(); index ++) {
+                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
+                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+                        audioItemArrayList.add((AudioItem) baseItemArrayList.get(i));
+                        break;
+                    }else {
+                        continue;
+                    }
+                }
+            }
+        }
+        return audioItemArrayList;
+    }
+
+    public ArrayList<VideoItem> getFavoriteVideo() {
+        ArrayList<VideoItem> audioItemArrayList = new ArrayList<>();
+        ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(VIDEO_LIST);
+        List<MediaDb> mediaDbList = queryFavoriteByType(VIDEO_TYPE);
+        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
+            for(int index = 0; index < mediaDbList.size(); index ++) {
+                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
+                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+                        audioItemArrayList.add((VideoItem) baseItemArrayList.get(i));
+                        break;
+                    }else {
+                        continue;
+                    }
+                }
+            }
+        }
+        return audioItemArrayList;
+    }
+
+    public ArrayList<PhotoItem> getFavoritePhoto() {
+        ArrayList<PhotoItem> photoItemArrayList = new ArrayList<>();
+        ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(PHOTO_LIST);
+        List<MediaDb> mediaDbList = queryFavoriteByType(PHOTO_TYPE);
+        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
+            for(int index = 0; index < mediaDbList.size(); index ++) {
+                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
+                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+                        photoItemArrayList.add((PhotoItem) baseItemArrayList.get(i));
+                        break;
+                    }else {
+                        continue;
+                    }
+                }
+            }
+        }
+        return photoItemArrayList;
+    }
+
+    public ArrayList<AudioItem> getPopularAudio() {
+        ArrayList<AudioItem> audioItemArrayList = new ArrayList<>();
+        ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(AUDIO_LIST);
+        List<MediaDb> mediaDbList = queryPopularByType(AUDIO_TYPE);
+        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
+            for(int index = 0; index < mediaDbList.size(); index ++) {
+                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
+                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+                        audioItemArrayList.add((AudioItem) baseItemArrayList.get(i));
+                        break;
+                    }else {
+                        continue;
+                    }
+                }
+            }
+        }
+        return audioItemArrayList;
+    }
+
+    public ArrayList<VideoItem> getPopularVideo() {
+        ArrayList<VideoItem> audioItemArrayList = new ArrayList<>();
+        ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(VIDEO_LIST);
+        List<MediaDb> mediaDbList = queryPopularByType(VIDEO_TYPE);
+        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
+            for(int index = 0; index < mediaDbList.size(); index ++) {
+                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
+                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+                        audioItemArrayList.add((VideoItem) baseItemArrayList.get(i));
+                        break;
+                    }else {
+                        continue;
+                    }
+                }
+            }
+        }
+        return audioItemArrayList;
+    }
+
+    public ArrayList<PhotoItem> getPopularPhoto() {
+        ArrayList<PhotoItem> photoItemArrayList = new ArrayList<>();
+        ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(PHOTO_LIST);
+        List<MediaDb> mediaDbList = queryPopularByType(PHOTO_TYPE);
+        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
+            for(int index = 0; index < mediaDbList.size(); index ++) {
+                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
+                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+                        photoItemArrayList.add((PhotoItem) baseItemArrayList.get(i));
+                        break;
+                    }else {
+                        continue;
+                    }
+                }
+            }
+        }
+        return photoItemArrayList;
+    }
+
+    public ArrayList<AudioItem> getLastPlayedAudio() {
+        ArrayList<AudioItem> audioItemArrayList = new ArrayList<>();
+        ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(AUDIO_LIST);
+        List<MediaDb> mediaDbList = queryLastPlayedByType(AUDIO_TYPE);
+        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
+            for(int index = 0; index < mediaDbList.size(); index ++) {
+                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
+                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+                        audioItemArrayList.add((AudioItem) baseItemArrayList.get(i));
+                        break;
+                    }else {
+                        continue;
+                    }
+                }
+            }
+        }
+        return audioItemArrayList;
+    }
+
+    public ArrayList<VideoItem> getLastPlayedVideo() {
+        ArrayList<VideoItem> audioItemArrayList = new ArrayList<>();
+        ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(VIDEO_LIST);
+        List<MediaDb> mediaDbList = queryLastPlayedByType(VIDEO_TYPE);
+        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
+            for(int index = 0; index < mediaDbList.size(); index ++) {
+                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
+                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+                        audioItemArrayList.add((VideoItem) baseItemArrayList.get(i));
+                        break;
+                    }else {
+                        continue;
+                    }
+                }
+            }
+        }
+        return audioItemArrayList;
+    }
+
+    public ArrayList<PhotoItem> getLastPlayedPhoto() {
+        ArrayList<PhotoItem> photoItemArrayList = new ArrayList<>();
+        ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(PHOTO_LIST);
+        List<MediaDb> mediaDbList = queryLastPlayedByType(PHOTO_TYPE);
+        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
+            for(int index = 0; index < mediaDbList.size(); index ++) {
+                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
+                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+                        photoItemArrayList.add((PhotoItem) baseItemArrayList.get(i));
+                        break;
+                    }else {
+                        continue;
+                    }
+                }
+            }
+        }
+        return photoItemArrayList;
+    }
+
+
 
 
     public MediaDbDao getMediaDbDao() {

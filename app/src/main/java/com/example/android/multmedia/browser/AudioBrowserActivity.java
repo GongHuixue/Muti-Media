@@ -63,7 +63,7 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
                     mAudioItems.addAll(result.getItems());
                     mTempList.addAll(result.getItems());
                     mAudioRvAdapter.notifyDataSetChanged();
-                    bowserFile.saveMediaFile(mTempList, AUDIO_LIST);
+                    browserMediaFile.saveMediaFile(mTempList, AUDIO_LIST);
                 }
             }
         });
