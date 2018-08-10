@@ -2,17 +2,12 @@ package com.example.android.multmedia.playedlist;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.base.BaseBrowserActivity;
 
 public class PopularActivity extends BaseBrowserActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_popular);
-    }
 
     @Override
     public int getLayoutResID() {
@@ -21,6 +16,8 @@ public class PopularActivity extends BaseBrowserActivity {
 
     @Override
     public void initView() {
-
+        mVideoRv = (RecyclerView)findViewById(R.id.video_rv);
+        mPhotoRv = (RecyclerView)findViewById(R.id.photo_rv);
+        mAudioRv = (RecyclerView)findViewById(R.id.music_rv);
     }
 }

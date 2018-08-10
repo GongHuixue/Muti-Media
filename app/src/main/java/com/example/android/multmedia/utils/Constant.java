@@ -1,4 +1,4 @@
-package com.example.android.multmedia;
+package com.example.android.multmedia.utils;
 
 /**
  * Created by huixue on 2018/4/6.
@@ -19,6 +19,11 @@ public class Constant {
     public static final String LASTED_FILES = "Last Played";
     public static final String ONLINE_MEDIA = "Online Media";
     public static final String SETTINGS = "Settings";
+
+    /*save the browser list to file*/
+    public static final String AUDIO_LIST = "audio_list_file";
+    public static final String VIDEO_LIST = "video_list_file";
+    public static final String PHOTO_LIST = "photo_list_file";
 
     public static final String PREF = "com.example.android.multmedia";
 }

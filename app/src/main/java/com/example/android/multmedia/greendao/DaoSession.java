@@ -8,7 +8,7 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
-import com.example.android.multmedia.personaldb.MediaDb;
+import com.example.android.multmedia.playedlist.personaldb.MediaDb;
 
 import com.example.android.multmedia.greendao.MediaDbDao;
 

@@ -1,4 +1,4 @@
-package com.example.android.multmedia.personaldb;
+package com.example.android.multmedia.playedlist.personaldb;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;

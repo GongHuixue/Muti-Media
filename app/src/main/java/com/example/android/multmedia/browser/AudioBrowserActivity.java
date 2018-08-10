@@ -14,20 +14,21 @@ import com.example.android.multmedia.R;
 import com.example.android.multmedia.adpter.BrowserRvAdapter;
 import com.example.android.multmedia.base.BaseBrowserActivity;
 import com.example.android.multmedia.player.AudioPlayerActivity;
-import com.example.android.multmedia.player.VideoPlayerActivity;
 import com.mediaload.bean.AudioItem;
 import com.mediaload.bean.AudioResult;
+import com.mediaload.bean.BaseItem;
 import com.mediaload.callback.OnAudioLoadCallBack;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import static com.example.android.multmedia.utils.Constant.AUDIO_LIST;
 import static com.example.android.multmedia.player.MediaPlayConstants.*;
 
 public class AudioBrowserActivity extends BaseBrowserActivity {
     private final static String TAG = AudioBrowserActivity.class.getSimpleName();
     private BrowserRvAdapter<AudioItem> mAudioRvAdapter;
     private ArrayList<AudioItem> mAudioItems = new ArrayList<>();
+    private ArrayList<BaseItem> mTempList = new ArrayList<>();
     private TextView TvTitle;
     private TextView TvNum;
     private ImageButton IbReturn;
@@ -58,8 +59,11 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
                 Log.d(TAG, "Total file size = " + result.getItems().size());
                 if(result.getItems().size() > 0) {
                     mAudioItems.clear();
+                    mTempList.clear();
                     mAudioItems.addAll(result.getItems());
+                    mTempList.addAll(result.getItems());
                     mAudioRvAdapter.notifyDataSetChanged();
+                    bowserFile.saveMediaFile(mTempList, AUDIO_LIST);
                 }
             }
         });
@@ -103,5 +107,6 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
     protected void onDestroy() {
         super.onDestroy();
         mAudioItems.clear();
+        mTempList.clear();
     }
 }

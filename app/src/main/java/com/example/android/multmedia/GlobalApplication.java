@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.android.multmedia.greendao.DaoMaster;
 import com.example.android.multmedia.greendao.DaoSession;
 import com.example.android.multmedia.greendao.MediaDbDao;
-import com.example.android.multmedia.personaldb.MediaDb;
+import com.example.android.multmedia.playedlist.personaldb.MediaDb;
 
 public class GlobalApplication extends Application {
     private static Context mContext;

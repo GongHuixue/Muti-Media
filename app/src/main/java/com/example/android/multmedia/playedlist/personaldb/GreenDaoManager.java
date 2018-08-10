@@ -1,4 +1,4 @@
-package com.example.android.multmedia.personaldb;
+package com.example.android.multmedia.playedlist.personaldb;
 
 import android.os.HandlerThread;
 import android.os.Handler;
@@ -133,8 +133,8 @@ public class GreenDaoManager {
         return favoriteList;
     }
 
-    public List queryLastPlayed() {
-        List lastPlayed = mediaDbDao.queryBuilder()
+    public List<MediaDb> queryLastPlayed() {
+        List<MediaDb> lastPlayed = mediaDbDao.queryBuilder()
                 .orderDesc(MediaDbDao.Properties.PlayedTime)
                 .limit(50)
                 .build()

@@ -15,15 +15,14 @@ import com.example.android.multmedia.R;
 import com.example.android.multmedia.adpter.BrowserRvAdapter;
 import com.example.android.multmedia.base.BaseBrowserActivity;
 import com.example.android.multmedia.player.PhotoPlayerActivity;
-import com.example.android.multmedia.player.VideoPlayerActivity;
+import com.mediaload.bean.BaseItem;
 import com.mediaload.bean.PhotoItem;
 import com.mediaload.bean.PhotoResult;
 import com.mediaload.callback.OnPhotoLoadCallBack;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_AUDIO_LIST;
+import static com.example.android.multmedia.utils.Constant.PHOTO_LIST;
 import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_MEDIA_POSITION;
 import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_PHOTO_LIST;
 
@@ -31,6 +30,7 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
     private final static String TAG = PictureBrowserActivity.class.getSimpleName();
     private BrowserRvAdapter<PhotoItem> mPictureRvAdapter;
     private ArrayList<PhotoItem> mPictureItems = new ArrayList<>();
+    private ArrayList<BaseItem> mTempList = new ArrayList<>();
     private TextView TvTitle;
     private TextView TvNum;
     private ImageButton IbReturn;
@@ -61,8 +61,11 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
                 TvNum.setText("" + result.getItems().size());
                 if(result.getItems().size()> 0 ) {
                     mPictureItems.clear();
+                    mTempList.clear();
                     mPictureItems.addAll(result.getItems());
+                    mTempList.addAll(result.getItems());
                     mPictureRvAdapter.notifyDataSetChanged();
+                    bowserFile.saveMediaFile(mTempList, PHOTO_LIST);
                 }
             }
         });
@@ -107,5 +110,6 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
     protected void onDestroy() {
         super.onDestroy();
         mPictureItems.clear();
+        mTempList.clear();
     }
 }

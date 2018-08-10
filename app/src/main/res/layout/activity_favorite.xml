@@ -14,6 +14,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:padding="5dp"
+            android:gravity="center"
             android:text="@string/video"/>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/video_rv"
@@ -31,6 +33,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:padding="5dp"
+            android:gravity="center"
             android:text="@string/picture"/>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/photo_rv"
@@ -48,6 +52,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:padding="5dp"
+            android:gravity="center"
             android:text="@string/audio"/>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/music_rv"

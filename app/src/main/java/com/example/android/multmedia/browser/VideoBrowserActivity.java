@@ -1,12 +1,10 @@
 package com.example.android.multmedia.browser;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -16,12 +14,14 @@ import com.example.android.multmedia.R;
 import com.example.android.multmedia.adpter.BrowserRvAdapter;
 import com.example.android.multmedia.base.BaseBrowserActivity;
 import com.example.android.multmedia.player.VideoPlayerActivity;
+import com.mediaload.bean.BaseItem;
 import com.mediaload.bean.VideoItem;
 import com.mediaload.bean.VideoResult;
 import com.mediaload.callback.OnVideoLoadCallBack;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import static com.example.android.multmedia.utils.Constant.VIDEO_LIST;
 
 import static com.example.android.multmedia.player.MediaPlayConstants.*;
 
@@ -29,6 +29,7 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
     final static String TAG = VideoBrowserActivity.class.getSimpleName();
     private BrowserRvAdapter<VideoItem> mVideoRvAdapter;
     private ArrayList<VideoItem> mVideoItems = new ArrayList<>();
+    private ArrayList<BaseItem> mTempList = new ArrayList<>();
     private TextView TvTitle;
     private TextView TvNum;
     private ImageButton IbReturn;
@@ -58,8 +59,11 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
                 TvNum.setText("" + result.getItems().size());
                 if(result.getItems().size() > 0) {
                     mVideoItems.clear();
+                    mTempList.clear();
                     mVideoItems.addAll(result.getItems());
+                    mTempList.addAll(result.getItems());
                     mVideoRvAdapter.notifyDataSetChanged();
+                    bowserFile.saveMediaFile(mTempList, VIDEO_LIST);
                 }
             }
         });
@@ -107,5 +111,6 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
     protected void onDestroy() {
         super.onDestroy();
         mVideoItems.clear();
+        mTempList.clear();
     }
 }
