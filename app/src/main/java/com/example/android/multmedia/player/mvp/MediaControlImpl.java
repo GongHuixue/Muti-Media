@@ -57,7 +57,6 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
 
     private static GreenDaoManager daoManager = GreenDaoManager.getSingleInstance();
 
-//    private static MediaDbDao mediaDbDao = daoManager.getMediaDbDao();
     private BaseItem mediaItem;
 
     private ServiceConnection mediaServiceCon = new ServiceConnection() {
@@ -247,9 +246,11 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
 
         mediaItem = audioList.get(position);
         if(daoManager.queryByPath(audioPath)) {
+            Log.d(TAG, "setAudioPath " + audioPath + " is exist in media.db");
             daoManager.updatePlayedTimes(audioPath);
             isFavorite = daoManager.queryFavorite(audioPath);
         }else {
+            Log.d(TAG, "setAudioPath " + audioPath + " not exist in media.db and insert");
             daoManager.insertIfNotExist(mediaItem);
         }
     }
@@ -413,6 +414,8 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
 
     @Override
     public void resetMediaData() {
+        unbindMediaService();
+
         /*reset the common data*/
         isPlaying = false;
         mediaType = MediaType.NONE;
@@ -434,6 +437,6 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
             photoList.clear();
         }
 
-        unbindMediaService();
+
     }
 }

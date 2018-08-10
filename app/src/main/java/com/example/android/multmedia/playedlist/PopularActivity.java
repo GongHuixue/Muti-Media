@@ -1,6 +1,7 @@
 package com.example.android.multmedia.playedlist;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ public class PopularActivity extends BaseBrowserActivity implements INotificatio
         mVideoRv = (RecyclerView)findViewById(R.id.video_rv);
         mPhotoRv = (RecyclerView)findViewById(R.id.photo_rv);
         mAudioRv = (RecyclerView)findViewById(R.id.music_rv);
+        progressDialog = new ProgressDialog(PopularActivity.this);
 
         /*init Video Recycle View*/
         mVideoRvAdapter = new BrowserRvAdapter<VideoItem>(mVideoList, PopularActivity.this);
@@ -60,7 +62,8 @@ public class PopularActivity extends BaseBrowserActivity implements INotificatio
                 intent.putExtra(INTENT_MEDIA_POSITION, position);
                 intent.putExtra(INTENT_VIDEO_LIST, mVideoList);
 
-                startActivity(intent);            }
+                startActivity(intent);
+            }
         });
         /*long click*/
         mVideoRvAdapter.setOnItemLongClickListener(new BrowserRvAdapter.OnItemLongClickListener() {
@@ -130,7 +133,7 @@ public class PopularActivity extends BaseBrowserActivity implements INotificatio
         mAudioRv.setAdapter(mAudioRvAdapter);
 
         NotificationHandler.getInstance().registerForNotification(this);
-        showProgessLoading();
+        showProgressLoading();
         /*start load favorite media*/
         loadMediaTask.execute();
     }

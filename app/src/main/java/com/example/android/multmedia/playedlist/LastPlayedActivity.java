@@ -1,6 +1,7 @@
 package com.example.android.multmedia.playedlist;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
         mVideoRv = (RecyclerView)findViewById(R.id.video_rv);
         mPhotoRv = (RecyclerView)findViewById(R.id.photo_rv);
         mAudioRv = (RecyclerView)findViewById(R.id.music_rv);
+        progressDialog = new ProgressDialog(LastPlayedActivity.this);
 
 
         /*init Video Recycle View*/
@@ -131,7 +133,7 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
         mAudioRv.setAdapter(mAudioRvAdapter);
 
         NotificationHandler.getInstance().registerForNotification(this);
-        showProgessLoading();
+        showProgressLoading();
         /*start load favorite media*/
         loadMediaTask.execute();
     }

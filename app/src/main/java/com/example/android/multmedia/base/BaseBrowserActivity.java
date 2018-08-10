@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public abstract class BaseBrowserActivity extends FragmentActivity {
 
-    private ProgressDialog progressDialog;
+    public ProgressDialog progressDialog;
     /*mediaload instance, user for load audio/video/picture*/
     public MediaLoad mediaLoad = MediaLoad.getMediaLoad();
     public BrowserMediaFile browserMediaFile = new BrowserMediaFile();
@@ -45,10 +45,9 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResID());
         initView();
-        progressDialog = new ProgressDialog(this);
     }
 
-    public void showProgessLoading() {
+    public void showProgressLoading() {
         progressDialog.setTitle("");
         progressDialog.setMessage("File is loading, please wait ......");
         progressDialog.setCancelable(false);

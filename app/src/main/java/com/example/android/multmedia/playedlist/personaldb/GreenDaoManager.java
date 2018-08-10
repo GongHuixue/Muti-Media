@@ -101,7 +101,9 @@ public class GreenDaoManager {
     public void updateFavorite(BaseItem mediaItem, Boolean isFavor) {
         if(mediaItem != null) {
             media = getMedia(mediaItem.getPath());
-            media.setIsFavor(isFavor);
+            if(media != null) {
+                media.setIsFavor(isFavor);
+            }
         }
     }
 
