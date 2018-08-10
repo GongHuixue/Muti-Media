@@ -159,9 +159,9 @@ public class PopularActivity extends BaseBrowserActivity implements INotificatio
     private class LoadMediaTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... arg0) {
-            mVideoList = daoManager.getLastPlayedVideo();
-            mPhotoList = daoManager.getLastPlayedPhoto();
-            mAudioList = daoManager.getLastPlayedAudio();
+            mVideoList = daoManager.getPopularVideo();
+            mPhotoList = daoManager.getPopularPhoto();
+            mAudioList = daoManager.getPopularAudio();
             return null;
         }
     }
