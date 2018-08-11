@@ -6,6 +6,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.example.android.multmedia.GlobalApplication;
+import com.example.android.multmedia.greendao.DaoSession;
 import com.example.android.multmedia.greendao.MediaDbDao;
 import com.example.android.multmedia.notification.NotificationHandler;
 import com.example.android.multmedia.player.MediaPlayConstants;
@@ -29,7 +30,8 @@ public class GreenDaoManager {
     private final static String TAG = GreenDaoManager.class.getSimpleName();
     private static GreenDaoManager singleInstance;
 
-    private MediaDbDao mediaDbDao = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao();
+    private static MediaDbDao mediaDbDao = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao();
+    private static DaoSession daoSession = ((GlobalApplication)GlobalApplication.getGlobalContext()).getDaoSession();
     private MediaDb media;  //return the query result.
     private QueryBuilder<MediaDb> queryBuilder = mediaDbDao.queryBuilder();
     private Query<MediaDb> query = queryBuilder.build();
@@ -76,7 +78,14 @@ public class GreenDaoManager {
     }
 
     public void insertIfNotExist(BaseItem mediaItem) {
-        media = new MediaDb();
+        try{
+            media = queryBuilder.where(MediaDbDao.Properties.MediaPath.eq(mediaItem.getPath())).unique();
+        }catch (Exception e){
+            media = null;
+        }
+        if(media == null) {
+            media = new MediaDb();
+        }
         media.setMediaPath(mediaItem.getPath());
         media.setMediaName(mediaItem.getDisplayName());
         media.setSize(mediaItem.getSize());
@@ -85,7 +94,7 @@ public class GreenDaoManager {
         media.setMediaType(mediaItem.getViewType());
         media.setPlayedCounts(1);
         media.setPlayedTime(System.currentTimeMillis());
-        mediaDbDao.insert(media);
+        mediaDbDao.insertOrReplace(media);
     }
 
     public void delete() {
@@ -113,12 +122,10 @@ public class GreenDaoManager {
         }
     }
 
-    public MediaDb getMedia(String path) {
+    private MediaDb getMedia(String path) {
         if(path != null) {
             Log.d(TAG, "getMedia path = " + path);
-            query = queryBuilder.where(MediaDbDao.Properties.MediaPath.eq(path)).build();
-            query.setParameter(0, path);
-            media = query.unique();
+            media = queryBuilder.where(MediaDbDao.Properties.MediaPath.eq(path)).unique();
         }
         return media;
     }
@@ -126,15 +133,17 @@ public class GreenDaoManager {
     public boolean queryByPath(String path) {
         boolean fileExist = false;
         if(path != null) {
-            //MediaDb media = mediaDbDao.queryBuilder().where(MediaDbDao.Properties.MediaPath.eq(path)).unique();
-            query = queryBuilder.where(MediaDbDao.Properties.MediaPath.eq(path)).build();
-            query.setParameter(0, path);
-            media = query.unique();
+//            media = queryBuilder.where(MediaDbDao.Properties.MediaPath.eq(path)).build().unique();
+//            query = queryBuilder.where(MediaDbDao.Properties.MediaPath.eq(path)).build();
+//            media = query.unique();
+            media = queryBuilder.where(MediaDbDao.Properties.MediaPath.eq(path)).unique();
             if(media != null) {
                 fileExist = true;
             }else {
                 fileExist = false;
             }
+            daoSession.clear();
+            mediaDbDao.detachAll();
             Log.d(TAG, "queryByPath " + path + ", fileExist = " + fileExist);
         }
         return fileExist;
@@ -142,9 +151,11 @@ public class GreenDaoManager {
 
     public Boolean queryFavorite(String mediaPath) {
         boolean isFavorite = false;
-        query = queryBuilder.where(MediaDbDao.Properties.MediaPath.eq(mediaPath), MediaDbDao.Properties.IsFavor.eq(true)).build();
-        query.setParameter(0, mediaPath);
-        media = query.unique();
+        media = queryBuilder
+                .where(MediaDbDao.Properties.MediaPath.eq(mediaPath), MediaDbDao.Properties.IsFavor.eq(true))
+                .build()
+                .unique();
+
         if(media != null) {
             isFavorite = true;
         }

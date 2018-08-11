@@ -9,15 +9,17 @@ import com.example.android.multmedia.greendao.DaoSession;
 import com.example.android.multmedia.greendao.MediaDbDao;
 import com.example.android.multmedia.playedlist.personaldb.MediaDb;
 
+import org.greenrobot.greendao.query.QueryBuilder;
+
 public class GlobalApplication extends Application {
     private static Context mContext;
     private static Application application;
 
     private DaoMaster.DevOpenHelper mHelper;
     private DaoMaster mDaoMaster;
-    private DaoSession mDaoSession;
+    private static DaoSession mDaoSession;
     private SQLiteDatabase mediaDB;
-    private MediaDbDao mediaDbDao;
+    private static MediaDbDao mediaDbDao;
 
 
     @Override
@@ -34,14 +36,21 @@ public class GlobalApplication extends Application {
     }
 
     public void createDataBase() {
-        mHelper = new DaoMaster.DevOpenHelper(this, "media_db", null);
+        mHelper = new DaoMaster.DevOpenHelper(this, "media.db", null);
         mediaDB = mHelper.getWritableDatabase();
         mDaoMaster = new DaoMaster(mediaDB);
         mDaoSession = mDaoMaster.newSession();
         mediaDbDao = mDaoSession.getMediaDbDao();
+
+        QueryBuilder.LOG_SQL = true;
+        QueryBuilder.LOG_VALUES = true;
     }
 
-    public MediaDbDao getMediaDbDao() {
+    public static MediaDbDao getMediaDbDao() {
         return mediaDbDao;
+    }
+
+    public static DaoSession getDaoSession() {
+        return mDaoSession;
     }
 }

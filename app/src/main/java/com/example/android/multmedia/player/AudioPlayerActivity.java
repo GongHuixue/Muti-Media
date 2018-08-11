@@ -62,7 +62,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            Log.d(TAG, "Main Thread Handle Msg = " + msg.what + ", Msg.arg1 = " + msg.arg1);
+            //Log.d(TAG, "Main Thread Handle Msg = " + msg.what + ", Msg.arg1 = " + msg.arg1);
             switch (msg.what) {
                 case MSG_UPDATE_PROGRESS:
                     updateProgress();
@@ -76,6 +76,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                             tvMusicDuration.setText(StringUtils.formatMediaTime(currentAudio.getDuration()));
                             //获取时长,实时更新播放进度
                             sbPosition.setMax((int)currentAudio.getDuration());
+                            updateAudioInfo();
                         }
                         ibPlay.setImageResource(R.drawable.btn_pause_normal);
                         animationDrawable.start();
@@ -164,7 +165,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     }
 
     private void updateAudioInfo() {
-        Log.d(TAG, "updateAudioInfo, audio duration = " + currentAudio.getDuration());
+        Log.d(TAG, "updateAudioInfo, audio duration = " + currentAudio.getDuration() + ", audio name = " + currentAudio.getDisplayName());
         tvMusicDuration.setText(StringUtils.formatMediaTime(currentAudio.getDuration()));
         tvMusicName.setText(currentAudio.getDisplayName());
         tvMusicSinger.setText(currentAudio.getSinger());
@@ -182,7 +183,6 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     }
 
     private void updateProgress() {
-        Log.d(TAG, "Current played time = " + audioPlayer.getCurrentPosition());
         tvMusicPlayTime.setText(StringUtils.formatMediaTime(audioPlayer.getCurrentPosition()));
         sbPosition.setProgress(audioPlayer.getCurrentPosition());
         tvLcr.updateLrcView(audioPlayer.getCurrentPosition(), audioPlayer.getDuration());
@@ -241,6 +241,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                 }
                 break;
             case R.id.ib_pre:
+                Log.d(TAG,"playPreMedia");
                 mediaControl.playPreMedia();
                 break;
             case R.id.ib_playpause:
@@ -255,6 +256,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                 }
                 break;
             case R.id.ib_next:
+                Log.d(TAG,"playNextMedia");
                 mediaControl.playNextMedia();
                 break;
             case R.id.ib_favorite:

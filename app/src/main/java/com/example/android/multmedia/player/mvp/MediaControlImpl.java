@@ -292,6 +292,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
             if(audioPlayerActivity.getPlayMode() == SEQUENCE_PLAY) {
                 playNextMedia();
             }else {
+                audioPlayer.reset();
                 setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
             }
         }else if (mediaType == MediaType.PHOTO) {
@@ -304,6 +305,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     }
     @Override
     public void playPreMedia(){
+        Log.d(TAG, "playPreMedia position = " + mediaPosition);
         if(mediaType == MediaType.VIDEO) {
             if (mediaPosition == 0) {
                 Log.d(TAG, "This is the first file");
@@ -364,6 +366,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     }
     @Override
     public void playNextMedia(){
+        Log.d(TAG, "playNextMedia position = " + mediaPosition);
         if (mediaType == MediaType.VIDEO) {
             if (mediaPosition == (videoList.size() - 1)) {
                 Log.d(TAG, "This is the last file");
