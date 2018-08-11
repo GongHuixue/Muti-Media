@@ -105,6 +105,7 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
 
     @Override
     protected void onDestroy() {
+        Log.d(TAG, "onDestroy");
         super.onDestroy();
         mAudioItems.clear();
         mTempList.clear();

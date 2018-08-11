@@ -66,9 +66,14 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mVideoList.clear();
-        mPhotoList.clear();
-        mAudioList.clear();
-
+        if(mVideoList != null) {
+            mVideoList.clear();
+        }
+        if(mPhotoList != null) {
+            mPhotoList.clear();
+        }
+        if(mAudioList != null) {
+            mAudioList.clear();
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.example.android.multmedia.playedlist.personaldb;
 import android.os.HandlerThread;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.example.android.multmedia.GlobalApplication;
 import com.example.android.multmedia.greendao.MediaDbDao;
@@ -25,6 +26,7 @@ import static com.example.android.multmedia.player.MediaPlayConstants.VIDEO_TYPE
 import static com.example.android.multmedia.utils.Constant.*;
 
 public class GreenDaoManager {
+    private final static String TAG = GreenDaoManager.class.getSimpleName();
     private static GreenDaoManager singleInstance;
 
     private MediaDbDao mediaDbDao = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao();
@@ -95,6 +97,7 @@ public class GreenDaoManager {
         if(media != null) {
             media.setPlayedTime(System.currentTimeMillis());
             media.setPlayedCounts(media.getPlayedCounts() + 1);
+            mediaDbDao.update(media);
         }
     }
 
@@ -103,12 +106,16 @@ public class GreenDaoManager {
             media = getMedia(mediaItem.getPath());
             if(media != null) {
                 media.setIsFavor(isFavor);
+                mediaDbDao.update(media);
+            }else {
+                Log.d(TAG, "Current file not exist in database");
             }
         }
     }
 
     public MediaDb getMedia(String path) {
         if(path != null) {
+            Log.d(TAG, "getMedia path = " + path);
             query = queryBuilder.where(MediaDbDao.Properties.MediaPath.eq(path)).build();
             query.setParameter(0, path);
             media = query.unique();
@@ -128,6 +135,7 @@ public class GreenDaoManager {
             }else {
                 fileExist = false;
             }
+            Log.d(TAG, "queryByPath " + path + ", fileExist = " + fileExist);
         }
         return fileExist;
     }
@@ -140,6 +148,7 @@ public class GreenDaoManager {
         if(media != null) {
             isFavorite = true;
         }
+        Log.d(TAG, "queryFavorite " + mediaPath + ", isFavorite = " + isFavorite);
         return isFavorite;
     }
     public List<MediaDb> queryFavoriteByType(int mediaType) {

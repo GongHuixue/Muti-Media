@@ -317,7 +317,6 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
                 Log.d(TAG, "This is the first file");
             }else {
                 mediaPosition = mediaPosition - 1;
-                audioPlayer.stop();
                 audioPlayer.reset();
                 setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
             }
@@ -414,13 +413,8 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
 
     @Override
     public void resetMediaData() {
+        Log.d(TAG, "resetMediaData mediaType = " + mediaType);
         unbindMediaService();
-
-        /*reset the common data*/
-        isPlaying = false;
-        mediaType = MediaType.NONE;
-        mediaPosition = 0;
-        mContext = null;
 
         if(mediaType == MediaType.VIDEO) {
             videoPlayerActivity = null;
@@ -430,13 +424,20 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         }else if(mediaType == MediaType.AUDIO) {
             audioPlayerActivity = null;
             audioList.clear();
+            audioPlayer.stop();
+            audioPlayer.reset();
             audioPlayer.release();
             audioPlayer = null;
+            Log.d(TAG, "release audio player ");
         }else if(mediaType == MediaType.PHOTO) {
             photoPlayerActivity = null;
             photoList.clear();
         }
 
-
+        /*reset the common data*/
+        isPlaying = false;
+        mediaType = MediaType.NONE;
+        mediaPosition = 0;
+        mContext = null;
     }
 }

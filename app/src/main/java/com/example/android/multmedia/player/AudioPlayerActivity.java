@@ -300,6 +300,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     @Override
     protected void onDestroy() {
+        Log.d(TAG, "onDestroy");
         handler = null;
         audioPlayer = null;
         mediaControl.resetMediaData();
