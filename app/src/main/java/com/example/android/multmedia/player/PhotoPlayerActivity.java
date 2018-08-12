@@ -93,18 +93,26 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         photoPlayer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.d(TAG, "onPageScrolled " + position);
+//                Log.d(TAG, "onPageScrolled " + position);
             }
 
             @Override
             public void onPageSelected(int position) {
                 currentPosition = position;
+                mediaControl.setPhotoPath(currentPosition);
+                /*update favorite icon*/
+                if(mediaControl.isFavorite()) {
+                    ibFavorite.setImageResource(R.drawable.btn_favorite_pressed);
+                }else {
+                    ibFavorite.setImageResource(R.drawable.btn_favorite_normal);
+                }
+
                 Log.d(TAG, "onPageSelected = " + position);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                Log.d(TAG, "onPageScrollStateChanged " + state);
+//                Log.d(TAG, "onPageScrollStateChanged " + state);
             }
         });
     }
@@ -113,7 +121,7 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            Log.d(TAG, "Main Thread Handle Msg = " + msg.what + ", Msg.arg1 = " + msg.arg1);
+//            Log.d(TAG, "Main Thread Handle Msg = " + msg.what + ", Msg.arg1 = " + msg.arg1);
             switch (msg.what) {
                 case MSG_SHOW_HIDE_BAR:
                     if(isBottomBarShow == true) {
@@ -143,6 +151,13 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     public Handler getMainThreadHandler() {
         return handler;
     }
+
+    private Runnable photoRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mediaControl.playMedia();
+        }
+    };
 
     @Override
     public MediaControlImpl attachMediaView() {
@@ -175,8 +190,8 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            Log.d(TAG, "instantiateItem");
             PhotoView photoView = new PhotoView(context);
+            handler.removeMessages(MSG_SHOW_HIDE_BAR);
             Glide.with(context)
                     .load("file://" + photoList.get(position).getPath())
                     .into(photoView);
@@ -213,21 +228,24 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
             case R.id.ib_playpause:
                 if (mediaControl.isPlaying()) {
                     handler.removeMessages(PLAY);
-                    ibPlay.setImageResource(R.drawable.btn_pause_normal);
-                    mediaControl.pauseMedia();
-                } else {
                     ibPlay.setImageResource(R.drawable.btn_play_normal);
-                    mediaControl.playMedia();
+                    mediaControl.pauseMedia();
+                    handler.removeCallbacksAndMessages(null);
+                } else {
+                    ibPlay.setImageResource(R.drawable.btn_pause_normal);
+                    handler.postDelayed(photoRunnable, ONE_SECOND_TIMER);
+                    break;
                 }
                 handler.sendEmptyMessage(MSG_UPDATE_CONTROL_BAR);
                 break;
             case R.id.ib_favorite:
                 if (isFavorite == false) {
-                    ibFavorite.setImageResource(R.drawable.btn_favorite_normal);
-                } else {
                     ibFavorite.setImageResource(R.drawable.btn_favorite_pressed);
+                } else {
+                    ibFavorite.setImageResource(R.drawable.btn_favorite_normal);
                 }
                 isFavorite = !isFavorite;
+                mediaControl.setMediaFavorite(isFavorite);
                 break;
         }
     }
@@ -280,8 +298,10 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     @Override
     protected void onDestroy() {
-        handler = null;
+
         mediaControl.resetMediaData();
+        handler.removeCallbacksAndMessages(null);
+        handler = null;
         super.onDestroy();
     }
 }

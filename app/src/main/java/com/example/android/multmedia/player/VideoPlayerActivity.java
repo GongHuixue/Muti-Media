@@ -77,7 +77,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            Log.d(TAG, "Main Thread Handle Msg = " + msg.what + ", Msg.arg1 = " + msg.arg1);
+//            Log.d(TAG, "Main Thread Handle Msg = " + msg.what + ", Msg.arg1 = " + msg.arg1);
             switch (msg.what) {
                 case MSG_UPDATE_TIME:
                     updateTime();
@@ -357,6 +357,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                     ibFavorite.setImageResource(R.drawable.btn_favorite_pressed);
                 }
                 isFavorite = !isFavorite;
+                mediaControl.setMediaFavorite(isFavorite);
                 break;
         }
     }
@@ -435,11 +436,11 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     @Override
     protected void onStop() {
         super.onStop();
-        handler.removeCallbacksAndMessages(null);
     }
 
     @Override
     protected void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
         handler = null;
         mediaControl.resetMediaData();
         super.onDestroy();

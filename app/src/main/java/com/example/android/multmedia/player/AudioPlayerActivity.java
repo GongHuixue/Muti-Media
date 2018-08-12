@@ -68,15 +68,12 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                     updateProgress();
                     break;
                 case MSG_UPDATE_CONTROL_BAR:
-                    updateAudioInfo();
-                    updateProgress();
                     if(msg.arg1 == PLAY_STATE_PLAYING) {
                         if(msg.obj != null) {
                             currentAudio = (AudioItem) msg.obj;
                             tvMusicDuration.setText(StringUtils.formatMediaTime(currentAudio.getDuration()));
                             //获取时长,实时更新播放进度
                             sbPosition.setMax((int)currentAudio.getDuration());
-                            updateAudioInfo();
                         }
                         ibPlay.setImageResource(R.drawable.btn_pause_normal);
                         animationDrawable.start();
@@ -98,6 +95,9 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                     }else {
                         ibFavorite.setImageResource(R.drawable.btn_favorite_normal);
                     }
+
+                    updateAudioInfo();
+                    updateProgress();
                     break;
             }
         }
@@ -297,12 +297,12 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     @Override
     protected void onStop() {
         super.onStop();
-        handler.removeCallbacksAndMessages(null);
     }
 
     @Override
     protected void onDestroy() {
         Log.d(TAG, "onDestroy");
+        handler.removeCallbacksAndMessages(null);
         handler = null;
         audioPlayer = null;
         mediaControl.resetMediaData();
