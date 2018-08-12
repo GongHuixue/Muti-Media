@@ -370,6 +370,9 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         if (mediaType == MediaType.VIDEO) {
             if (mediaPosition == (videoList.size() - 1)) {
                 Log.d(TAG, "This is the last file");
+                mediaPosition = 0;
+                videoPlayer.stopPlayback();
+                setVideoPath(videoList.get(mediaPosition).getPath(), mediaPosition);
             } else {
                 mediaPosition = mediaPosition + 1;
                 videoPlayer.stopPlayback();
@@ -378,6 +381,9 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         }else if (mediaType == MediaType.AUDIO) {
             if(mediaPosition == (audioList.size() - 1)) {
                 Log.d(TAG, "This is the last file");
+                mediaPosition = 0;
+                audioPlayer.reset();
+                setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
             }else {
                 mediaPosition = mediaPosition + 1;
                 audioPlayer.reset();

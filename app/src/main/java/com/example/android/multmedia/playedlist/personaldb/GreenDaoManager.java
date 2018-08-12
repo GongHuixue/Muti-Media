@@ -29,12 +29,7 @@ import static com.example.android.multmedia.utils.Constant.*;
 public class GreenDaoManager {
     private final static String TAG = GreenDaoManager.class.getSimpleName();
     private static GreenDaoManager singleInstance;
-
-    private static MediaDbDao mediaDbDao = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao();
-    private static DaoSession daoSession = ((GlobalApplication)GlobalApplication.getGlobalContext()).getDaoSession();
     private MediaDb media;  //return the query result.
-    private QueryBuilder<MediaDb> queryBuilder = mediaDbDao.queryBuilder();
-    private Query<MediaDb> query = queryBuilder.build();
 
     private Handler mHandler;
     private HandlerThread mHT;
@@ -78,14 +73,8 @@ public class GreenDaoManager {
     }
 
     public void insertIfNotExist(BaseItem mediaItem) {
-        try{
-            media = queryBuilder.where(MediaDbDao.Properties.MediaPath.eq(mediaItem.getPath())).unique();
-        }catch (Exception e){
-            media = null;
-        }
-        if(media == null) {
-            media = new MediaDb();
-        }
+        media = new MediaDb();
+
         media.setMediaPath(mediaItem.getPath());
         media.setMediaName(mediaItem.getDisplayName());
         media.setSize(mediaItem.getSize());
@@ -94,7 +83,7 @@ public class GreenDaoManager {
         media.setMediaType(mediaItem.getViewType());
         media.setPlayedCounts(1);
         media.setPlayedTime(System.currentTimeMillis());
-        mediaDbDao.insertOrReplace(media);
+        ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao().insertOrReplace(media);
     }
 
     public void delete() {
@@ -106,7 +95,7 @@ public class GreenDaoManager {
         if(media != null) {
             media.setPlayedTime(System.currentTimeMillis());
             media.setPlayedCounts(media.getPlayedCounts() + 1);
-            mediaDbDao.update(media);
+            ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao().update(media);
         }
     }
 
@@ -115,7 +104,7 @@ public class GreenDaoManager {
             media = getMedia(mediaItem.getPath());
             if(media != null) {
                 media.setIsFavor(isFavor);
-                mediaDbDao.update(media);
+                ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao().update(media);
             }else {
                 Log.d(TAG, "Current file not exist in database");
             }
@@ -125,7 +114,14 @@ public class GreenDaoManager {
     private MediaDb getMedia(String path) {
         if(path != null) {
             Log.d(TAG, "getMedia path = " + path);
-            media = queryBuilder.where(MediaDbDao.Properties.MediaPath.eq(path)).unique();
+            media = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao()
+                    .queryBuilder()
+                    .where(MediaDbDao.Properties.MediaPath.eq(path))
+                    .unique();
+            /*clear greendao cache*/
+            ((GlobalApplication)GlobalApplication.getGlobalContext()).getDaoSession().clear();
+
+            ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao().detachAll();
         }
         return media;
     }
@@ -133,17 +129,20 @@ public class GreenDaoManager {
     public boolean queryByPath(String path) {
         boolean fileExist = false;
         if(path != null) {
-//            media = queryBuilder.where(MediaDbDao.Properties.MediaPath.eq(path)).build().unique();
-//            query = queryBuilder.where(MediaDbDao.Properties.MediaPath.eq(path)).build();
-//            media = query.unique();
-            media = queryBuilder.where(MediaDbDao.Properties.MediaPath.eq(path)).unique();
+            media = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao()
+                    .queryBuilder()
+                    .where(MediaDbDao.Properties.MediaPath.eq(path))
+                    .unique();
+
             if(media != null) {
                 fileExist = true;
             }else {
                 fileExist = false;
             }
-            daoSession.clear();
-            mediaDbDao.detachAll();
+            /*clear greendao cache*/
+            ((GlobalApplication)GlobalApplication.getGlobalContext()).getDaoSession().clear();
+
+            ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao().detachAll();
             Log.d(TAG, "queryByPath " + path + ", fileExist = " + fileExist);
         }
         return fileExist;
@@ -151,7 +150,8 @@ public class GreenDaoManager {
 
     public Boolean queryFavorite(String mediaPath) {
         boolean isFavorite = false;
-        media = queryBuilder
+        media = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao()
+                .queryBuilder()
                 .where(MediaDbDao.Properties.MediaPath.eq(mediaPath), MediaDbDao.Properties.IsFavor.eq(true))
                 .build()
                 .unique();
@@ -163,19 +163,22 @@ public class GreenDaoManager {
         return isFavorite;
     }
     public List<MediaDb> queryFavoriteByType(int mediaType) {
-        List<MediaDb> favoriteList = queryBuilder
+        List<MediaDb> favoriteList = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao()
+                .queryBuilder()
                 .where(MediaDbDao.Properties.IsFavor.eq(true), MediaDbDao.Properties.MediaType.eq(mediaType)).list();
         return favoriteList;
     }
 
     public List<MediaDb> queryPopularByType(int mediaType) {
-        List<MediaDb> popularList = queryBuilder
+        List<MediaDb> popularList = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao()
+                .queryBuilder()
                 .where(MediaDbDao.Properties.MediaType.eq(mediaType), MediaDbDao.Properties.PlayedCounts.ge(1)).list();
         return popularList;
     }
 
     public List<MediaDb> queryLastPlayedByType(int mediaType) {
-        List<MediaDb> lastPlayedList = queryBuilder
+        List<MediaDb> lastPlayedList = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao()
+                .queryBuilder()
                 .where(MediaDbDao.Properties.MediaType.eq(mediaType))
                 .orderDesc(MediaDbDao.Properties.PlayedTime)
                 .list();
