@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.multmedia.R;
@@ -38,6 +39,8 @@ public class PopularActivity extends BaseBrowserActivity implements INotificatio
     private final static String TAG = PopularActivity.class.getSimpleName();
     private GreenDaoManager daoManager = GreenDaoManager.getSingleInstance();
     private LoadMediaTask loadMediaTask = new LoadMediaTask();
+    private TextView mTvVideo, mTvPhoto, mTvAudio;
+
     @Override
     public int getLayoutResID() {
         return R.layout.activity_popular;
@@ -45,9 +48,16 @@ public class PopularActivity extends BaseBrowserActivity implements INotificatio
 
     @Override
     public void initView() {
-        mVideoRv = (RecyclerView)findViewById(R.id.video_rv);
-        mPhotoRv = (RecyclerView)findViewById(R.id.photo_rv);
-        mAudioRv = (RecyclerView)findViewById(R.id.music_rv);
+        mTvVideo = (TextView)findViewById(R.id.media_tv_submenu);
+        mVideoRv = (RecyclerView)findViewById(R.id.media_rv);
+        mTvPhoto = (TextView)findViewById(R.id.media_tv_submenu);
+        mPhotoRv = (RecyclerView)findViewById(R.id.media_rv);
+        mTvAudio = (TextView)findViewById(R.id.media_tv_submenu);
+        mAudioRv = (RecyclerView)findViewById(R.id.media_rv);
+
+        mTvVideo.setText("Most Popular Video Files");
+        mTvPhoto.setText("Most Popular Photo Files");
+        mTvAudio.setText("Most Popular Audio Files");
         progressDialog = new ProgressDialog(PopularActivity.this);
 
         /*init Video Recycle View*/

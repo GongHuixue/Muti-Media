@@ -7,61 +7,79 @@
     android:orientation="vertical"
     tools:context=".playedlist.FavoriteActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:padding="5dp"
-            android:gravity="center"
-            android:text="@string/video"/>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/video_rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="5dp">
-        </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:padding="5dp"
-            android:gravity="center"
-            android:text="@string/picture"/>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/photo_rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="5dp">
-        </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
+    <include
+        android:id="@+id/top_action_bar"
+        layout="@layout/top_action_bar"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:padding="5dp"
-            android:gravity="center"
-            android:text="@string/audio"/>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/music_rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="5dp">
-        </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
+    <include
+        android:id="@+id/played_video_rv"
+        layout="@layout/played_media_rv"/>
+
+    <include
+        android:id="@+id/played_photo_rv"
+        layout="@layout/played_media_rv"/>
+
+    <include
+        android:id="@+id/played_audio_rv"
+        layout="@layout/played_media_rv"/>
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical">-->
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:padding="5dp"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/video"/>-->
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/video_rv"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical"-->
+            <!--android:padding="5dp">-->
+        <!--</android.support.v7.widget.RecyclerView>-->
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:gravity="center"-->
+            <!--android:padding="5dp"-->
+            <!--android:text="@string/picture" />-->
+
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/photo_rv"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical"-->
+            <!--android:padding="5dp"></android.support.v7.widget.RecyclerView>-->
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical">-->
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:padding="5dp"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/audio"/>-->
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/music_rv"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical"-->
+            <!--android:padding="5dp">-->
+        <!--</android.support.v7.widget.RecyclerView>-->
+    <!--</LinearLayout>-->
 
 </LinearLayout>

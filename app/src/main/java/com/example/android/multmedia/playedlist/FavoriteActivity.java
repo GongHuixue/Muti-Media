@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.multmedia.R;
@@ -46,11 +47,14 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
     private final static String TAG = FavoriteActivity.class.getSimpleName();
     private GreenDaoManager daoManager = GreenDaoManager.getSingleInstance();
     private LoadMediaTask loadMediaTask = new LoadMediaTask();
+    private TextView mTvVideo, mTvPhoto, mTvAudio;
+
     private Handler mHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             hideProgressLoading();
+            Log.d(TAG, "msg id = " + msg.what);
             switch (msg.what) {
                 case UPDATE_VIDEO_DATA:
                     mVideoRvAdapter.notifyDataSetChanged();
@@ -72,9 +76,16 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
 
     @Override
     public void initView() {
-        mVideoRv = (RecyclerView)findViewById(R.id.video_rv);
-        mPhotoRv = (RecyclerView)findViewById(R.id.photo_rv);
-        mAudioRv = (RecyclerView)findViewById(R.id.music_rv);
+        mTvVideo = (TextView)findViewById(R.id.media_tv_submenu);
+        mVideoRv = (RecyclerView)findViewById(R.id.media_rv);
+        mTvPhoto = (TextView)findViewById(R.id.media_tv_submenu);
+        mPhotoRv = (RecyclerView)findViewById(R.id.media_rv);
+        mTvAudio = (TextView)findViewById(R.id.media_tv_submenu);
+        mAudioRv = (RecyclerView)findViewById(R.id.media_rv);
+
+        mTvVideo.setText("Most Favorite Video Files");
+        mTvPhoto.setText("Most Favorite Photo Files");
+        mTvAudio.setText("Most Favorite Audio Files");
         progressDialog = new ProgressDialog(FavoriteActivity.this);
 
         /*init Video Recycle View*/
@@ -116,7 +127,8 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
                 intent.putExtra(INTENT_MEDIA_POSITION, position);
                 intent.putExtra(INTENT_PHOTO_LIST, mPhotoList);
 
-                startActivity(intent);            }
+                startActivity(intent);
+            }
         });
         /*long click*/
         mPhotoRvAdapter.setOnItemLongClickListener(new BrowserRvAdapter.OnItemLongClickListener() {
@@ -143,7 +155,8 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
                 intent.putExtra(INTENT_MEDIA_POSITION, position);
                 intent.putExtra(INTENT_AUDIO_LIST, mAudioList);
 
-                startActivity(intent);            }
+                startActivity(intent);
+            }
         });
         /*long click*/
         mAudioRvAdapter.setOnItemLongClickListener(new BrowserRvAdapter.OnItemLongClickListener() {
