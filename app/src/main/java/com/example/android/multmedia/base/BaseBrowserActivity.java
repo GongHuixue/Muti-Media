@@ -66,6 +66,7 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        progressDialog.cancel();
         if(mVideoList != null) {
             mVideoList.clear();
         }

@@ -5,6 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,6 +35,9 @@ import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_AUD
 import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_MEDIA_POSITION;
 import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_PHOTO_LIST;
 import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_VIDEO_LIST;
+import static com.example.android.multmedia.player.MediaPlayConstants.UPDATE_AUDIO_DATA;
+import static com.example.android.multmedia.player.MediaPlayConstants.UPDATE_PHOTO_DATA;
+import static com.example.android.multmedia.player.MediaPlayConstants.UPDATE_VIDEO_DATA;
 import static com.example.android.multmedia.utils.Constant.AUDIO_LOADED_COMPLETED_ID;
 import static com.example.android.multmedia.utils.Constant.PHOTO_LOADED_COMPLETED_ID;
 import static com.example.android.multmedia.utils.Constant.VIDEO_LOADED_COMPLETED_ID;
@@ -40,6 +46,24 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
     private final static String TAG = FavoriteActivity.class.getSimpleName();
     private GreenDaoManager daoManager = GreenDaoManager.getSingleInstance();
     private LoadMediaTask loadMediaTask = new LoadMediaTask();
+    private Handler mHandler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            hideProgressLoading();
+            switch (msg.what) {
+                case UPDATE_VIDEO_DATA:
+                    mVideoRvAdapter.notifyDataSetChanged();
+                    break;
+                case UPDATE_PHOTO_DATA:
+                    mPhotoRvAdapter.notifyDataSetChanged();
+                    break;
+                case UPDATE_AUDIO_DATA:
+                    mAudioRvAdapter.notifyDataSetChanged();
+                    break;
+            }
+        }
+    };
 
     @Override
     public int getLayoutResID() {
@@ -145,21 +169,19 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
         Log.d(TAG, "update: action " + ((NotificationInfoObject) data).actionID + ", message " + ((NotificationInfoObject) data).message);
         final int l_eventID = ((NotificationInfoObject) data).actionID;
 
-        hideProgressLoading();
-
         switch (l_eventID) {
             case VIDEO_LOADED_COMPLETED_ID:
-                mVideoRvAdapter.notifyDataSetChanged();
+                mHandler.sendEmptyMessage(UPDATE_VIDEO_DATA);
                 break;
             case AUDIO_LOADED_COMPLETED_ID:
-                mPhotoRvAdapter.notifyDataSetChanged();
-                mAudioRvAdapter.notifyDataSetChanged();
+                mHandler.sendEmptyMessage(UPDATE_AUDIO_DATA);
                 break;
             case PHOTO_LOADED_COMPLETED_ID:
-                mPhotoRvAdapter.notifyDataSetChanged();
+                mHandler.sendEmptyMessage(UPDATE_PHOTO_DATA);
                 break;
         }
     }
+
 
     private class LoadMediaTask extends AsyncTask<Void, Void, Void> {
         @Override
@@ -167,6 +189,10 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
             mVideoList = daoManager.getFavoriteVideo();
             mPhotoList = daoManager.getFavoritePhoto();
             mAudioList = daoManager.getFavoriteAudio();
+
+            Log.d(TAG, "video_size = " + mVideoList.size() +
+                    ", photo_size = " + mPhotoList.size() +
+                    ", audio_size = " + mAudioList.size());
             return null;
         }
     }

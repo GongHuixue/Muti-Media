@@ -155,8 +155,12 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        Log.d(TAG, "getItemCount = " + mMediaList.size());
-        return  mMediaList.size();
+        if(mMediaList != null) {
+            Log.d(TAG, "getItemCount = " + mMediaList.size());
+            return mMediaList.size();
+        }else {
+            return 0;
+        }
     }
 
     @Override
