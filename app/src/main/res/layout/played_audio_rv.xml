@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/media_tv_submenu"
+        android:id="@+id/tv_audio_submenu"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:gravity="center"
@@ -13,7 +13,7 @@
         android:text="media" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/media_rv"
+        android:id="@+id/audio_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

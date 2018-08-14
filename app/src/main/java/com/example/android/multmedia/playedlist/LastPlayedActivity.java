@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +42,7 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
     private GreenDaoManager daoManager = GreenDaoManager.getSingleInstance();
     private LoadMediaTask loadMediaTask = new LoadMediaTask();
     private TextView mTvVideo, mTvPhoto, mTvAudio;
+    private ImageButton IbReturn;
     @Override
     public int getLayoutResID() {
         return R.layout.activity_last_played;
@@ -47,12 +50,20 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
 
     @Override
     public void initView() {
-        mTvVideo = (TextView)findViewById(R.id.media_tv_submenu);
-        mVideoRv = (RecyclerView)findViewById(R.id.media_rv);
-        mTvPhoto = (TextView)findViewById(R.id.media_tv_submenu);
-        mPhotoRv = (RecyclerView)findViewById(R.id.media_rv);
-        mTvAudio = (TextView)findViewById(R.id.media_tv_submenu);
-        mAudioRv = (RecyclerView)findViewById(R.id.media_rv);
+        IbReturn = (ImageButton)findViewById(R.id.ib_back);
+        IbReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        mTvVideo = (TextView)findViewById(R.id.tv_video_submenu);
+        mVideoRv = (RecyclerView)findViewById(R.id.played_video_rv);
+        mTvPhoto = (TextView)findViewById(R.id.tv_photo_submenu);
+        mPhotoRv = (RecyclerView)findViewById(R.id.played_photo_rv);
+        mTvAudio = (TextView)findViewById(R.id.tv_audio_submenu);
+        mAudioRv = (RecyclerView)findViewById(R.id.played_audio_rv);
 
         mTvVideo.setText("Last Played Video Files");
         mTvPhoto.setText("Last Played Photo Files");
@@ -62,7 +73,7 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
 
         /*init Video Recycle View*/
         mVideoRvAdapter = new BrowserRvAdapter<VideoItem>(mVideoList, LastPlayedActivity.this);
-        mVideoRv.setLayoutManager(new LinearLayoutManager(LastPlayedActivity.this));
+        mVideoRv.setLayoutManager(new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL));
 
         /*short click*/
         mVideoRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
@@ -84,12 +95,14 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
         });
 
         horizontalDivider = new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL);
+        verticalDivider = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
         mVideoRv.addItemDecoration(horizontalDivider);
+        mVideoRv.addItemDecoration(verticalDivider);
         mVideoRv.setAdapter(mVideoRvAdapter);
 
         /*init Photo Recycle View*/
         mPhotoRvAdapter = new BrowserRvAdapter<PhotoItem>(mPhotoList, LastPlayedActivity.this);
-        mPhotoRv.setLayoutManager(new LinearLayoutManager(LastPlayedActivity.this));
+        mPhotoRv.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
 
         /*short click*/
         mPhotoRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
@@ -111,7 +124,9 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
         });
 
         horizontalDivider = new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL);
+        verticalDivider = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
         mPhotoRv.addItemDecoration(horizontalDivider);
+        mPhotoRv.addItemDecoration(verticalDivider);
         mPhotoRv.setAdapter(mPhotoRvAdapter);
 
         /*init Audio Recycle View*/
@@ -160,7 +175,6 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
                 mVideoRvAdapter.notifyDataSetChanged();
                 break;
             case AUDIO_LOADED_COMPLETED_ID:
-                mPhotoRvAdapter.notifyDataSetChanged();
                 mAudioRvAdapter.notifyDataSetChanged();
                 break;
             case PHOTO_LOADED_COMPLETED_ID:
@@ -172,9 +186,13 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
     private class LoadMediaTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... arg0) {
-            mVideoList = daoManager.getLastPlayedVideo();
-            mPhotoList = daoManager.getLastPlayedPhoto();
-            mAudioList = daoManager.getLastPlayedAudio();
+            mVideoList.addAll(daoManager.getFavoriteVideo());
+            mPhotoList.addAll(daoManager.getFavoritePhoto());
+            mAudioList.addAll(daoManager.getFavoriteAudio());
+
+            Log.d(TAG, "video_size = " + mVideoList.size() +
+                    ", photo_size = " + mPhotoList.size() +
+                    ", audio_size = " + mAudioList.size());
             return null;
         }
     }

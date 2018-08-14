@@ -11,8 +11,11 @@ import android.os.Message;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +51,7 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
     private GreenDaoManager daoManager = GreenDaoManager.getSingleInstance();
     private LoadMediaTask loadMediaTask = new LoadMediaTask();
     private TextView mTvVideo, mTvPhoto, mTvAudio;
+    private ImageButton IbReturn;
 
     private Handler mHandler = new Handler(Looper.getMainLooper()){
         @Override
@@ -76,12 +80,20 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
 
     @Override
     public void initView() {
-        mTvVideo = (TextView)findViewById(R.id.media_tv_submenu);
-        mVideoRv = (RecyclerView)findViewById(R.id.media_rv);
-        mTvPhoto = (TextView)findViewById(R.id.media_tv_submenu);
-        mPhotoRv = (RecyclerView)findViewById(R.id.media_rv);
-        mTvAudio = (TextView)findViewById(R.id.media_tv_submenu);
-        mAudioRv = (RecyclerView)findViewById(R.id.media_rv);
+        IbReturn = (ImageButton)findViewById(R.id.ib_back);
+        IbReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        mTvVideo = (TextView)findViewById(R.id.tv_video_submenu);
+        mVideoRv = (RecyclerView)findViewById(R.id.played_video_rv);
+        mTvPhoto = (TextView)findViewById(R.id.tv_photo_submenu);
+        mPhotoRv = (RecyclerView)findViewById(R.id.played_photo_rv);
+        mTvAudio = (TextView)findViewById(R.id.tv_audio_submenu);
+        mAudioRv = (RecyclerView)findViewById(R.id.played_audio_rv);
 
         mTvVideo.setText("Most Favorite Video Files");
         mTvPhoto.setText("Most Favorite Photo Files");
@@ -90,7 +102,7 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
 
         /*init Video Recycle View*/
         mVideoRvAdapter = new BrowserRvAdapter<VideoItem>(mVideoList, FavoriteActivity.this);
-        mVideoRv.setLayoutManager(new LinearLayoutManager(FavoriteActivity.this));
+        mVideoRv.setLayoutManager(new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL));
 
         /*short click*/
         mVideoRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
@@ -112,12 +124,14 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
         });
 
         horizontalDivider = new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL);
+        verticalDivider = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
         mVideoRv.addItemDecoration(horizontalDivider);
+        mVideoRv.addItemDecoration(verticalDivider);
         mVideoRv.setAdapter(mVideoRvAdapter);
 
         /*init Photo Recycle View*/
         mPhotoRvAdapter = new BrowserRvAdapter<PhotoItem>(mPhotoList, FavoriteActivity.this);
-        mPhotoRv.setLayoutManager(new LinearLayoutManager(FavoriteActivity.this));
+        mPhotoRv.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
 
         /*short click*/
         mPhotoRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
@@ -140,7 +154,9 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
         });
 
         horizontalDivider = new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL);
+        verticalDivider = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
         mPhotoRv.addItemDecoration(horizontalDivider);
+        mPhotoRv.addItemDecoration(verticalDivider);
         mPhotoRv.setAdapter(mPhotoRvAdapter);
 
         /*init Audio Recycle View*/
@@ -199,9 +215,9 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
     private class LoadMediaTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... arg0) {
-            mVideoList = daoManager.getFavoriteVideo();
-            mPhotoList = daoManager.getFavoritePhoto();
-            mAudioList = daoManager.getFavoriteAudio();
+            mVideoList.addAll(daoManager.getFavoriteVideo());
+            mPhotoList.addAll(daoManager.getFavoritePhoto());
+            mAudioList.addAll(daoManager.getFavoriteAudio());
 
             Log.d(TAG, "video_size = " + mVideoList.size() +
                     ", photo_size = " + mPhotoList.size() +

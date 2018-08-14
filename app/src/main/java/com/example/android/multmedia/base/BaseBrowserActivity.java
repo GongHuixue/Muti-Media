@@ -30,11 +30,11 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
     public RecyclerView mVideoRv, mAudioRv, mPhotoRv;
 
     public BrowserRvAdapter<VideoItem> mVideoRvAdapter;
-    public ArrayList<VideoItem> mVideoList;
+    public ArrayList<VideoItem> mVideoList = new ArrayList<>();
     public BrowserRvAdapter<PhotoItem> mPhotoRvAdapter;
-    public ArrayList<PhotoItem> mPhotoList;
+    public ArrayList<PhotoItem> mPhotoList = new ArrayList<>();
     public BrowserRvAdapter<AudioItem> mAudioRvAdapter;
-    public ArrayList<AudioItem> mAudioList;
+    public ArrayList<AudioItem> mAudioList = new ArrayList<>();
 
     /*recycler view divider*/
     public DividerItemDecoration verticalDivider;
