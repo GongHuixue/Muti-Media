@@ -12,15 +12,12 @@
         layout="@layout/top_action_bar"/>
 
     <include
-        android:id="@+id/play_video_rv"
         layout="@layout/played_video_rv"/>
 
     <include
-        android:id="@+id/play_photo_rv"
         layout="@layout/played_photo_rv"/>
 
     <include
-        android:id="@+id/play_audio_rv"
         layout="@layout/played_audio_rv"/>
 
 </LinearLayout>

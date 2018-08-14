@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -52,6 +53,8 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
     private LoadMediaTask loadMediaTask = new LoadMediaTask();
     private TextView mTvVideo, mTvPhoto, mTvAudio;
     private ImageButton IbReturn;
+    private LinearLayout linearLayout;
+    private LayoutInflater inflater;
 
     private Handler mHandler = new Handler(Looper.getMainLooper()){
         @Override
@@ -80,6 +83,8 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
 
     @Override
     public void initView() {
+        inflater = LayoutInflater.from(FavoriteActivity.this);
+
         IbReturn = (ImageButton)findViewById(R.id.ib_back);
         IbReturn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,12 +93,20 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
             }
         });
 
+        linearLayout = (LinearLayout)findViewById(R.id.play_video_rv);
         mTvVideo = (TextView)findViewById(R.id.tv_video_submenu);
-        mVideoRv = (RecyclerView)findViewById(R.id.played_video_rv);
+        mVideoRv = (RecyclerView)findViewById(R.id.video_rv);
+        inflater.inflate(R.layout.played_video_rv, linearLayout, true);
+
+        linearLayout = (LinearLayout)findViewById(R.id.play_photo_rv);
         mTvPhoto = (TextView)findViewById(R.id.tv_photo_submenu);
-        mPhotoRv = (RecyclerView)findViewById(R.id.played_photo_rv);
+        mPhotoRv = (RecyclerView)findViewById(R.id.photo_rv);
+        inflater.inflate(R.layout.played_photo_rv, linearLayout, true);
+
+        linearLayout = (LinearLayout)findViewById(R.id.play_audio_rv);
         mTvAudio = (TextView)findViewById(R.id.tv_audio_submenu);
-        mAudioRv = (RecyclerView)findViewById(R.id.played_audio_rv);
+        mAudioRv = (RecyclerView)findViewById(R.id.audio_rv);
+        inflater.inflate(R.layout.played_audio_rv, linearLayout, true);
 
         mTvVideo.setText("Most Favorite Video Files");
         mTvPhoto.setText("Most Favorite Photo Files");
