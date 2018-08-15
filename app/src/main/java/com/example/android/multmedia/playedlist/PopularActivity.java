@@ -84,6 +84,7 @@ public class PopularActivity extends BaseBrowserActivity implements INotificatio
     @Override
     public void initView() {
         loadRvLayout();
+        mTvMediaTitle.setText("Popular");
         mTvVideo.setText("Most Popular Video Files");
         mTvPhoto.setText("Most Popular Photo Files");
         mTvAudio.setText("Most Popular Audio Files");
@@ -94,7 +95,7 @@ public class PopularActivity extends BaseBrowserActivity implements INotificatio
 
         NotificationHandler.getInstance().registerForNotification(this);
         progressDialog = new ProgressDialog(PopularActivity.this);
-        //showProgressLoading();
+        showProgressLoading();
         /*start load favorite media*/
         loadMediaTask.execute();
     }
@@ -120,9 +121,9 @@ public class PopularActivity extends BaseBrowserActivity implements INotificatio
     private class LoadMediaTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... arg0) {
-            mVideoList.addAll(daoManager.getFavoriteVideo());
-            mPhotoList.addAll(daoManager.getFavoritePhoto());
-            mAudioList.addAll(daoManager.getFavoriteAudio());
+            mVideoList.addAll(daoManager.getPopularVideo());
+            mPhotoList.addAll(daoManager.getPopularPhoto());
+            mAudioList.addAll(daoManager.getPopularAudio());
 
             Log.d(TAG, "video_size = " + mVideoList.size() +
                     ", photo_size = " + mPhotoList.size() +

@@ -83,7 +83,7 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
     public void initView() {
         loadRvLayout();
 
-        mTvMediaTitle.setText("Favorite");
+        mTvMediaTitle.setText("Lastplay");
         mTvVideo.setText("Last Played Video Files");
         mTvPhoto.setText("Last Played Photo Files");
         mTvAudio.setText("Last Played Audio Files");
@@ -94,7 +94,7 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
 
         NotificationHandler.getInstance().registerForNotification(this);
         progressDialog = new ProgressDialog(LastPlayedActivity.this);
-        //showProgressLoading();
+        showProgressLoading();
         /*start load favorite media*/
         loadMediaTask.execute();
     }
@@ -121,9 +121,9 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
     private class LoadMediaTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... arg0) {
-            mVideoList.addAll(daoManager.getFavoriteVideo());
-            mPhotoList.addAll(daoManager.getFavoritePhoto());
-            mAudioList.addAll(daoManager.getFavoriteAudio());
+            mVideoList.addAll(daoManager.getLastPlayedVideo());
+            mPhotoList.addAll(daoManager.getLastPlayedPhoto());
+            mAudioList.addAll(daoManager.getLastPlayedAudio());
 
             Log.d(TAG, "video_size = " + mVideoList.size() +
                     ", photo_size = " + mPhotoList.size() +

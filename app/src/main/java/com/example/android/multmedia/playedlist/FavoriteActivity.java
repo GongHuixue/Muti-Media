@@ -97,7 +97,7 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
 
         NotificationHandler.getInstance().registerForNotification(this);
         progressDialog = new ProgressDialog(FavoriteActivity.this);
-        //showProgressLoading();
+        showProgressLoading();
         /*start load favorite media*/
         loadMediaTask.execute();
     }
