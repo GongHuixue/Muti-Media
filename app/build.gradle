@@ -41,4 +41,7 @@ dependencies {
     compile 'org.greenrobot:greendao:3.2.0'
     compile 'org.greenrobot:greendao-generator:3.2.0'
 
+    //add seekbar library
+    compile 'com.minimize.library:seekbar-compat:0.3.0'
+
 }
