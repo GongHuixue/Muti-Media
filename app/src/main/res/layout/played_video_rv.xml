@@ -9,14 +9,15 @@
         android:id="@+id/tv_video_submenu"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:gravity="center"
+        android:gravity="center_vertical|center"
         android:padding="5dp"
-        android:text="media" />
+        android:text="" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/video_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:nestedScrollingEnabled="false"
         android:padding="5dp"></android.support.v7.widget.RecyclerView>
 </LinearLayout>

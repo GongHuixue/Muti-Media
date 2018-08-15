@@ -12,11 +12,25 @@
         android:id="@+id/top_action_bar"
         layout="@layout/top_action_bar"/>
 
-        <include layout="@layout/played_video_rv" />
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
 
-        <include layout="@layout/played_photo_rv" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <include layout="@layout/played_audio_rv" />
+            <include layout="@layout/played_video_rv" />
+
+            <include layout="@layout/played_photo_rv" />
+
+            <include layout="@layout/played_audio_rv" />
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
 
     <!--<LinearLayout-->

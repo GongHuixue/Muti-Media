@@ -51,15 +51,13 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
     private final static String TAG = FavoriteActivity.class.getSimpleName();
     private GreenDaoManager daoManager = GreenDaoManager.getSingleInstance();
     private LoadMediaTask loadMediaTask = new LoadMediaTask();
-    private TextView mTvVideo, mTvPhoto, mTvAudio;
-    private ImageButton IbReturn;
-    private LinearLayout linearLayout;
-    private LayoutInflater inflater;
+
 
     private Handler mHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            int total;
             hideProgressLoading();
             Log.d(TAG, "msg id = " + msg.what);
             switch (msg.what) {
@@ -73,6 +71,9 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
                     mAudioRvAdapter.notifyDataSetChanged();
                     break;
             }
+            total = mVideoList.size() + mPhotoList.size() + mAudioList.size();
+            //update total favorite media num.
+            mTvMediaNum.setText("" + total);
         }
     };
 
@@ -83,125 +84,20 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
 
     @Override
     public void initView() {
-        inflater = LayoutInflater.from(FavoriteActivity.this);
+        loadRvLayout();
 
-        IbReturn = (ImageButton)findViewById(R.id.ib_back);
-        IbReturn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        linearLayout = (LinearLayout)findViewById(R.id.play_video_rv);
-        mTvVideo = (TextView)findViewById(R.id.tv_video_submenu);
-        mVideoRv = (RecyclerView)findViewById(R.id.video_rv);
-        inflater.inflate(R.layout.played_video_rv, linearLayout, true);
-
-        linearLayout = (LinearLayout)findViewById(R.id.play_photo_rv);
-        mTvPhoto = (TextView)findViewById(R.id.tv_photo_submenu);
-        mPhotoRv = (RecyclerView)findViewById(R.id.photo_rv);
-        inflater.inflate(R.layout.played_photo_rv, linearLayout, true);
-
-        linearLayout = (LinearLayout)findViewById(R.id.play_audio_rv);
-        mTvAudio = (TextView)findViewById(R.id.tv_audio_submenu);
-        mAudioRv = (RecyclerView)findViewById(R.id.audio_rv);
-        inflater.inflate(R.layout.played_audio_rv, linearLayout, true);
-
+        mTvMediaTitle.setText("Favorite");
         mTvVideo.setText("Most Favorite Video Files");
         mTvPhoto.setText("Most Favorite Photo Files");
         mTvAudio.setText("Most Favorite Audio Files");
-        progressDialog = new ProgressDialog(FavoriteActivity.this);
 
-        /*init Video Recycle View*/
-        mVideoRvAdapter = new BrowserRvAdapter<VideoItem>(mVideoList, FavoriteActivity.this);
-        mVideoRv.setLayoutManager(new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL));
-
-        /*short click*/
-        mVideoRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent(FavoriteActivity.this, VideoPlayerActivity.class);
-                intent.putExtra(INTENT_MEDIA_POSITION, position);
-                intent.putExtra(INTENT_VIDEO_LIST, mVideoList);
-
-                startActivity(intent);            }
-        });
-        /*long click*/
-        mVideoRvAdapter.setOnItemLongClickListener(new BrowserRvAdapter.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(View view, int position) {
-                Toast.makeText(FavoriteActivity.this, "long click " + position, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
-
-        horizontalDivider = new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL);
-        verticalDivider = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
-        mVideoRv.addItemDecoration(horizontalDivider);
-        mVideoRv.addItemDecoration(verticalDivider);
-        mVideoRv.setAdapter(mVideoRvAdapter);
-
-        /*init Photo Recycle View*/
-        mPhotoRvAdapter = new BrowserRvAdapter<PhotoItem>(mPhotoList, FavoriteActivity.this);
-        mPhotoRv.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
-
-        /*short click*/
-        mPhotoRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent(FavoriteActivity.this, VideoPlayerActivity.class);
-                intent.putExtra(INTENT_MEDIA_POSITION, position);
-                intent.putExtra(INTENT_PHOTO_LIST, mPhotoList);
-
-                startActivity(intent);
-            }
-        });
-        /*long click*/
-        mPhotoRvAdapter.setOnItemLongClickListener(new BrowserRvAdapter.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(View view, int position) {
-                Toast.makeText(FavoriteActivity.this, "long click " + position, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
-
-        horizontalDivider = new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL);
-        verticalDivider = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
-        mPhotoRv.addItemDecoration(horizontalDivider);
-        mPhotoRv.addItemDecoration(verticalDivider);
-        mPhotoRv.setAdapter(mPhotoRvAdapter);
-
-        /*init Audio Recycle View*/
-        mAudioRvAdapter = new BrowserRvAdapter<AudioItem>(mAudioList, FavoriteActivity.this);
-        mAudioRv.setLayoutManager(new LinearLayoutManager(FavoriteActivity.this));
-
-        /*short click*/
-        mAudioRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent(FavoriteActivity.this, VideoPlayerActivity.class);
-                intent.putExtra(INTENT_MEDIA_POSITION, position);
-                intent.putExtra(INTENT_AUDIO_LIST, mAudioList);
-
-                startActivity(intent);
-            }
-        });
-        /*long click*/
-        mAudioRvAdapter.setOnItemLongClickListener(new BrowserRvAdapter.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(View view, int position) {
-                Toast.makeText(FavoriteActivity.this, "long click " + position, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
-
-        horizontalDivider = new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL);
-        mAudioRv.addItemDecoration(horizontalDivider);
-        mAudioRv.setAdapter(mAudioRvAdapter);
+        initVideoRv();
+        initPhotoRv();
+        initAudioRv();
 
         NotificationHandler.getInstance().registerForNotification(this);
-        showProgressLoading();
+        progressDialog = new ProgressDialog(FavoriteActivity.this);
+        //showProgressLoading();
         /*start load favorite media*/
         loadMediaTask.execute();
     }

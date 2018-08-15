@@ -78,6 +78,13 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         //start play selected photo.
         mediaControl.setPhotoPath(currentPosition);
         showTopBottomBar();
+
+        if(mediaControl.isFavorite()) {
+            ibFavorite.setImageResource(R.drawable.btn_favorite_pressed);
+        }else {
+            ibFavorite.setImageResource(R.drawable.btn_favorite_normal);
+        }
+        
         handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, FIVE_SECOND_TIMER);
     }
 
