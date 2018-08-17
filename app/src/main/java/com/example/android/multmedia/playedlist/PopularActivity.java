@@ -84,11 +84,6 @@ public class PopularActivity extends BaseBrowserActivity implements INotificatio
     @Override
     public void initView() {
         loadRvLayout();
-        mTvMediaTitle.setText("Popular");
-        mTvVideo.setText("Most Popular Video Files");
-        mTvPhoto.setText("Most Popular Photo Files");
-        mTvAudio.setText("Most Popular Audio Files");
-
         initVideoRv();
         initPhotoRv();
         initAudioRv();
@@ -98,6 +93,13 @@ public class PopularActivity extends BaseBrowserActivity implements INotificatio
         showProgressLoading();
         /*start load favorite media*/
         loadMediaTask.execute();
+    }
+
+    private void initTvView() {
+        mTvMediaTitle.setText("Popular");
+        mTvVideo.setText("Most Popular Video Files");
+        mTvPhoto.setText("Most Popular Photo Files");
+        mTvAudio.setText("Most Popular Audio Files");
     }
 
     @Override

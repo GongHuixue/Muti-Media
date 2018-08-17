@@ -85,12 +85,7 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
     @Override
     public void initView() {
         loadRvLayout();
-
-        mTvMediaTitle.setText("Favorite");
-        mTvVideo.setText("Most Favorite Video Files");
-        mTvPhoto.setText("Most Favorite Photo Files");
-        mTvAudio.setText("Most Favorite Audio Files");
-
+        initTvView();
         initVideoRv();
         initPhotoRv();
         initAudioRv();
@@ -100,6 +95,13 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
         showProgressLoading();
         /*start load favorite media*/
         loadMediaTask.execute();
+    }
+
+    private void initTvView() {
+        mTvMediaTitle.setText("Favorite");
+        mTvVideo.setText("Most Favorite Video Files");
+        mTvPhoto.setText("Most Favorite Photo Files");
+        mTvAudio.setText("Most Favorite Audio Files");
     }
 
     @Override

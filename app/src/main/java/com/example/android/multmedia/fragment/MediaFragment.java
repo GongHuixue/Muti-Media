@@ -46,13 +46,13 @@ public class MediaFragment extends BaseFragment {
         FragListItem favourites = new FragListItem(Constant.FAVORITE_FILES, R.drawable.favorite);
         FragListItem popular = new FragListItem(Constant.POPULAR_FILES, R.drawable.popular);
         FragListItem lastPlayed = new FragListItem(Constant.LASTED_FILES, R.drawable.play);
-        FragListItem onlineMedia = new FragListItem(Constant.ONLINE_MEDIA, R.drawable.online);
-        FragListItem settings = new FragListItem(Constant.SETTINGS, R.drawable.setting);
+//        FragListItem onlineMedia = new FragListItem(Constant.ONLINE_MEDIA, R.drawable.online);
+//        FragListItem settings = new FragListItem(Constant.SETTINGS, R.drawable.setting);
 
         fragList.add(favourites);
         fragList.add(popular);
         fragList.add(lastPlayed);
-        fragList.add(onlineMedia);
-        fragList.add(settings);
+//        fragList.add(onlineMedia);
+//        fragList.add(settings);
     }
 }

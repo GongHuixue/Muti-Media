@@ -82,12 +82,7 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
     @Override
     public void initView() {
         loadRvLayout();
-
-        mTvMediaTitle.setText("Lastplay");
-        mTvVideo.setText("Last Played Video Files");
-        mTvPhoto.setText("Last Played Photo Files");
-        mTvAudio.setText("Last Played Audio Files");
-
+        initTvView();
         initVideoRv();
         initPhotoRv();
         initAudioRv();
@@ -97,6 +92,13 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
         showProgressLoading();
         /*start load favorite media*/
         loadMediaTask.execute();
+    }
+
+    private void initTvView() {
+        mTvMediaTitle.setText("Lastplay");
+        mTvVideo.setText("Last Played Video Files");
+        mTvPhoto.setText("Last Played Photo Files");
+        mTvAudio.setText("Last Played Audio Files");
     }
 
 
