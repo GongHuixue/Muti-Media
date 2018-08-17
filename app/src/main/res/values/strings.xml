@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MultMedia</string>
+    <string name="app_name">MultiMedia Player</string>
 
     <!--Define the bottom tab menu-->
     <string name="media">Media</string>
