@@ -85,6 +85,7 @@ public class PopularActivity extends BaseBrowserActivity implements INotificatio
     public void initView() {
         loadRvLayout();
         initVideoRv();
+        initTvView();
         initPhotoRv();
         initAudioRv();
 
