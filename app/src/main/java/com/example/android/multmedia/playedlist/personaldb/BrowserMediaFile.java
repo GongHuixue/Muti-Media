@@ -46,9 +46,11 @@ public class BrowserMediaFile {
         ArrayList<BaseItem> savedArrayList = new ArrayList<>();
         try {
             File file = new File(GlobalApplication.getGlobalContext().getFilesDir().getAbsoluteFile(), fileName);
-            fileInputStream = new FileInputStream(file.toString());
-            objectInputStream = new ObjectInputStream(fileInputStream);
-            savedArrayList = (ArrayList<BaseItem>) objectInputStream.readObject();
+            if(file.exists()) {
+                fileInputStream = new FileInputStream(file.toString());
+                objectInputStream = new ObjectInputStream(fileInputStream);
+                savedArrayList = (ArrayList<BaseItem>) objectInputStream.readObject();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

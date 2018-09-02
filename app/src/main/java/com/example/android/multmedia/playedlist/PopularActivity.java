@@ -57,7 +57,6 @@ public class PopularActivity extends BaseBrowserActivity implements INotificatio
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             int total;
-            hideProgressLoading();
             Log.d(TAG, "msg id = " + msg.what);
             switch (msg.what) {
                 case UPDATE_VIDEO_DATA:
@@ -91,7 +90,6 @@ public class PopularActivity extends BaseBrowserActivity implements INotificatio
 
         NotificationHandler.getInstance().registerForNotification(this);
         progressDialog = new ProgressDialog(PopularActivity.this);
-        showProgressLoading();
         /*start load favorite media*/
         loadMediaTask.execute();
     }
@@ -122,6 +120,16 @@ public class PopularActivity extends BaseBrowserActivity implements INotificatio
     }
 
     private class LoadMediaTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            showProgressLoading();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            hideProgressLoading();
+        }
+
         @Override
         protected Void doInBackground(Void... arg0) {
             mVideoList.addAll(daoManager.getPopularVideo());

@@ -55,7 +55,6 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             int total;
-            hideProgressLoading();
             Log.d(TAG, "msg id = " + msg.what);
             switch (msg.what) {
                 case UPDATE_VIDEO_DATA:
@@ -89,7 +88,6 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
 
         NotificationHandler.getInstance().registerForNotification(this);
         progressDialog = new ProgressDialog(LastPlayedActivity.this);
-        showProgressLoading();
         /*start load favorite media*/
         loadMediaTask.execute();
     }
@@ -121,6 +119,16 @@ public class LastPlayedActivity extends BaseBrowserActivity implements INotifica
     }
 
     private class LoadMediaTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            showProgressLoading();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            hideProgressLoading();
+        }
+
         @Override
         protected Void doInBackground(Void... arg0) {
             mVideoList.addAll(daoManager.getLastPlayedVideo());

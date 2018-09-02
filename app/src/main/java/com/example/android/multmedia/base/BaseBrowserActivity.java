@@ -9,6 +9,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -77,11 +78,13 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
         progressDialog.setCancelable(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(false);
-        progressDialog.show();
+        if(!progressDialog.isShowing())
+            progressDialog.show();
     }
 
     public void hideProgressLoading() {
-        progressDialog.hide();
+        if(progressDialog.isShowing())
+            progressDialog.dismiss();
     }
 
     public void initVideoRv() {
