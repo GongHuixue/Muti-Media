@@ -38,6 +38,7 @@ import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_VID
 
 public abstract class BaseBrowserActivity extends FragmentActivity {
     private Context mContext;
+    private Toast mToast = null;
     public ProgressDialog progressDialog;
     /*mediaload instance, user for load audio/video/picture*/
     public MediaLoad mediaLoad = MediaLoad.getMediaLoad();
@@ -85,6 +86,11 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
     public void hideProgressLoading() {
         if(progressDialog.isShowing())
             progressDialog.dismiss();
+    }
+
+    public void showMediaToast(String message) {
+        mToast = Toast.makeText(mContext, message, Toast.LENGTH_SHORT);
+        mToast.show();
     }
 
     public void initVideoRv() {

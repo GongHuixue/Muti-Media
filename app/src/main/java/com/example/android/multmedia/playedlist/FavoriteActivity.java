@@ -51,13 +51,12 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
     private final static String TAG = FavoriteActivity.class.getSimpleName();
     private GreenDaoManager daoManager = GreenDaoManager.getSingleInstance();
     private LoadMediaTask loadMediaTask = new LoadMediaTask();
-
+    private int total = 0;
 
     private Handler mHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            int total;
             Log.d(TAG, "msg id = " + msg.what);
             switch (msg.what) {
                 case UPDATE_VIDEO_DATA:
@@ -130,6 +129,9 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
         @Override
         protected void onPostExecute(Void aVoid) {
             hideProgressLoading();
+            if(total == 0) {
+                showMediaToast("No favorite media file, Maybe you can select favorite media file first");
+            }
         }
 
         @Override
