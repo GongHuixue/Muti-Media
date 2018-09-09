@@ -40,7 +40,7 @@
         android:textAllCaps="false"
         android:layout_weight="1" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/btn_del"
         android:clickable="true"
         android:layout_width="0dp"
@@ -48,6 +48,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:src="@drawable/icon_del"
+        android:background="@null"
         android:visibility="invisible"
         android:layout_weight="1"/>
 

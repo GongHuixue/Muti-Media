@@ -111,9 +111,7 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
         /*long click*/
         mVideoRvAdapter.setOnItemLongClickListener(new BrowserRvAdapter.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(View view, int position) {
-                Toast.makeText(mContext, "long click " + position, Toast.LENGTH_SHORT).show();
-                return false;
+            public void onItemLongClick(boolean selected, String path) {
             }
         });
 
@@ -143,9 +141,7 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
         /*long click*/
         mPhotoRvAdapter.setOnItemLongClickListener(new BrowserRvAdapter.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(View view, int position) {
-                Toast.makeText(mContext, "long click " + position, Toast.LENGTH_SHORT).show();
-                return false;
+            public void onItemLongClick(boolean selected, String path) {
             }
         });
 
@@ -175,9 +171,7 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
         /*long click*/
         mAudioRvAdapter.setOnItemLongClickListener(new BrowserRvAdapter.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(View view, int position) {
-                Toast.makeText(mContext, "long click " + position, Toast.LENGTH_SHORT).show();
-                return false;
+            public void onItemLongClick(boolean selected, String path) {
             }
         });
 

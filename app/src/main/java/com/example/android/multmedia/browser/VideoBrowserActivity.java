@@ -1,14 +1,20 @@
 package com.example.android.multmedia.browser;
 
+import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.adpter.BrowserRvAdapter;
@@ -22,7 +28,6 @@ import com.mediaload.callback.OnVideoLoadCallBack;
 import java.util.ArrayList;
 
 import static com.example.android.multmedia.utils.Constant.VIDEO_LIST;
-
 import static com.example.android.multmedia.player.MediaPlayConstants.*;
 
 public class VideoBrowserActivity extends BaseBrowserActivity {
@@ -33,6 +38,9 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
     private TextView TvTitle;
     private TextView TvNum;
     private ImageButton IbReturn;
+    private ImageButton IbDel;
+    private ArrayList<String> mSelectList = new ArrayList<>();
+    private DeleteMediaTask mDeleteTask;
 
     @Override
     public int getLayoutResID(){
@@ -51,7 +59,9 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
                 finish();
             }
         });
-
+        IbDel = (ImageButton)findViewById(R.id.btn_del);
+        IbDel.setVisibility(View.GONE);
+        IbDel.setEnabled(false);
         mRecyclerView = (RecyclerView) findViewById(R.id.video_recycler_view);
         mediaLoad.loadVideos(VideoBrowserActivity.this, new OnVideoLoadCallBack() {
             @Override
@@ -75,6 +85,10 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
         mVideoRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                //clear select media and hide del button.
+                mSelectList.clear();
+                hideDelButton();
+
                 Intent intent = new Intent(VideoBrowserActivity.this, VideoPlayerActivity.class);
                 intent.putExtra(INTENT_MEDIA_POSITION, position);
                 intent.putExtra(INTENT_VIDEO_LIST, mVideoItems);
@@ -87,9 +101,22 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
         /*long click*/
         mVideoRvAdapter.setOnItemLongClickListener(new BrowserRvAdapter.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(View view, int position) {
-                Toast.makeText(VideoBrowserActivity.this, "long click " + position, Toast.LENGTH_SHORT).show();
-                return false;
+            public void onItemLongClick(boolean selected, String path) {
+                if(selected) {
+                    if(!mSelectList.contains(path)) {
+                        mSelectList.add(path);
+                    }
+                }else {
+                    if(mSelectList.contains(path)) {
+                        mSelectList.remove(path);
+                    }
+                }
+
+                if(mSelectList.size() == 0) {
+                    hideDelButton();
+                }else {
+                    showDelButton();
+                }
             }
         });
 
@@ -112,5 +139,95 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
         super.onDestroy();
         mVideoItems.clear();
         mTempList.clear();
+        mSelectList.clear();
+    }
+
+    private void hideDelButton() {
+        IbDel.setVisibility(View.GONE);
+        IbDel.setEnabled(false);
+    }
+
+    private void showDelButton() {
+        IbDel.setVisibility(View.VISIBLE);
+        IbDel.setEnabled(true);
+        IbDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //show dialog for confirm
+                showDelDialog();
+            }
+        });
+    }
+
+    private void showDelDialog() {
+        AlertDialog.Builder mDialog = new AlertDialog.Builder(VideoBrowserActivity.this);
+        mDialog.setMessage("Are you sure to delete these media file");
+        mDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mDeleteTask = new DeleteMediaTask();
+                mDeleteTask.execute();
+            }
+        });
+
+        mDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //nothing to do
+            }
+        });
+        mDialog.show();
+    }
+
+    private class DeleteMediaTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            mSelectList.clear();
+            hideDelButton();
+            TvNum.setText("" + mVideoItems.size());
+            Log.d(TAG, "notify data changed");
+            mVideoRvAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            Log.d(TAG, "start deleted");
+            Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            ContentResolver mContentResolver = VideoBrowserActivity.this.getContentResolver();
+            String where;
+            MediaScanner mediaScanner = new MediaScanner(VideoBrowserActivity.this);
+            for(int i = 0; i < mSelectList.size(); i++ ) {
+                for(int j = 0; j < mVideoItems.size(); j++ ) {
+                    if(mSelectList.get(i).equals(mVideoItems.get(j).getPath())) {
+                        mVideoItems.remove(j);
+                        break;
+                    }else {
+                        continue;
+                    }
+                }
+
+                for(int k = 0; k < mTempList.size(); k++) {
+                    if(mSelectList.get(i).equals(mTempList.get(k).getPath())) {
+                        mTempList.remove(k);
+                        break;
+                    }else {
+                        continue;
+                    }
+                }
+
+                where = MediaStore.Video.Media.DATA + "='" + mSelectList.get(i) +"'";
+                mContentResolver.delete(uri, where, null);
+            }
+            //after delete, notify to provider
+            mediaScanner.scan(mSelectList);
+
+            browserMediaFile.saveMediaFile(mTempList, VIDEO_LIST);
+            Log.d(TAG, "end deleted");
+            return null;
+        }
     }
 }

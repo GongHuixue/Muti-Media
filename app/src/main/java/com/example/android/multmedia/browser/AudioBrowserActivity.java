@@ -83,12 +83,10 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
             }
         });
 
-        /*long click*/
+        /*not support long click for audio browser*/
         mAudioRvAdapter.setOnItemLongClickListener(new BrowserRvAdapter.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(View view, int position) {
-                Toast.makeText(AudioBrowserActivity.this, "long click " + position, Toast.LENGTH_SHORT).show();
-                return false;
+            public void onItemLongClick(boolean selected, String path) {
             }
         });
 
