@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
-public class TabMenuLayout extends LinearLayout implements View.OnClickListener{
+public class TabMenuLayout extends LinearLayout implements View.OnClickListener {
     private ArrayList<TableItem> tableItems;
     private OnTabClickListener tabClickLister;
     private Context mContext;
@@ -53,11 +53,11 @@ public class TabMenuLayout extends LinearLayout implements View.OnClickListener{
         params.weight = 1;
         Point point = getDefaultHW(mContext);
 
-        if(tabs != null && (tabs.size() > 0)) {
+        if (tabs != null && (tabs.size() > 0)) {
             tabCount = tabs.size();
             TabView mTabView;
 
-            for(int i = 0; i < tabs.size(); i++ ) {
+            for (int i = 0; i < tabs.size(); i++) {
                 mTabView = new TabView(getContext());
                 mTabView.setTag(tabs.get(i));
                 mTabView.initTabItemData(tabs.get(i));
@@ -65,7 +65,7 @@ public class TabMenuLayout extends LinearLayout implements View.OnClickListener{
                 addView(mTabView, params);
             }
             setCurrentTab(0); //set the first highlight as default;
-        }else {
+        } else {
             throw new IllegalArgumentException("tabs is null");
         }
     }

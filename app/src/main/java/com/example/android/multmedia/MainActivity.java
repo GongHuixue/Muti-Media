@@ -98,27 +98,27 @@ public class MainActivity extends FragmentActivity implements TabMenuLayout.OnTa
     }
 
     public void launchActivity(String activityName) {
-        if(activityName.equalsIgnoreCase(Constant.AUDIO_FILES)) {
+        if (activityName.equalsIgnoreCase(Constant.AUDIO_FILES)) {
             Log.d(TAG, "Launch Audio Recycler View");
             intent = new Intent(MainActivity.this, AudioBrowserActivity.class);
             startActivity(intent);
-        }else if (activityName.equalsIgnoreCase(Constant.VIDEO_FILES)) {
+        } else if (activityName.equalsIgnoreCase(Constant.VIDEO_FILES)) {
             Log.d(TAG, "Launch Video Recycler View");
             intent = new Intent(MainActivity.this, VideoBrowserActivity.class);
             startActivity(intent);
-        }else if(activityName.equalsIgnoreCase(Constant.PICTURE_FILES)) {
+        } else if (activityName.equalsIgnoreCase(Constant.PICTURE_FILES)) {
             Log.d(TAG, "Launch Picture Recycler View");
             intent = new Intent(MainActivity.this, PictureBrowserActivity.class);
             startActivity(intent);
-        }else if(activityName.equalsIgnoreCase(Constant.FAVORITE_FILES)) {
+        } else if (activityName.equalsIgnoreCase(Constant.FAVORITE_FILES)) {
             Log.d(TAG, "Launch Favorite Recycler View");
             intent = new Intent(MainActivity.this, FavoriteActivity.class);
             startActivity(intent);
-        }else if(activityName.equalsIgnoreCase(Constant.POPULAR_FILES)) {
+        } else if (activityName.equalsIgnoreCase(Constant.POPULAR_FILES)) {
             Log.d(TAG, "Launch Popular Recycler View");
             intent = new Intent(MainActivity.this, PopularActivity.class);
             startActivity(intent);
-        }else if(activityName.equalsIgnoreCase(Constant.LASTED_FILES)) {
+        } else if (activityName.equalsIgnoreCase(Constant.LASTED_FILES)) {
             Log.d(TAG, "Launch Popular Recycler View");
             intent = new Intent(MainActivity.this, LastPlayedActivity.class);
             startActivity(intent);

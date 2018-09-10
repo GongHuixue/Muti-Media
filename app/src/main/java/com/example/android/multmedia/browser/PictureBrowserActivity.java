@@ -4,20 +4,16 @@ import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.multmedia.R;
 import com.example.android.multmedia.adpter.BrowserRvAdapter;
@@ -29,8 +25,6 @@ import com.mediaload.bean.PhotoResult;
 import com.mediaload.callback.OnPhotoLoadCallBack;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import static com.example.android.multmedia.utils.Constant.PHOTO_LIST;
 import static com.example.android.multmedia.player.MediaPlayConstants.INTENT_MEDIA_POSITION;
@@ -56,18 +50,17 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
 
     @Override
     public void initView() {
-        Log.d(TAG, "PictureBrowserActivity Enter");
-        TvTitle = (TextView)findViewById(R.id.txt_title);
+        TvTitle = (TextView) findViewById(R.id.txt_title);
         TvTitle.setText(R.string.picture);
-        TvNum = (TextView)findViewById(R.id.txt_number);
-        IbReturn = (ImageButton)findViewById(R.id.ib_back);
+        TvNum = (TextView) findViewById(R.id.txt_number);
+        IbReturn = (ImageButton) findViewById(R.id.ib_back);
         IbReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        IbDel = (ImageButton)findViewById(R.id.btn_del);
+        IbDel = (ImageButton) findViewById(R.id.btn_del);
         IbDel.setVisibility(View.GONE);
         IbDel.setEnabled(false);
         mRecyclerView = (RecyclerView) findViewById(R.id.picture_recycler_view);
@@ -75,7 +68,7 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
             @Override
             public void onResult(PhotoResult result) {
                 TvNum.setText("" + result.getItems().size());
-                if(result.getItems().size()> 0 ) {
+                if (result.getItems().size() > 0) {
                     mPictureItems.clear();
                     mTempList.clear();
                     mPictureItems.addAll(result.getItems());
@@ -86,7 +79,7 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
             }
         });
 
-        mPictureRvAdapter = new BrowserRvAdapter<PhotoItem>(mPictureItems, PictureBrowserActivity.this) ;
+        mPictureRvAdapter = new BrowserRvAdapter<PhotoItem>(mPictureItems, PictureBrowserActivity.this);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
 
         mPictureRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
@@ -107,19 +100,19 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
         mPictureRvAdapter.setOnItemLongClickListener(new BrowserRvAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(boolean selected, String path) {
-                if(selected) {
-                    if(!mSelectList.contains(path)) {
+                if (selected) {
+                    if (!mSelectList.contains(path)) {
                         mSelectList.add(path);
                     }
-                }else {
-                    if(mSelectList.contains(path)) {
+                } else {
+                    if (mSelectList.contains(path)) {
                         mSelectList.remove(path);
                     }
                 }
 
-                if(mSelectList.size() == 0) {
+                if (mSelectList.size() == 0) {
                     hideDelButton();
-                }else {
+                } else {
                     showDelButton();
                 }
             }
@@ -145,7 +138,7 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
         mPictureItems.clear();
         mTempList.clear();
         mSelectList.clear();
-        if(mDeleteTask != null) {
+        if (mDeleteTask != null) {
             mDeleteTask.cancel(true);
         }
     }
@@ -195,6 +188,7 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             mSelectList.clear();
+            mPictureRvAdapter.initCheckedList();
             hideDelButton();
             TvNum.setText("" + mPictureItems.size());
 
@@ -207,26 +201,26 @@ public class PictureBrowserActivity extends BaseBrowserActivity {
             ContentResolver mContentResolver = PictureBrowserActivity.this.getContentResolver();
             String where;
             MediaScanner mediaScanner = new MediaScanner(PictureBrowserActivity.this);
-            for(int i = 0; i < mSelectList.size(); i++ ) {
-                for(int j = 0; j < mPictureItems.size(); j++ ) {
-                    if(mSelectList.get(i).equals(mPictureItems.get(j).getPath())) {
+            for (int i = 0; i < mSelectList.size(); i++) {
+                for (int j = 0; j < mPictureItems.size(); j++) {
+                    if (mSelectList.get(i).equals(mPictureItems.get(j).getPath())) {
                         mPictureItems.remove(j);
                         break;
-                    }else {
+                    } else {
                         continue;
                     }
                 }
 
-                for(int k = 0; k < mTempList.size(); k++) {
-                    if(mSelectList.get(i).equals(mTempList.get(k).getPath())) {
+                for (int k = 0; k < mTempList.size(); k++) {
+                    if (mSelectList.get(i).equals(mTempList.get(k).getPath())) {
                         mTempList.remove(k);
                         break;
-                    }else {
+                    } else {
                         continue;
                     }
                 }
 
-                where = MediaStore.Images.Media.DATA + "='" + mSelectList.get(i) +"'";
+                where = MediaStore.Images.Media.DATA + "='" + mSelectList.get(i) + "'";
                 mContentResolver.delete(uri, where, null);
             }
             //after delete, notify to provider

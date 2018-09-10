@@ -79,12 +79,12 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
         progressDialog.setCancelable(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(false);
-        if(!progressDialog.isShowing())
+        if (!progressDialog.isShowing())
             progressDialog.show();
     }
 
     public void hideProgressLoading() {
-        if(progressDialog.isShowing())
+        if (progressDialog.isShowing())
             progressDialog.dismiss();
     }
 
@@ -96,7 +96,7 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
     public void initVideoRv() {
         /*init Video Recycle View*/
         mVideoRvAdapter = new BrowserRvAdapter<VideoItem>(mVideoList, mContext);
-        mVideoRv.setLayoutManager(new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL));
+        mVideoRv.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
 
         /*short click*/
         mVideoRvAdapter.setOnItemClickListener(new BrowserRvAdapter.OnItemClickListener() {
@@ -106,7 +106,8 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
                 intent.putExtra(INTENT_MEDIA_POSITION, position);
                 intent.putExtra(INTENT_VIDEO_LIST, mVideoList);
 
-                startActivity(intent);            }
+                startActivity(intent);
+            }
         });
         /*long click*/
         mVideoRvAdapter.setOnItemLongClickListener(new BrowserRvAdapter.OnItemLongClickListener() {
@@ -183,7 +184,7 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
     public void loadRvLayout() {
         inflater = LayoutInflater.from(mContext);
 
-        IbReturn = (ImageButton)findViewById(R.id.ib_back);
+        IbReturn = (ImageButton) findViewById(R.id.ib_back);
         IbReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,38 +192,39 @@ public abstract class BaseBrowserActivity extends FragmentActivity {
             }
         });
 
-        mTvMediaTitle = (TextView)findViewById(R.id.txt_title);
-        mTvMediaNum = (TextView)findViewById(R.id.txt_number);
+        mTvMediaTitle = (TextView) findViewById(R.id.txt_title);
+        mTvMediaNum = (TextView) findViewById(R.id.txt_number);
 
-        linearLayout = (LinearLayout)findViewById(R.id.play_video_rv);
-        mTvVideo = (TextView)findViewById(R.id.tv_video_submenu);
-        mVideoRv = (RecyclerView)findViewById(R.id.video_rv);
+        linearLayout = (LinearLayout) findViewById(R.id.play_video_rv);
+        mTvVideo = (TextView) findViewById(R.id.tv_video_submenu);
+        mVideoRv = (RecyclerView) findViewById(R.id.video_rv);
         //inflater.inflate(R.layout.played_video_rv, linearLayout, true);
 
-        linearLayout = (LinearLayout)findViewById(R.id.play_photo_rv);
-        mTvPhoto = (TextView)findViewById(R.id.tv_photo_submenu);
-        mPhotoRv = (RecyclerView)findViewById(R.id.photo_rv);
+        linearLayout = (LinearLayout) findViewById(R.id.play_photo_rv);
+        mTvPhoto = (TextView) findViewById(R.id.tv_photo_submenu);
+        mPhotoRv = (RecyclerView) findViewById(R.id.photo_rv);
         //inflater.inflate(R.layout.played_photo_rv, linearLayout, true);
 
-        linearLayout = (LinearLayout)findViewById(R.id.play_audio_rv);
-        mTvAudio = (TextView)findViewById(R.id.tv_audio_submenu);
-        mAudioRv = (RecyclerView)findViewById(R.id.audio_rv);
+        linearLayout = (LinearLayout) findViewById(R.id.play_audio_rv);
+        mTvAudio = (TextView) findViewById(R.id.tv_audio_submenu);
+        mAudioRv = (RecyclerView) findViewById(R.id.audio_rv);
         //inflater.inflate(R.layout.played_audio_rv, linearLayout, true);
     }
 
     public abstract int getLayoutResID();
+
     public abstract void initView();
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mVideoList != null) {
+        if (mVideoList != null) {
             mVideoList.clear();
         }
-        if(mPhotoList != null) {
+        if (mPhotoList != null) {
             mPhotoList.clear();
         }
-        if(mAudioList != null) {
+        if (mAudioList != null) {
             mAudioList.clear();
         }
         mContext = null;

@@ -16,7 +16,8 @@ import java.util.ArrayList;
 public class FragmentAdapter extends FragmentPagerAdapter {
     private ArrayList<TableItem> tableItems;
     private BaseFragment fragment;
-    public FragmentAdapter(FragmentManager fm, ArrayList<TableItem>tabs) {
+
+    public FragmentAdapter(FragmentManager fm, ArrayList<TableItem> tabs) {
         super(fm);
         this.tableItems = tabs;
     }

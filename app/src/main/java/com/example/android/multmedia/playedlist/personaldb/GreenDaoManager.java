@@ -43,7 +43,7 @@ public class GreenDaoManager {
 
     /*The thread was used for operate database*/
     private void createHandlerThread() {
-        if(mHT == null) {
+        if (mHT == null) {
             mHT = new HandlerThread("GreenDaoManager_HT");
         }
         mHT.start();
@@ -57,7 +57,7 @@ public class GreenDaoManager {
     }
 
     private void destroyHandlerThread() {
-        if(mHT != null) {
+        if (mHT != null) {
             mHT.quit();
             mHT.interrupt();
             mHT = null;
@@ -66,7 +66,7 @@ public class GreenDaoManager {
     }
 
     public static synchronized GreenDaoManager getSingleInstance() {
-        if(singleInstance == null) {
+        if (singleInstance == null) {
             singleInstance = new GreenDaoManager();
         }
         return singleInstance;
@@ -83,7 +83,7 @@ public class GreenDaoManager {
         media.setMediaType(mediaItem.getViewType());
         media.setPlayedCounts(1);
         media.setPlayedTime(System.currentTimeMillis());
-        ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao().insertOrReplace(media);
+        ((GlobalApplication) GlobalApplication.getGlobalContext()).getMediaDbDao().insertOrReplace(media);
     }
 
     public void delete() {
@@ -92,57 +92,57 @@ public class GreenDaoManager {
 
     public void updatePlayedTimes(String path) {
         media = getMedia(path);
-        if(media != null) {
+        if (media != null) {
             media.setPlayedTime(System.currentTimeMillis());
             media.setPlayedCounts(media.getPlayedCounts() + 1);
-            ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao().update(media);
+            ((GlobalApplication) GlobalApplication.getGlobalContext()).getMediaDbDao().update(media);
         }
     }
 
     public void updateFavorite(BaseItem mediaItem, Boolean isFavor) {
-        if(mediaItem != null) {
+        if (mediaItem != null) {
             media = getMedia(mediaItem.getPath());
-            if(media != null) {
+            if (media != null) {
                 media.setIsFavor(isFavor);
-                ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao().update(media);
-            }else {
+                ((GlobalApplication) GlobalApplication.getGlobalContext()).getMediaDbDao().update(media);
+            } else {
                 Log.d(TAG, "Current file not exist in database");
             }
         }
     }
 
     private MediaDb getMedia(String path) {
-        if(path != null) {
+        if (path != null) {
             Log.d(TAG, "getMedia path = " + path);
-            media = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao()
+            media = ((GlobalApplication) GlobalApplication.getGlobalContext()).getMediaDbDao()
                     .queryBuilder()
                     .where(MediaDbDao.Properties.MediaPath.eq(path))
                     .unique();
             /*clear greendao cache*/
-            ((GlobalApplication)GlobalApplication.getGlobalContext()).getDaoSession().clear();
+            ((GlobalApplication) GlobalApplication.getGlobalContext()).getDaoSession().clear();
 
-            ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao().detachAll();
+            ((GlobalApplication) GlobalApplication.getGlobalContext()).getMediaDbDao().detachAll();
         }
         return media;
     }
 
     public boolean queryByPath(String path) {
         boolean fileExist = false;
-        if(path != null) {
-            media = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao()
+        if (path != null) {
+            media = ((GlobalApplication) GlobalApplication.getGlobalContext()).getMediaDbDao()
                     .queryBuilder()
                     .where(MediaDbDao.Properties.MediaPath.eq(path))
                     .unique();
 
-            if(media != null) {
+            if (media != null) {
                 fileExist = true;
-            }else {
+            } else {
                 fileExist = false;
             }
             /*clear greendao cache*/
-            ((GlobalApplication)GlobalApplication.getGlobalContext()).getDaoSession().clear();
+            ((GlobalApplication) GlobalApplication.getGlobalContext()).getDaoSession().clear();
 
-            ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao().detachAll();
+            ((GlobalApplication) GlobalApplication.getGlobalContext()).getMediaDbDao().detachAll();
             Log.d(TAG, "queryByPath " + path + ", fileExist = " + fileExist);
         }
         return fileExist;
@@ -150,34 +150,35 @@ public class GreenDaoManager {
 
     public Boolean queryFavorite(String mediaPath) {
         boolean isFavorite = false;
-        media = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao()
+        media = ((GlobalApplication) GlobalApplication.getGlobalContext()).getMediaDbDao()
                 .queryBuilder()
                 .where(MediaDbDao.Properties.MediaPath.eq(mediaPath), MediaDbDao.Properties.IsFavor.eq(true))
                 .build()
                 .unique();
 
-        if(media != null) {
+        if (media != null) {
             isFavorite = true;
         }
         Log.d(TAG, "queryFavorite " + mediaPath + ", isFavorite = " + isFavorite);
         return isFavorite;
     }
+
     public List<MediaDb> queryFavoriteByType(int mediaType) {
-        List<MediaDb> favoriteList = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao()
+        List<MediaDb> favoriteList = ((GlobalApplication) GlobalApplication.getGlobalContext()).getMediaDbDao()
                 .queryBuilder()
                 .where(MediaDbDao.Properties.IsFavor.eq(true), MediaDbDao.Properties.MediaType.eq(mediaType)).list();
         return favoriteList;
     }
 
     public List<MediaDb> queryPopularByType(int mediaType) {
-        List<MediaDb> popularList = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao()
+        List<MediaDb> popularList = ((GlobalApplication) GlobalApplication.getGlobalContext()).getMediaDbDao()
                 .queryBuilder()
                 .where(MediaDbDao.Properties.MediaType.eq(mediaType), MediaDbDao.Properties.PlayedCounts.ge(1)).list();
         return popularList;
     }
 
     public List<MediaDb> queryLastPlayedByType(int mediaType) {
-        List<MediaDb> lastPlayedList = ((GlobalApplication)GlobalApplication.getGlobalContext()).getMediaDbDao()
+        List<MediaDb> lastPlayedList = ((GlobalApplication) GlobalApplication.getGlobalContext()).getMediaDbDao()
                 .queryBuilder()
                 .where(MediaDbDao.Properties.MediaType.eq(mediaType))
                 .orderDesc(MediaDbDao.Properties.PlayedTime)
@@ -186,18 +187,17 @@ public class GreenDaoManager {
     }
 
 
-
     public ArrayList<AudioItem> getFavoriteAudio() {
         ArrayList<AudioItem> audioItemArrayList = new ArrayList<>();
         ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(AUDIO_LIST);
         List<MediaDb> mediaDbList = queryFavoriteByType(AUDIO_TYPE);
-        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
-            for(int index = 0; index < mediaDbList.size(); index ++) {
-                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
-                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+        if ((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0)) {
+            for (int index = 0; index < mediaDbList.size(); index++) {
+                for (int i = 0; i < baseItemArrayList.size(); i++) {
+                    if (mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
                         audioItemArrayList.add((AudioItem) baseItemArrayList.get(i));
                         break;
-                    }else {
+                    } else {
                         continue;
                     }
                 }
@@ -211,13 +211,13 @@ public class GreenDaoManager {
         ArrayList<VideoItem> audioItemArrayList = new ArrayList<>();
         ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(VIDEO_LIST);
         List<MediaDb> mediaDbList = queryFavoriteByType(VIDEO_TYPE);
-        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
-            for(int index = 0; index < mediaDbList.size(); index ++) {
-                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
-                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+        if ((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0)) {
+            for (int index = 0; index < mediaDbList.size(); index++) {
+                for (int i = 0; i < baseItemArrayList.size(); i++) {
+                    if (mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
                         audioItemArrayList.add((VideoItem) baseItemArrayList.get(i));
                         break;
-                    }else {
+                    } else {
                         continue;
                     }
                 }
@@ -231,13 +231,13 @@ public class GreenDaoManager {
         ArrayList<PhotoItem> photoItemArrayList = new ArrayList<>();
         ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(PHOTO_LIST);
         List<MediaDb> mediaDbList = queryFavoriteByType(PHOTO_TYPE);
-        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
-            for(int index = 0; index < mediaDbList.size(); index ++) {
-                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
-                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+        if ((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0)) {
+            for (int index = 0; index < mediaDbList.size(); index++) {
+                for (int i = 0; i < baseItemArrayList.size(); i++) {
+                    if (mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
                         photoItemArrayList.add((PhotoItem) baseItemArrayList.get(i));
                         break;
-                    }else {
+                    } else {
                         continue;
                     }
                 }
@@ -251,13 +251,13 @@ public class GreenDaoManager {
         ArrayList<AudioItem> audioItemArrayList = new ArrayList<>();
         ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(AUDIO_LIST);
         List<MediaDb> mediaDbList = queryPopularByType(AUDIO_TYPE);
-        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
-            for(int index = 0; index < mediaDbList.size(); index ++) {
-                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
-                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+        if ((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0)) {
+            for (int index = 0; index < mediaDbList.size(); index++) {
+                for (int i = 0; i < baseItemArrayList.size(); i++) {
+                    if (mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
                         audioItemArrayList.add((AudioItem) baseItemArrayList.get(i));
                         break;
-                    }else {
+                    } else {
                         continue;
                     }
                 }
@@ -271,13 +271,13 @@ public class GreenDaoManager {
         ArrayList<VideoItem> audioItemArrayList = new ArrayList<>();
         ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(VIDEO_LIST);
         List<MediaDb> mediaDbList = queryPopularByType(VIDEO_TYPE);
-        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
-            for(int index = 0; index < mediaDbList.size(); index ++) {
-                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
-                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+        if ((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0)) {
+            for (int index = 0; index < mediaDbList.size(); index++) {
+                for (int i = 0; i < baseItemArrayList.size(); i++) {
+                    if (mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
                         audioItemArrayList.add((VideoItem) baseItemArrayList.get(i));
                         break;
-                    }else {
+                    } else {
                         continue;
                     }
                 }
@@ -291,13 +291,13 @@ public class GreenDaoManager {
         ArrayList<PhotoItem> photoItemArrayList = new ArrayList<>();
         ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(PHOTO_LIST);
         List<MediaDb> mediaDbList = queryPopularByType(PHOTO_TYPE);
-        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
-            for(int index = 0; index < mediaDbList.size(); index ++) {
-                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
-                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+        if ((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0)) {
+            for (int index = 0; index < mediaDbList.size(); index++) {
+                for (int i = 0; i < baseItemArrayList.size(); i++) {
+                    if (mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
                         photoItemArrayList.add((PhotoItem) baseItemArrayList.get(i));
                         break;
-                    }else {
+                    } else {
                         continue;
                     }
                 }
@@ -311,13 +311,13 @@ public class GreenDaoManager {
         ArrayList<AudioItem> audioItemArrayList = new ArrayList<>();
         ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(AUDIO_LIST);
         List<MediaDb> mediaDbList = queryLastPlayedByType(AUDIO_TYPE);
-        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
-            for(int index = 0; index < mediaDbList.size(); index ++) {
-                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
-                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+        if ((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0)) {
+            for (int index = 0; index < mediaDbList.size(); index++) {
+                for (int i = 0; i < baseItemArrayList.size(); i++) {
+                    if (mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
                         audioItemArrayList.add((AudioItem) baseItemArrayList.get(i));
                         break;
-                    }else {
+                    } else {
                         continue;
                     }
                 }
@@ -331,13 +331,13 @@ public class GreenDaoManager {
         ArrayList<VideoItem> audioItemArrayList = new ArrayList<>();
         ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(VIDEO_LIST);
         List<MediaDb> mediaDbList = queryLastPlayedByType(VIDEO_TYPE);
-        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
-            for(int index = 0; index < mediaDbList.size(); index ++) {
-                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
-                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+        if ((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0)) {
+            for (int index = 0; index < mediaDbList.size(); index++) {
+                for (int i = 0; i < baseItemArrayList.size(); i++) {
+                    if (mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
                         audioItemArrayList.add((VideoItem) baseItemArrayList.get(i));
                         break;
-                    }else {
+                    } else {
                         continue;
                     }
                 }
@@ -351,13 +351,13 @@ public class GreenDaoManager {
         ArrayList<PhotoItem> photoItemArrayList = new ArrayList<>();
         ArrayList<BaseItem> baseItemArrayList = browserMediaFile.getMediaFile(PHOTO_LIST);
         List<MediaDb> mediaDbList = queryLastPlayedByType(PHOTO_TYPE);
-        if((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0) ) {
-            for(int index = 0; index < mediaDbList.size(); index ++) {
-                for(int i = 0; i < baseItemArrayList.size(); i ++ ) {
-                    if(mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
+        if ((baseItemArrayList.size() > 0) && (mediaDbList.size() > 0)) {
+            for (int index = 0; index < mediaDbList.size(); index++) {
+                for (int i = 0; i < baseItemArrayList.size(); i++) {
+                    if (mediaDbList.get(index).getMediaPath().equals(baseItemArrayList.get(i).getPath())) {
                         photoItemArrayList.add((PhotoItem) baseItemArrayList.get(i));
                         break;
-                    }else {
+                    } else {
                         continue;
                     }
                 }

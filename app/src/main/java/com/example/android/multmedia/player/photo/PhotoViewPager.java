@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 
 public class PhotoViewPager extends ViewPager {
     private final static String TAG = PhotoViewPager.class.getSimpleName();
+
     public PhotoViewPager(Context context) {
         super(context);
     }

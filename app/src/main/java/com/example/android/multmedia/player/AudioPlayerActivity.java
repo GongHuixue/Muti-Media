@@ -68,21 +68,21 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                     updateProgress();
                     break;
                 case MSG_UPDATE_CONTROL_BAR:
-                    if(msg.arg1 == PLAY_STATE_PLAYING) {
-                        if(msg.obj != null) {
+                    if (msg.arg1 == PLAY_STATE_PLAYING) {
+                        if (msg.obj != null) {
                             currentAudio = (AudioItem) msg.obj;
                             tvMusicDuration.setText(StringUtils.formatMediaTime(currentAudio.getDuration()));
                             //获取时长,实时更新播放进度
-                            sbPosition.setMax((int)currentAudio.getDuration());
+                            sbPosition.setMax((int) currentAudio.getDuration());
                         }
                         ibPlay.setImageResource(R.drawable.btn_pause_normal);
                         animationDrawable.start();
-                    }else if (msg.arg1 == PLAY_STATE_PAUSE) {
+                    } else if (msg.arg1 == PLAY_STATE_PAUSE) {
                         ibPlay.setImageResource(R.drawable.btn_play_normal);
                         tvMusicPlayTime.setText(StringUtils.formatMediaTime(audioPlayer.getCurrentPosition()));
                         sbPosition.setProgress(audioPlayer.getCurrentPosition());
                         animationDrawable.stop();
-                    }else if (msg.arg1 == PLAY_STATE_END) {
+                    } else if (msg.arg1 == PLAY_STATE_END) {
                         handler.removeMessages(MSG_UPDATE_PROGRESS);
                         ibPlay.setImageResource(R.drawable.btn_play_normal);
                         sbPosition.setProgress(sbPosition.getMax());
@@ -90,9 +90,9 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                         animationDrawable.stop();
                     }
 
-                    if(mediaControl.isFavorite()) {
+                    if (mediaControl.isFavorite()) {
                         ibFavorite.setImageResource(R.drawable.btn_favorite_pressed);
-                    }else {
+                    } else {
                         ibFavorite.setImageResource(R.drawable.btn_favorite_normal);
                     }
 
@@ -109,7 +109,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
 
     public MediaControlImpl attachMediaView() {
-        if(mediaControl == null) {
+        if (mediaControl == null) {
             mediaControl = new MediaControlImpl(this, MediaType.AUDIO);
             audioPlayer = mediaControl.getAudioPlayer();
         }
@@ -156,7 +156,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     private void getAudioDataFromIntent() {
         /*get audio list and selected audio*/
-        audioList = (ArrayList<AudioItem>)getIntent().getSerializableExtra(INTENT_AUDIO_LIST);
+        audioList = (ArrayList<AudioItem>) getIntent().getSerializableExtra(INTENT_AUDIO_LIST);
         position = getIntent().getIntExtra(INTENT_MEDIA_POSITION, 0);
         currentAudio = audioList.get(position);
         Log.d(TAG, "audio Position = " + position);
@@ -179,7 +179,7 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     }
 
     public void mediaPlayerPrepared() {
-        
+
     }
 
     private void updateProgress() {
@@ -187,9 +187,9 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         sbPosition.setProgress(audioPlayer.getCurrentPosition());
         tvLcr.updateLrcView(audioPlayer.getCurrentPosition(), audioPlayer.getDuration());
 
-        if(mediaControl.isPlaying()) {
+        if (mediaControl.isPlaying()) {
             animationDrawable.start();
-        }else {
+        } else {
             animationDrawable.stop();
         }
 
@@ -200,12 +200,13 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     public int getPlayMode() {
         return playMode;
     }
+
     private class AudioSeekBarListener implements SeekBar.OnSeekBarChangeListener {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             switch (seekBar.getId()) {
                 case R.id.sb_position:
-                    if(fromUser) {
+                    if (fromUser) {
                         audioPlayer.seekTo(progress);
                     }
                     break;
@@ -232,37 +233,37 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                 finish();
                 break;
             case R.id.ib_playmode:
-                if(playMode == SEQUENCE_PLAY) {
+                if (playMode == SEQUENCE_PLAY) {
                     playMode = SINGLE_PLAY;
                     ibPlayMode.setImageResource(R.drawable.btn_playmode_singlerepeat_normal);
-                }else {
+                } else {
                     playMode = SEQUENCE_PLAY;
                     ibPlayMode.setImageResource(R.drawable.btn_playmode_all_repeat_normal);
                 }
                 break;
             case R.id.ib_pre:
-                Log.d(TAG,"playPreMedia");
+                Log.d(TAG, "playPreMedia");
                 mediaControl.playPreMedia();
                 break;
             case R.id.ib_playpause:
-                if(mediaControl.isPlaying()) {
+                if (mediaControl.isPlaying()) {
                     mediaControl.pauseMedia();
                     ibPlay.setImageResource(R.drawable.btn_play_normal);
                     animationDrawable.stop();
-                }else {
+                } else {
                     mediaControl.playMedia();
                     ibPlay.setImageResource(R.drawable.btn_pause_normal);
                     animationDrawable.start();
                 }
                 break;
             case R.id.ib_next:
-                Log.d(TAG,"playNextMedia");
+                Log.d(TAG, "playNextMedia");
                 mediaControl.playNextMedia();
                 break;
             case R.id.ib_favorite:
-                if(isFavorite == true) {
+                if (isFavorite == true) {
                     ibFavorite.setImageResource(R.drawable.btn_favorite_normal);
-                }else {
+                } else {
                     ibFavorite.setImageResource(R.drawable.btn_favorite_pressed);
                 }
                 isFavorite = !isFavorite;
@@ -278,17 +279,20 @@ public class AudioPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     }
 
     @Override
-    public void showTopBottomBar(){
+    public void showTopBottomBar() {
 
     }
+
     @Override
     public void hideTopBottomBar(int top, int bottom) {
 
     }
+
     @Override
     public void showLoadingProgress() {
         showLoadingProgressDialog();
     }
+
     @Override
     public void hideLoadingProgress() {
         hideLoadingProgressDialog();

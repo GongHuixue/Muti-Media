@@ -15,7 +15,7 @@ import com.example.android.multmedia.R;
  * Created by huixue.gong on 2018/3/30.
  */
 
-public class TabView extends RelativeLayout{
+public class TabView extends RelativeLayout {
     private static final String TAG = TabView.class.getSimpleName();
     private ImageView mTabImage;
     private TextView mTabText;

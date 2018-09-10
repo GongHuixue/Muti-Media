@@ -7,14 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.multmedia.R;
-import com.example.android.multmedia.browser.AudioBrowserActivity;
-import com.example.android.multmedia.browser.PictureBrowserActivity;
-import com.example.android.multmedia.browser.VideoBrowserActivity;
 import com.mediaload.bean.AudioItem;
 import com.mediaload.bean.BaseItem;
 import com.mediaload.bean.PhotoItem;
@@ -28,7 +24,7 @@ import java.util.List;
  */
 
 public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> /*implements
-    View.OnClickListener, View.OnLongClickListener*/{
+    View.OnClickListener, View.OnLongClickListener*/ {
     private final static String TAG = BrowserRvAdapter.class.getSimpleName();
 
     protected List<T> mMediaList;
@@ -41,15 +37,15 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int PICTURE_BROWSER = 1;
     private static final int AUDIO_BROWSER = 2;
 
-    public interface OnItemClickListener{
-        void onItemClick(View view,int position);
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
     }
 
-    public interface OnItemLongClickListener{
+    public interface OnItemLongClickListener {
         void onItemLongClick(boolean selected, String path);
     }
 
-    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener){
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
         this.mOnItemClickListener = mOnItemClickListener;
     }
 
@@ -62,9 +58,9 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
         this.mContext = context;
     }
 
-    private void initCheckedList() {
+    public void initCheckedList() {
         mCheckedList.clear();
-        for(int i = 0; i < mMediaList.size(); i++) {
+        for (int i = 0; i < mMediaList.size(); i++) {
             mCheckedList.add(false);
         }
     }
@@ -73,7 +69,7 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
     public int getItemViewType(int position) {
 
         int viewType = -1;
-        if(mMediaList.size() > 0) {
+        if (mMediaList.size() > 0) {
             viewType = ((BaseItem) mMediaList.get(position)).getViewType();
             Log.d(TAG, "getItemViewType View Type = " + viewType);
         }
@@ -91,7 +87,7 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
             mediaView = view;
             mImageView = (ImageView) view.findViewById(R.id.image_item);
             mTextView = (TextView) view.findViewById(R.id.text_item);
-            mImageCheck = (ImageView)view.findViewById(R.id.image_checked);
+            mImageCheck = (ImageView) view.findViewById(R.id.image_checked);
         }
     }
 
@@ -123,7 +119,7 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
             mediaView = view;
             mImageView = (ImageView) view.findViewById(R.id.image_item);
             mTextView = (TextView) view.findViewById(R.id.text_item);
-            mImageCheck = (ImageView)view.findViewById(R.id.image_checked);
+            mImageCheck = (ImageView) view.findViewById(R.id.image_checked);
         }
     }
 
@@ -132,16 +128,16 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
         Log.d(TAG, "onCreateViewHolder, viewType = " + viewType);
         View root;
         RecyclerView.ViewHolder viewHolder;
-        if((viewType == VIDEO_BROWSER) ){
+        if ((viewType == VIDEO_BROWSER)) {
             root = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item, parent, false);
             viewHolder = new VideoViewHolder(root);
-        }else if((viewType == PICTURE_BROWSER) ) {
+        } else if ((viewType == PICTURE_BROWSER)) {
             root = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item, parent, false);
             viewHolder = new PictureViewHolder(root);
-        }else if((viewType == AUDIO_BROWSER)){
+        } else if ((viewType == AUDIO_BROWSER)) {
             root = LayoutInflater.from(parent.getContext()).inflate(R.layout.audio_list_item, parent, false);
             viewHolder = new AudioViewHolder(root);
-        }else {
+        } else {
             return null;
         }
 
@@ -150,18 +146,33 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        if((mMediaList != null) && (mMediaList.size() > 0)) {
-            Log.d(TAG, "getItemCount = " + mMediaList.size());
-            initCheckedList();
+        int index;
+        boolean bFileSelected = false;
+        if ((mMediaList != null) && (mMediaList.size() > 0)) {
+            if (mCheckedList.size() > 0) {
+                for (index = 0; index < mCheckedList.size(); index++) {
+                    if (mCheckedList.get(index)) {
+                        bFileSelected = true;
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
+            }
+            //if there is no file selected, need clear the list
+            if (!bFileSelected) {
+                initCheckedList();
+            }
             return mMediaList.size();
-        }else {
+        } else {
             return 0;
         }
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        if(holder != null) {
+        Log.d(TAG, "onBindViewHolder " + ", position = " + position);
+        if (holder != null) {
             if (holder instanceof VideoViewHolder) {
                 final VideoItem videoItem = (VideoItem) mMediaList.get(position);
                 Glide.with(mContext)
@@ -171,7 +182,7 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                         .into(((VideoViewHolder) holder).mImageView);
                 ((VideoViewHolder) holder).mediaView.setTag(position);
 
-                if(mOnItemClickListener != null) {
+                if (mOnItemClickListener != null) {
                     ((VideoViewHolder) holder).mediaView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -184,15 +195,15 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                     });
                 }
 
-                if(mOnItemLongClickListener != null) {
+                if (mOnItemLongClickListener != null) {
                     ((VideoViewHolder) holder).mediaView.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View view) {
-                            if(!mCheckedList.get(position)) {
+                            if (!mCheckedList.get(position)) {
                                 mCheckedList.set(position, true);
                                 ((VideoViewHolder) holder).mImageCheck.setVisibility(View.VISIBLE);
                                 ((VideoViewHolder) holder).mImageCheck.setBackgroundResource(R.drawable.image_select);
-                            }else {
+                            } else {
                                 mCheckedList.set(position, false);
                                 ((VideoViewHolder) holder).mImageCheck.setVisibility(View.INVISIBLE);
                             }
@@ -204,6 +215,13 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                         }
                     });
                 }
+
+                if (mCheckedList.get(position)) {
+                    ((VideoViewHolder) holder).mImageCheck.setVisibility(View.VISIBLE);
+                    ((VideoViewHolder) holder).mImageCheck.setBackgroundResource(R.drawable.image_select);
+                } else {
+                    ((VideoViewHolder) holder).mImageCheck.setVisibility(View.INVISIBLE);
+                }
             } else if (holder instanceof PictureViewHolder) {
                 final PhotoItem photoItem = (PhotoItem) mMediaList.get(position);
                 Glide.with(mContext)
@@ -213,7 +231,7 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                         .into(((PictureViewHolder) holder).mImageView);
                 ((PictureViewHolder) holder).mediaView.setTag(position);
 
-                if(mOnItemClickListener != null) {
+                if (mOnItemClickListener != null) {
                     ((PictureViewHolder) holder).mediaView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -226,15 +244,15 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                     });
                 }
 
-                if(mOnItemLongClickListener != null) {
+                if (mOnItemLongClickListener != null) {
                     ((PictureViewHolder) holder).mediaView.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View view) {
-                            if(!mCheckedList.get(position)) {
+                            if (!mCheckedList.get(position)) {
                                 mCheckedList.set(position, true);
                                 ((PictureViewHolder) holder).mImageCheck.setVisibility(View.VISIBLE);
                                 ((PictureViewHolder) holder).mImageCheck.setBackgroundResource(R.drawable.image_select);
-                            }else {
+                            } else {
                                 mCheckedList.set(position, false);
                                 ((PictureViewHolder) holder).mImageCheck.setVisibility(View.INVISIBLE);
                             }
@@ -246,6 +264,13 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                         }
                     });
                 }
+
+                if (mCheckedList.get(position)) {
+                    ((PictureViewHolder) holder).mImageCheck.setVisibility(View.VISIBLE);
+                    ((PictureViewHolder) holder).mImageCheck.setBackgroundResource(R.drawable.image_select);
+                } else {
+                    ((PictureViewHolder) holder).mImageCheck.setVisibility(View.INVISIBLE);
+                }
             } else if (holder instanceof AudioViewHolder) {
                 final AudioItem audioItem = (AudioItem) mMediaList.get(position);
                 Glide.with(mContext)
@@ -253,13 +278,13 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                         .asBitmap()
                         .placeholder(R.drawable.record)
                         .into(((AudioViewHolder) holder).mAudioIcon);
-                ((AudioViewHolder)holder).mediaView.setTag(position);
-                ((AudioViewHolder)holder).mAudioName.setText(audioItem.getDisplayName());
-                ((AudioViewHolder)holder).mAudioSinger.setText(audioItem.getSinger());
-                ((AudioViewHolder)holder).mAudioLength.setText(audioItem.getDurationString());
+                ((AudioViewHolder) holder).mediaView.setTag(position);
+                ((AudioViewHolder) holder).mAudioName.setText(audioItem.getDisplayName());
+                ((AudioViewHolder) holder).mAudioSinger.setText(audioItem.getSinger());
+                ((AudioViewHolder) holder).mAudioLength.setText(audioItem.getDurationString());
 
 
-                if(mOnItemClickListener != null) {
+                if (mOnItemClickListener != null) {
                     ((AudioViewHolder) holder).mediaView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -269,7 +294,7 @@ public class BrowserRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewH
                     });
                 }
 
-                if(mOnItemLongClickListener != null) {
+                if (mOnItemLongClickListener != null) {
                     ((AudioViewHolder) holder).mediaView.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View view) {

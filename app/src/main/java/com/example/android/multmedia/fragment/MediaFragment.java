@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 public class MediaFragment extends BaseFragment {
     private static final String TAG = MediaFragment.class.getSimpleName();
+
     @Override
     public void fetchData() {
 

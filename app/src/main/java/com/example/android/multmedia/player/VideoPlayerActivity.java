@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 import static com.example.android.multmedia.player.MediaPlayConstants.*;
 
-public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implements IMediaView , View.OnClickListener{
+public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implements IMediaView, View.OnClickListener {
     private final static String TAG = VideoPlayerActivity.class.getSimpleName();
 
     private VideoView videoPlayer;
@@ -89,27 +89,27 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                     hideTopBottomBar(topHeight, bottomHeight);
                     break;
                 case MSG_UPDATE_CONTROL_BAR:
-                    if(msg.arg1 == PLAY_STATE_PLAYING) {
-                        if(msg.obj != null) {
+                    if (msg.arg1 == PLAY_STATE_PLAYING) {
+                        if (msg.obj != null) {
                             currentVideo = (VideoItem) msg.obj;
                             tvVideoDuration.setText(StringUtils.formatMediaTime(currentVideo.getDuration()));
                             //获取时长,实时更新播放进度
-                            sbPosition.setMax((int)currentVideo.getDuration());
+                            sbPosition.setMax((int) currentVideo.getDuration());
                         }
                         ibPlay.setImageResource(R.drawable.btn_pause_normal);
                         updateProgress();
-                    }else if (msg.arg1 == PLAY_STATE_PAUSE) {
+                    } else if (msg.arg1 == PLAY_STATE_PAUSE) {
                         ibPlay.setImageResource(R.drawable.btn_play_normal);
-                    }else if (msg.arg1 == PLAY_STATE_END) {
+                    } else if (msg.arg1 == PLAY_STATE_END) {
                         handler.removeMessages(MSG_UPDATE_PROGRESS);
                         ibPlay.setImageResource(R.drawable.btn_play_normal);
                         sbPosition.setProgress(sbPosition.getMax());
                         tvPlayTime.setText(StringUtils.formatMediaTime(videoPlayer.getDuration()));
                     }
 
-                    if(mediaControl.isFavorite()) {
+                    if (mediaControl.isFavorite()) {
                         ibFavorite.setImageResource(R.drawable.btn_favorite_pressed);
-                    }else {
+                    } else {
                         ibFavorite.setImageResource(R.drawable.btn_favorite_normal);
                     }
                     break;
@@ -155,7 +155,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         tvVideoName = (TextView) findViewById(R.id.tv_video_name);
         tvPlayTime = (TextView) findViewById(R.id.tv_av_playtime);
         tvVideoDuration = (TextView) findViewById(R.id.tv_av_duration);
-        sbPosition = (SeekBar)findViewById(R.id.sb_position);
+        sbPosition = (SeekBar) findViewById(R.id.sb_position);
         viewAlpha = (View) findViewById(R.id.view_alpha);
 
         ibReturn = (ImageButton) findViewById(R.id.ib_back);
@@ -176,7 +176,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         rlTopBar.measure(0, 0);
         topHeight = rlTopBar.getMeasuredHeight();
         llBottomBar = (LinearLayout) findViewById(R.id.ll_video_bottom);
-        llBottomBar.measure(0,0);
+        llBottomBar.measure(0, 0);
         bottomHeight = llBottomBar.getMeasuredHeight();
     }
 
@@ -198,12 +198,12 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
     private void getVideoDataFromIntent() {
         /*get video list and selected video*/
-        videoList = (ArrayList<VideoItem>)getIntent().getSerializableExtra(INTENT_VIDEO_LIST);
+        videoList = (ArrayList<VideoItem>) getIntent().getSerializableExtra(INTENT_VIDEO_LIST);
         videoPosition = getIntent().getIntExtra(INTENT_MEDIA_POSITION, 0);
         video = videoList.get(videoPosition);
         Log.d(TAG, "Video Position = " + videoPosition);
 
-        if(video != null) {
+        if (video != null) {
             Log.d(TAG, "Video Duration = " + video.getDuration());
 
             tvVideoName.setText(video.getDisplayName());
@@ -212,18 +212,18 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     }
 
     private void initPreAndNext() {
-        if(videoPosition == 0 ) {
+        if (videoPosition == 0) {
             ibPre.setImageResource(R.drawable.btn_pre_normal);
             ibPre.setEnabled(false);
-        }else {
+        } else {
             ibPre.setImageResource(R.drawable.btn_pre_pressed);
             ibPre.setEnabled(true);
         }
 
-        if(videoPosition == -1) {
+        if (videoPosition == -1) {
             ibNext.setImageResource(R.drawable.btn_next_normal);
             ibNext.setEnabled(false);
-        }else {
+        } else {
             ibNext.setImageResource(R.drawable.btn_next_normal);
             ibNext.setEnabled(true);
         }
@@ -246,10 +246,10 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
     }
 
     private void setVideoViewSize() {
-        if(isFullScreen) {
-            videoPlayer.getLayoutParams().width = videoWidth * screenHeight/videoHeight;
+        if (isFullScreen) {
+            videoPlayer.getLayoutParams().width = videoWidth * screenHeight / videoHeight;
             videoPlayer.getLayoutParams().height = screenHeight;
-        }else {
+        } else {
             videoPlayer.getLayoutParams().width = screenWidth;
             videoPlayer.getLayoutParams().height = screenHeight;
         }
@@ -263,7 +263,7 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             switch (seekBar.getId()) {
                 case R.id.sb_position:
-                    if(fromUser) {
+                    if (fromUser) {
                         videoPlayer.seekTo(progress);
                     }
                     break;
@@ -295,10 +295,10 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-            if(isTopBottomBarShow) {
+            if (isTopBottomBarShow) {
                 hideTopBottomBar(topHeight, bottomHeight);
                 handler.removeMessages(MSG_SHOW_HIDE_BAR);
-            }else {
+            } else {
                 showTopBottomBar();
             }
             return super.onSingleTapConfirmed(e);
@@ -325,10 +325,10 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                 finish();
                 break;
             case R.id.ib_playmode:
-                if(playMode == SEQUENCE_PLAY) {
+                if (playMode == SEQUENCE_PLAY) {
                     playMode = SINGLE_PLAY;
                     ibPlayMode.setImageResource(R.drawable.btn_playmode_singlerepeat_normal);
-                }else {
+                } else {
                     playMode = SEQUENCE_PLAY;
                     ibPlayMode.setImageResource(R.drawable.btn_playmode_all_repeat_normal);
                 }
@@ -337,11 +337,11 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                 mediaControl.playPreMedia();
                 break;
             case R.id.ib_playpause:
-                if(mediaControl.isPlaying()) {
+                if (mediaControl.isPlaying()) {
                     mediaControl.pauseMedia();
                     ibPlay.setImageResource(R.drawable.btn_play_normal);
                     handler.removeMessages(MSG_UPDATE_PROGRESS);
-                }else {
+                } else {
                     mediaControl.playMedia();
                     ibPlay.setImageResource(R.drawable.btn_pause_normal);
                     updateProgress();
@@ -351,9 +351,9 @@ public class VideoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                 mediaControl.playNextMedia();
                 break;
             case R.id.ib_favorite:
-                if(isFavorite == true) {
+                if (isFavorite == true) {
                     ibFavorite.setImageResource(R.drawable.btn_favorite_normal);
-                }else {
+                } else {
                     ibFavorite.setImageResource(R.drawable.btn_favorite_pressed);
                 }
                 isFavorite = !isFavorite;

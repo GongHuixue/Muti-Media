@@ -9,6 +9,7 @@ public class MediaStoreService extends Service {
     private final static String TAG = MediaStoreService.class.getSimpleName();
 
     private MediaServiceBinder IBinder = new MediaServiceBinder();
+
     public MediaStoreService() {
     }
 

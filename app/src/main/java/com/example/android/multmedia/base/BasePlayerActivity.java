@@ -18,6 +18,7 @@ public abstract class BasePlayerActivity extends FragmentActivity {
     }
 
     public abstract int getLayoutResID();
+
     public abstract void initView();
 
 //    public abstract void initMediaPlayer();

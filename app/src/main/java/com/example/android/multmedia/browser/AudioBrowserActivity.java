@@ -41,10 +41,10 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
 
     @Override
     public void initView() {
-        TvTitle = (TextView)findViewById(R.id.txt_title);
+        TvTitle = (TextView) findViewById(R.id.txt_title);
         TvTitle.setText(R.string.audio);
-        TvNum = (TextView)findViewById(R.id.txt_number);
-        IbReturn = (ImageButton)findViewById(R.id.ib_back);
+        TvNum = (TextView) findViewById(R.id.txt_number);
+        IbReturn = (ImageButton) findViewById(R.id.ib_back);
         IbReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +57,7 @@ public class AudioBrowserActivity extends BaseBrowserActivity {
             public void onResult(AudioResult result) {
                 TvNum.setText("" + result.getItems().size());
                 Log.d(TAG, "Total file size = " + result.getItems().size());
-                if(result.getItems().size() > 0) {
+                if (result.getItems().size() > 0) {
                     mAudioItems.clear();
                     mTempList.clear();
                     mAudioItems.addAll(result.getItems());

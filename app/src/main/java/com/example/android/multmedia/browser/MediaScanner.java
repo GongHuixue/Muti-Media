@@ -8,7 +8,7 @@ import android.webkit.MimeTypeMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MediaScanner implements MediaScannerConnection.MediaScannerConnectionClient{
+public class MediaScanner implements MediaScannerConnection.MediaScannerConnectionClient {
     private MediaScannerConnection mMediaScanConn;
 
     private LinkedList<String[]> mLinkedList = new LinkedList<>();

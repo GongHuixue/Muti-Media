@@ -13,7 +13,7 @@ import com.example.android.multmedia.fragment.BaseFragment;
  * Created by huixue.gong on 2018/4/4.
  */
 
-public class PanelViewManager implements AdapterView.OnItemClickListener{
+public class PanelViewManager implements AdapterView.OnItemClickListener {
     private static final String TAG = PanelViewManager.class.getSimpleName();
     private static PanelViewManager mInstance;
     private MainActivity mActivity;
@@ -21,11 +21,11 @@ public class PanelViewManager implements AdapterView.OnItemClickListener{
     private int currentActiveFragId;
 
     private PanelViewManager(Context context) {
-        this.mActivity = (MainActivity)context;
+        this.mActivity = (MainActivity) context;
     }
 
     public static synchronized PanelViewManager getPanelViewManager(Context context) {
-        if(mInstance == null) {
+        if (mInstance == null) {
             mInstance = new PanelViewManager(context);
         }
         return mInstance;
@@ -39,7 +39,7 @@ public class PanelViewManager implements AdapterView.OnItemClickListener{
 
         try {
             fragListItem = (BaseFragment.FragListItem) listView.getItemAtPosition(position);
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             Log.e(TAG, "get List Item failed " + ex.getMessage());
             return;
         }

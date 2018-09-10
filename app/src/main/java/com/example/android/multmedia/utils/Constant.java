@@ -9,7 +9,7 @@ public class Constant {
     private static final int MEDIA_FRAGMENT = 0;
     private static final int VIDEO_FRAGMENT = 1;
     private static final int AUDIO_FRAGMENT = 2;
-    private static final int PICTURE_FRAGMENT =3;
+    private static final int PICTURE_FRAGMENT = 3;
 
     public static final String AUDIO_FILES = "All Audio Files";
     public static final String VIDEO_FILES = "All Video Files";

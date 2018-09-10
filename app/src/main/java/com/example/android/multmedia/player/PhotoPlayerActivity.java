@@ -79,12 +79,12 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
         mediaControl.setPhotoPath(currentPosition);
         showTopBottomBar();
 
-        if(mediaControl.isFavorite()) {
+        if (mediaControl.isFavorite()) {
             ibFavorite.setImageResource(R.drawable.btn_favorite_pressed);
-        }else {
+        } else {
             ibFavorite.setImageResource(R.drawable.btn_favorite_normal);
         }
-        
+
         handler.sendEmptyMessageDelayed(MSG_SHOW_HIDE_BAR, FIVE_SECOND_TIMER);
     }
 
@@ -108,9 +108,9 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                 currentPosition = position;
                 mediaControl.setPhotoPath(currentPosition);
                 /*update favorite icon*/
-                if(mediaControl.isFavorite()) {
+                if (mediaControl.isFavorite()) {
                     ibFavorite.setImageResource(R.drawable.btn_favorite_pressed);
-                }else {
+                } else {
                     ibFavorite.setImageResource(R.drawable.btn_favorite_normal);
                 }
 
@@ -131,7 +131,7 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
 //            Log.d(TAG, "Main Thread Handle Msg = " + msg.what + ", Msg.arg1 = " + msg.arg1);
             switch (msg.what) {
                 case MSG_SHOW_HIDE_BAR:
-                    if(isBottomBarShow == true) {
+                    if (isBottomBarShow == true) {
                         hideTopBottomBar(0, bottomHeight);
                     }
                     break;
@@ -142,9 +142,9 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                         ibPlay.setImageResource(R.drawable.btn_play_normal);
                     }
                 case PLAY:
-                    if(mediaControl.isPlaying()) {
+                    if (mediaControl.isPlaying()) {
                         mediaControl.playMedia();
-                    }else {
+                    } else {
                         handler.removeMessages(PLAY);
                     }
                     break;
@@ -209,9 +209,9 @@ public class PhotoPlayerActivity extends BaseActivity<MediaControlImpl> implemen
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "instantiateItem onClick");
-                    if(isBottomBarShow) {
+                    if (isBottomBarShow) {
                         hideTopBottomBar(0, bottomHeight);
-                    }else {
+                    } else {
                         showTopBottomBar();
                     }
                 }

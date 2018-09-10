@@ -26,6 +26,7 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
     protected FragListItemAdapter fragListItemAdapter;
 
     public abstract void fetchData();
+
     public abstract BaseFragment getFragment();
 
     @Override

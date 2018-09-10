@@ -30,13 +30,13 @@ public class FragListItemAdapter extends ArrayAdapter<BaseFragment.FragListItem>
         BaseFragment.FragListItem mediaItem = getItem(position);
         View view;
 
-        if(convertView == null) {
+        if (convertView == null) {
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
         } else {
             view = convertView;
         }
 
-        ImageView MediaItemImage = (ImageView)view.findViewById(R.id.media_item_image);
+        ImageView MediaItemImage = (ImageView) view.findViewById(R.id.media_item_image);
         TextView MediaItemName = (TextView) view.findViewById(R.id.media_item_name);
         MediaItemImage.setImageResource(mediaItem.getImageId());
         MediaItemName.setText(mediaItem.getItemName());

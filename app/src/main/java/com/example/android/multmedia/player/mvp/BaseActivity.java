@@ -67,7 +67,7 @@ public abstract class BaseActivity<P extends BaseControl> extends FragmentActivi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mediaView != null) {
+        if (mediaView != null) {
             mediaView.detachView();
         }
         this.fragmentActivity = null;
@@ -75,8 +75,11 @@ public abstract class BaseActivity<P extends BaseControl> extends FragmentActivi
     }
 
     public abstract P attachMediaView();
+
     public abstract int getLayoutResID();
+
     public abstract void initView();
+
     public abstract void initData();
 
 
@@ -87,7 +90,7 @@ public abstract class BaseActivity<P extends BaseControl> extends FragmentActivi
     }
 
     public void hideLoadingProgressDialog() {
-        if( (progressDialog != null) && (progressDialog.isShowing()) ) {
+        if ((progressDialog != null) && (progressDialog.isShowing())) {
             progressDialog.dismiss();
         }
     }

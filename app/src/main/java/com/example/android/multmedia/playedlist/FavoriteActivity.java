@@ -47,13 +47,13 @@ import static com.example.android.multmedia.utils.Constant.AUDIO_LOADED_COMPLETE
 import static com.example.android.multmedia.utils.Constant.PHOTO_LOADED_COMPLETED_ID;
 import static com.example.android.multmedia.utils.Constant.VIDEO_LOADED_COMPLETED_ID;
 
-public class FavoriteActivity extends BaseBrowserActivity implements INotificationListener{
+public class FavoriteActivity extends BaseBrowserActivity implements INotificationListener {
     private final static String TAG = FavoriteActivity.class.getSimpleName();
     private GreenDaoManager daoManager = GreenDaoManager.getSingleInstance();
     private LoadMediaTask loadMediaTask = new LoadMediaTask();
     private int total = 0;
 
-    private Handler mHandler = new Handler(Looper.getMainLooper()){
+    private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -129,7 +129,7 @@ public class FavoriteActivity extends BaseBrowserActivity implements INotificati
         @Override
         protected void onPostExecute(Void aVoid) {
             hideProgressLoading();
-            if(total == 0) {
+            if (total == 0) {
                 showMediaToast("No favorite media file, Maybe you can select favorite media file first");
             }
         }

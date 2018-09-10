@@ -43,23 +43,23 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
     private DeleteMediaTask mDeleteTask;
 
     @Override
-    public int getLayoutResID(){
+    public int getLayoutResID() {
         return R.layout.activity_video_browser;
     }
 
     @Override
     public void initView() {
-        TvTitle = (TextView)findViewById(R.id.txt_title);
+        TvTitle = (TextView) findViewById(R.id.txt_title);
         TvTitle.setText(R.string.video);
-        TvNum = (TextView)findViewById(R.id.txt_number);
-        IbReturn = (ImageButton)findViewById(R.id.ib_back);
+        TvNum = (TextView) findViewById(R.id.txt_number);
+        IbReturn = (ImageButton) findViewById(R.id.ib_back);
         IbReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        IbDel = (ImageButton)findViewById(R.id.btn_del);
+        IbDel = (ImageButton) findViewById(R.id.btn_del);
         IbDel.setVisibility(View.GONE);
         IbDel.setEnabled(false);
         mRecyclerView = (RecyclerView) findViewById(R.id.video_recycler_view);
@@ -67,7 +67,7 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
             @Override
             public void onResult(VideoResult result) {
                 TvNum.setText("" + result.getItems().size());
-                if(result.getItems().size() > 0) {
+                if (result.getItems().size() > 0) {
                     mVideoItems.clear();
                     mTempList.clear();
                     mVideoItems.addAll(result.getItems());
@@ -78,7 +78,7 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
             }
         });
 
-        mVideoRvAdapter = new BrowserRvAdapter<VideoItem>(mVideoItems, VideoBrowserActivity.this) ;
+        mVideoRvAdapter = new BrowserRvAdapter<VideoItem>(mVideoItems, VideoBrowserActivity.this);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
 
         /*short click*/
@@ -102,19 +102,19 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
         mVideoRvAdapter.setOnItemLongClickListener(new BrowserRvAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(boolean selected, String path) {
-                if(selected) {
-                    if(!mSelectList.contains(path)) {
+                if (selected) {
+                    if (!mSelectList.contains(path)) {
                         mSelectList.add(path);
                     }
-                }else {
-                    if(mSelectList.contains(path)) {
+                } else {
+                    if (mSelectList.contains(path)) {
                         mSelectList.remove(path);
                     }
                 }
 
-                if(mSelectList.size() == 0) {
+                if (mSelectList.size() == 0) {
                     hideDelButton();
-                }else {
+                } else {
                     showDelButton();
                 }
             }
@@ -187,46 +187,44 @@ public class VideoBrowserActivity extends BaseBrowserActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             mSelectList.clear();
+            mVideoRvAdapter.initCheckedList();
             hideDelButton();
             TvNum.setText("" + mVideoItems.size());
-            Log.d(TAG, "notify data changed");
             mVideoRvAdapter.notifyDataSetChanged();
         }
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            Log.d(TAG, "start deleted");
             Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
             ContentResolver mContentResolver = VideoBrowserActivity.this.getContentResolver();
             String where;
             MediaScanner mediaScanner = new MediaScanner(VideoBrowserActivity.this);
-            for(int i = 0; i < mSelectList.size(); i++ ) {
-                for(int j = 0; j < mVideoItems.size(); j++ ) {
-                    if(mSelectList.get(i).equals(mVideoItems.get(j).getPath())) {
+            for (int i = 0; i < mSelectList.size(); i++) {
+                for (int j = 0; j < mVideoItems.size(); j++) {
+                    if (mSelectList.get(i).equals(mVideoItems.get(j).getPath())) {
                         mVideoItems.remove(j);
                         break;
-                    }else {
+                    } else {
                         continue;
                     }
                 }
 
-                for(int k = 0; k < mTempList.size(); k++) {
-                    if(mSelectList.get(i).equals(mTempList.get(k).getPath())) {
+                for (int k = 0; k < mTempList.size(); k++) {
+                    if (mSelectList.get(i).equals(mTempList.get(k).getPath())) {
                         mTempList.remove(k);
                         break;
-                    }else {
+                    } else {
                         continue;
                     }
                 }
 
-                where = MediaStore.Video.Media.DATA + "='" + mSelectList.get(i) +"'";
+                where = MediaStore.Video.Media.DATA + "='" + mSelectList.get(i) + "'";
                 mContentResolver.delete(uri, where, null);
             }
             //after delete, notify to provider
             mediaScanner.scan(mSelectList);
 
             browserMediaFile.saveMediaFile(mTempList, VIDEO_LIST);
-            Log.d(TAG, "end deleted");
             return null;
         }
     }

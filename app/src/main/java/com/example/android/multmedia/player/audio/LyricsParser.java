@@ -19,15 +19,15 @@ public class LyricsParser {
         ArrayList<Lcr> lyricsList = new ArrayList<>();
         // 数据可用性检查
         if (lyricsFile == null || !lyricsFile.exists()) {
-            lyricsList.add(new Lcr( "没有找到歌词文件。",0));
+            lyricsList.add(new Lcr("没有找到歌词文件。", 0));
             return lyricsList;
         }
 
         // 按行解析歌词
         try {
-            BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(lyricsFile),"GBK"));
-            String line  = buffer.readLine();
-            while (line!=null){
+            BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(lyricsFile), "GBK"));
+            String line = buffer.readLine();
+            while (line != null) {
                 List<Lcr> lineList = parserLine(line);
                 lyricsList.addAll(lineList);
 
@@ -49,24 +49,28 @@ public class LyricsParser {
         return lyricsList;
     }
 
-    /** 解析一行歌词  [01:45.51][02:58.62]整理好心情再出发 */
+    /**
+     * 解析一行歌词  [01:45.51][02:58.62]整理好心情再出发
+     */
     private static List<Lcr> parserLine(String line) {
         List<Lcr> lineList = new ArrayList<>();
 
         String[] arr = line.split("]");
         // [01:45.51 [02:58.62 整理好心情再出发
-        String content = arr[arr.length-1];
+        String content = arr[arr.length - 1];
 
         // [01:45.51 [02:58.62
         for (int i = 0; i < arr.length - 1; i++) {
             int startPoint = parserStartPoint(arr[i]);
-            lineList.add(new Lcr(content,startPoint));
+            lineList.add(new Lcr(content, startPoint));
         }
 
         return lineList;
     }
 
-    /** 解析出一行歌词的起始时间 [01:45.51 */
+    /**
+     * 解析出一行歌词的起始时间 [01:45.51
+     */
     private static int parserStartPoint(String startPoint) {
 
         int time = 0;
@@ -82,8 +86,8 @@ public class LyricsParser {
         String mSecStr = arr[1];
 
         time = Integer.parseInt(minStr) * 60 * 1000
-                + Integer.parseInt(secStr) *  1000
-                + Integer.parseInt(mSecStr) * 10 ;
+                + Integer.parseInt(secStr) * 1000
+                + Integer.parseInt(mSecStr) * 10;
 
 
         return time;

@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * Created by huixue.gong on 2018/3/29.
  */
 
-public class PictureFragment extends BaseFragment{
+public class PictureFragment extends BaseFragment {
     @Override
     public void fetchData() {
 

@@ -17,7 +17,7 @@ import com.example.android.multmedia.R;
 import java.io.File;
 import java.util.ArrayList;
 
-public class LcrView extends AppCompatTextView{
+public class LcrView extends AppCompatTextView {
     private int viewWith;
     private int viewHeight;
     private Paint paint;
@@ -31,11 +31,11 @@ public class LcrView extends AppCompatTextView{
     private float passPercent;
 
     public LcrView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public LcrView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
         initInfo();
     }
 
@@ -64,15 +64,15 @@ public class LcrView extends AppCompatTextView{
     @Override
     protected void onDraw(Canvas canvas) {
         //在重新绘制界面的时候让画布平滑滚动
-        if(lcrs !=null && lcrs.size()>0){
-            canvas.translate(0,-getSmoothScroll());
+        if (lcrs != null && lcrs.size() > 0) {
+            canvas.translate(0, -getSmoothScroll());
             drawAllLrc(canvas);
         }
     }
 
     private void drawAllLrc(Canvas canvas) {
         Rect bounds = new Rect();
-        if(lcrs != null) {
+        if (lcrs != null) {
             for (int i = 0; i < lcrs.size(); i++) {
                 Lcr lrc = lcrs.get(i);
                 if (currentPosition == i) {
@@ -111,8 +111,9 @@ public class LcrView extends AppCompatTextView{
             }
         }
     }
-    private void changeCurrentPosition(int time){
-        if(lcrs != null) {
+
+    private void changeCurrentPosition(int time) {
+        if (lcrs != null) {
             for (int i = 0; i < lcrs.size(); i++) {
                 if (i == lcrs.size() - 1) {
                     currentPosition = i;
@@ -125,30 +126,33 @@ public class LcrView extends AppCompatTextView{
             }
         }
     }
-    public void updateLrcView(int time,int duration){
+
+    public void updateLrcView(int time, int duration) {
         currentTime = time;
         this.duration = duration;
         changeCurrentPosition(time);
         invalidate();
     }
-    private float getSmoothScroll(){
-        if(currentPosition < lcrs.size()) {
+
+    private float getSmoothScroll() {
+        if (currentPosition < lcrs.size()) {
             int startTime = lcrs.get(currentPosition).getTime();
             //唱了多久
             int passTime = currentTime - startTime;
-            if(currentPosition==lcrs.size()-1){
-                passPercent = passTime/(float)(duration-startTime);
-                return line_height*passPercent;
+            if (currentPosition == lcrs.size() - 1) {
+                passPercent = passTime / (float) (duration - startTime);
+                return line_height * passPercent;
             }
             int endTime = lcrs.get(currentPosition + 1).getTime();
-            int totalTime = endTime-startTime;
+            int totalTime = endTime - startTime;
             //进度百分比
-            passPercent = passTime /(float) (totalTime);
+            passPercent = passTime / (float) (totalTime);
         }
-        return line_height*passPercent;
+        return line_height * passPercent;
 
     }
-    public void loadLrc(String title){
+
+    public void loadLrc(String title) {
         File file = LyricLoader.loadLyricFile(title);
         lcrs = LyricsParser.parserFromFile(file);
     }

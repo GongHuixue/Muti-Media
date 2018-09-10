@@ -23,13 +23,14 @@ import com.mediaload.bean.AudioItem;
 import com.mediaload.bean.BaseItem;
 import com.mediaload.bean.PhotoItem;
 import com.mediaload.bean.VideoItem;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 import static com.example.android.multmedia.player.MediaPlayConstants.*;
 
-public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaPlayControl{
+public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaPlayControl {
     private final static String TAG = MediaControlImpl.class.getSimpleName();
     private Context mContext;
     private VideoPlayerActivity videoPlayerActivity;
@@ -88,16 +89,16 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
             mContext = audioPlayerActivity;
             mediaType = type;
             mainHandler = audioPlayerActivity.getMainThreadHandler();
-            if(audioPlayer == null) {
+            if (audioPlayer == null) {
                 audioPlayer = new MediaPlayer();
             }
             Log.d(TAG, "Audio Player Init");
         } else if (getActivityView() instanceof PhotoPlayerActivity) {
-            photoPlayerActivity = (PhotoPlayerActivity)getActivityView();
+            photoPlayerActivity = (PhotoPlayerActivity) getActivityView();
             mContext = photoPlayerActivity;
             mediaType = type;
             mainHandler = photoPlayerActivity.getMainThreadHandler();
-            if(photoPlayer == null) {
+            if (photoPlayer == null) {
                 photoPlayer = (PhotoViewPager) photoPlayerActivity.findViewById(R.id.photo_view);
             }
         }
@@ -133,7 +134,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
                     mp.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
                         @Override
                         public void onBufferingUpdate(MediaPlayer mp, int percent) {
-                            videoPlayerActivity.updateSeekBar(mp.getDuration()*percent/100);
+                            videoPlayerActivity.updateSeekBar(mp.getDuration() * percent / 100);
                         }
                     });
                     videoPlayerActivity.setVideoHW(mp.getVideoWidth(), mp.getVideoHeight());
@@ -224,10 +225,10 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         mediaPosition = position;
         isPlaying = true;
         mediaItem = videoList.get(position);
-        if(daoManager.queryByPath(videoPath)) {
+        if (daoManager.queryByPath(videoPath)) {
             daoManager.updatePlayedTimes(videoPath);
             isFavorite = daoManager.queryFavorite(videoPath);
-        }else {
+        } else {
             daoManager.insertIfNotExist(mediaItem);
         }
     }
@@ -239,17 +240,17 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
             audioPlayer.setDataSource(audioList.get(position).getPath());
             audioPlayer.prepareAsync();
             isPlaying = true;
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         mediaPosition = position;
 
         mediaItem = audioList.get(position);
-        if(daoManager.queryByPath(audioPath)) {
+        if (daoManager.queryByPath(audioPath)) {
             Log.d(TAG, "setAudioPath " + audioPath + " is exist in media.db");
             daoManager.updatePlayedTimes(audioPath);
             isFavorite = daoManager.queryFavorite(audioPath);
-        }else {
+        } else {
             Log.d(TAG, "setAudioPath " + audioPath + " not exist in media.db and insert");
             daoManager.insertIfNotExist(mediaItem);
         }
@@ -260,10 +261,10 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         photoPlayer.setCurrentItem(position);
 
         mediaItem = photoList.get(position);
-        if(daoManager.queryByPath(photoList.get(position).getPath())) {
+        if (daoManager.queryByPath(photoList.get(position).getPath())) {
             daoManager.updatePlayedTimes(photoList.get(position).getPath());
             isFavorite = daoManager.queryFavorite(photoList.get(position).getPath());
-        }else {
+        } else {
             daoManager.insertIfNotExist(mediaItem);
         }
     }
@@ -274,41 +275,43 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
     }
 
     private void unbindMediaService() {
-        if(mBound == true) {
+        if (mBound == true) {
             mContext.unbindService(mediaServiceCon);
         }
         mediaService = null;
     }
 
     @Override
-    public void playPauseMedia(){
-        if(mediaType == MediaType.VIDEO) {
-            if(videoPlayerActivity.getPlayMode() == SEQUENCE_PLAY) {
+    public void playPauseMedia() {
+        if (mediaType == MediaType.VIDEO) {
+            if (videoPlayerActivity.getPlayMode() == SEQUENCE_PLAY) {
                 playNextMedia();
-            }else {
+            } else {
                 setVideoPath(videoList.get(mediaPosition).getPath(), mediaPosition);
             }
-        }else if (mediaType == MediaType.AUDIO) {
-            if(audioPlayerActivity.getPlayMode() == SEQUENCE_PLAY) {
+        } else if (mediaType == MediaType.AUDIO) {
+            if (audioPlayerActivity.getPlayMode() == SEQUENCE_PLAY) {
                 playNextMedia();
-            }else {
+            } else {
                 audioPlayer.reset();
                 setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
             }
-        }else if (mediaType == MediaType.PHOTO) {
+        } else if (mediaType == MediaType.PHOTO) {
             /*for photo type, only support sequence play*/
             playNextMedia();
             Log.d(TAG, "for photo, only support sequence play ");
         }
     }
+
     @Override
-    public void loadMediaData(){
+    public void loadMediaData() {
         mvpView.showLoadingProgress();
     }
+
     @Override
-    public void playPreMedia(){
+    public void playPreMedia() {
         Log.d(TAG, "playPreMedia position = " + mediaPosition);
-        if(mediaType == MediaType.VIDEO) {
+        if (mediaType == MediaType.VIDEO) {
             if (mediaPosition == 0) {
                 Log.d(TAG, "This is the first file");
             } else {
@@ -316,51 +319,54 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
                 videoPlayer.stopPlayback();
                 setVideoPath(videoList.get(mediaPosition).getPath(), mediaPosition);
             }
-        }else if(mediaType == MediaType.AUDIO) {
-            if(mediaPosition == 0) {
+        } else if (mediaType == MediaType.AUDIO) {
+            if (mediaPosition == 0) {
                 Log.d(TAG, "This is the first file");
-            }else {
+            } else {
                 mediaPosition = mediaPosition - 1;
                 audioPlayer.reset();
                 setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
             }
-        }else if(mediaType == MediaType.PHOTO) {
+        } else if (mediaType == MediaType.PHOTO) {
             Log.d(TAG, "for photo, not support play pre picture");
         }
     }
+
     @Override
-    public void playMedia(){
+    public void playMedia() {
         isPlaying = true;
         Log.d(TAG, "playMedia");
-        if(mediaType == MediaType.VIDEO) {
+        if (mediaType == MediaType.VIDEO) {
             videoPlayer.start();
-        }else if(mediaType == MediaType.AUDIO){
+        } else if (mediaType == MediaType.AUDIO) {
             audioPlayer.start();
-        }else if(mediaType == MediaType.PHOTO) {
+        } else if (mediaType == MediaType.PHOTO) {
             playPauseMedia();
         }
     }
+
     @Override
-    public void pauseMedia(){
+    public void pauseMedia() {
         isPlaying = false;
         Log.d(TAG, "pauseMedia");
-        if(mediaType == MediaType.VIDEO) {
+        if (mediaType == MediaType.VIDEO) {
             videoPlayer.pause();
             Message msg = mainHandler.obtainMessage(MSG_UPDATE_CONTROL_BAR);
             msg.arg1 = PLAY_STATE_PAUSE;
             mainHandler.sendMessage(msg);
-        }else if(mediaType == MediaType.AUDIO) {
+        } else if (mediaType == MediaType.AUDIO) {
             audioPlayer.pause();
             Message msg = mainHandler.obtainMessage(MSG_UPDATE_CONTROL_BAR);
             msg.arg1 = PLAY_STATE_PAUSE;
             mainHandler.sendMessage(msg);
-        }else if(mediaType == MediaType.PHOTO) {
+        } else if (mediaType == MediaType.PHOTO) {
             mainHandler.removeMessages(PLAY);
             mainHandler.sendEmptyMessage(PAUSE);
         }
     }
+
     @Override
-    public void playNextMedia(){
+    public void playNextMedia() {
 
         if (mediaType == MediaType.VIDEO) {
             if (mediaPosition == (videoList.size() - 1)) {
@@ -373,52 +379,55 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
                 videoPlayer.stopPlayback();
                 setVideoPath(videoList.get(mediaPosition).getPath(), mediaPosition);
             }
-        }else if (mediaType == MediaType.AUDIO) {
-            if(mediaPosition == (audioList.size() - 1)) {
+        } else if (mediaType == MediaType.AUDIO) {
+            if (mediaPosition == (audioList.size() - 1)) {
                 Log.d(TAG, "This is the last file");
                 mediaPosition = 0;
                 audioPlayer.reset();
                 setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
-            }else {
+            } else {
                 mediaPosition = mediaPosition + 1;
                 audioPlayer.reset();
                 setAudioPath(audioList.get(mediaPosition).getPath(), mediaPosition);
             }
-        }else if (mediaType == MediaType.PHOTO) {
+        } else if (mediaType == MediaType.PHOTO) {
             mediaPosition = photoPlayer.getCurrentItem();
-            if(mediaPosition == (photoList.size() -1)) {
+            if (mediaPosition == (photoList.size() - 1)) {
                 mediaPosition = 0;
                 setPhotoPath(mediaPosition);
-            }else {
+            } else {
                 mediaPosition = mediaPosition + 1;
                 setPhotoPath(mediaPosition + 1);
             }
             mainHandler.sendEmptyMessageDelayed(PLAY, THREE_SECOND_TIMER);
         }
     }
+
     @Override
-    public void playModeChanged(){
+    public void playModeChanged() {
 
     }
+
     @Override
-    public void setMediaFavorite(boolean isFavorite){
+    public void setMediaFavorite(boolean isFavorite) {
         Log.d(TAG, "setMediaFavorite = " + isFavorite);
-        if(mediaType == MediaType.VIDEO) {
+        if (mediaType == MediaType.VIDEO) {
             mediaItem = videoList.get(mediaPosition);
-        }else if(mediaType == MediaType.AUDIO) {
+        } else if (mediaType == MediaType.AUDIO) {
             mediaItem = audioList.get(mediaPosition);
-        }else if(mediaType == MediaType.PHOTO) {
+        } else if (mediaType == MediaType.PHOTO) {
             mediaItem = photoList.get(mediaPosition);
         }
         daoManager.updateFavorite(mediaItem, isFavorite);
     }
+
     @Override
-    public boolean isPlaying(){
+    public boolean isPlaying() {
         return isPlaying;
     }
 
     @Override
-    public boolean isFavorite(){
+    public boolean isFavorite() {
         Log.d(TAG, "isFavorite = " + isFavorite);
         return isFavorite;
     }
@@ -428,12 +437,12 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
         Log.d(TAG, "resetMediaData mediaType = " + mediaType);
         unbindMediaService();
 
-        if(mediaType == MediaType.VIDEO) {
+        if (mediaType == MediaType.VIDEO) {
             videoPlayerActivity = null;
             videoPlayer = null;
             videoList.clear();
             mainHandler = null;
-        }else if(mediaType == MediaType.AUDIO) {
+        } else if (mediaType == MediaType.AUDIO) {
             audioPlayerActivity = null;
             audioList.clear();
             audioPlayer.stop();
@@ -441,7 +450,7 @@ public class MediaControlImpl extends BaseControl<IMediaView> implements IMediaP
             audioPlayer.release();
             audioPlayer = null;
             Log.d(TAG, "release audio player ");
-        }else if(mediaType == MediaType.PHOTO) {
+        } else if (mediaType == MediaType.PHOTO) {
             photoPlayerActivity = null;
             photoList.clear();
         }
