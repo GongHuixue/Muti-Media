@@ -4,8 +4,6 @@ Browser/Playing Local Media File[Video/Audio/Photo] the screenshot folder displa
 
 ![audio_browser](https://github.com/GongHuixue/Muti-Media/blob/master/screenshot/audio_browser_gaitubao_com_480x853.png)
 
-![photo_browser](https://github.com/GongHuixue/Muti-Media/blob/master/screenshot/picture_browser_gaitubao_com_480x853.png)
-
 ![video_play](https://github.com/GongHuixue/Muti-Media/blob/master/screenshot/video_play_gaitubao_com_480x853.png)
 
 ![popular_file](https://github.com/GongHuixue/Muti-Media/blob/master/screenshot/popular_play_gaitubao_com_480x853.png)
